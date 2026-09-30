@@ -206,8 +206,10 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Python syntax check failed' }
       - name: Test ordinary native Windows SQL, AMQP semantics and upgrade
         run: |
-          $interop = if ('${{ matrix.pg }}' -eq '18') { @('--independent-client') } else { @() }
-          python scripts/run_integration.py --ordinary @interop --pg-config "$env:PG_CONFIG" --work-dir "$env:RUNNER_TEMP/evidence" --keep
+          [string[]]$integrationArgs = @('scripts/run_integration.py', '--ordinary', '--pg-config', "$env:PG_CONFIG", '--work-dir', "$env:RUNNER_TEMP/evidence", '--keep')
+          if ('${{ matrix.pg }}' -eq '18') { $integrationArgs += '--independent-client' }
+          Write-Host ("Integration arguments: " + ($integrationArgs | ConvertTo-Json -Compress))
+          python @integrationArgs
           if ($LASTEXITCODE -ne 0) { throw 'Integration tests failed' }
       - name: Package candidate only
         run: |
@@ -230,8 +232,10 @@ jobs:
             ([IO.Path]::GetFullPath($_).TrimEnd('\') -ine $opensslBin)
           }) -join ';'
           Remove-Item Env:PROTON_ROOT
-          $interop = if ('${{ matrix.pg }}' -eq '18') { @('--independent-client') } else { @() }
-          python scripts/run_integration.py --ordinary @interop --pg-config "$env:PG_CONFIG" --work-dir "$env:RUNNER_TEMP/candidate-evidence" --keep
+          [string[]]$integrationArgs = @('scripts/run_integration.py', '--ordinary', '--pg-config', "$env:PG_CONFIG", '--work-dir', "$env:RUNNER_TEMP/candidate-evidence", '--keep')
+          if ('${{ matrix.pg }}' -eq '18') { $integrationArgs += '--independent-client' }
+          Write-Host ("Integration arguments: " + ($integrationArgs | ConvertTo-Json -Compress))
+          python @integrationArgs
           if ($LASTEXITCODE -ne 0) { throw 'Candidate-only integration tests failed' }
       - name: Preserve test evidence without data or private keys
         if: always()
