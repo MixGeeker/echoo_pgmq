@@ -1,0 +1,12 @@
+Recorded cells: 27
+Failed measurement/accounting cells: 0
+Cells missing provisional synthetic-DB p95 <=10% criterion: 24
+Broker cells achieving <95% of requested offered load: 11
+Failed: []
+Provisional criterion missed: ['r1-echoo-1x1-200pps', 'r1-rabbitmq-1x1-200pps', 'r1-echoo-1x1-400pps', 'r1-rabbitmq-1x1-400pps', 'r1-echoo-4x4-200pps', 'r1-rabbitmq-4x4-200pps', 'r1-echoo-4x4-400pps', 'r1-rabbitmq-4x4-400pps', 'r2-rabbitmq-4x4-400pps', 'r2-echoo-4x4-400pps', 'r2-rabbitmq-4x4-200pps', 'r2-echoo-4x4-200pps', 'r2-rabbitmq-1x1-400pps', 'r2-echoo-1x1-400pps', 'r2-rabbitmq-1x1-200pps', 'r2-echoo-1x1-200pps', 'r3-echoo-1x1-200pps', 'r3-rabbitmq-1x1-200pps', 'r3-echoo-1x1-400pps', 'r3-rabbitmq-1x1-400pps', 'r3-echoo-4x4-200pps', 'r3-rabbitmq-4x4-200pps', 'r3-echoo-4x4-400pps', 'r3-rabbitmq-4x4-400pps']
+Under target load: ['r1-echoo-1x1-200pps', 'r1-echoo-1x1-400pps', 'r1-echoo-4x4-200pps', 'r1-echoo-4x4-400pps', 'r2-echoo-4x4-400pps', 'r2-echoo-4x4-200pps', 'r2-echoo-1x1-400pps', 'r2-echoo-1x1-200pps', 'r3-echoo-1x1-200pps', 'r3-echoo-1x1-400pps', 'r3-echoo-4x4-200pps']
+
+Inspect all per-cell summaries, raw samples and environment details. A successful harness exit is not a performance qualification.
+These are paced finite-window synthetic experiments, not maximum capacity, real ERP, Win11 or power-loss qualification.
+Entire server stack shares 2 logical CPU / 4 GiB / no swap; clients use two separate host CPU IDs outside that budget.
+GitHub artifacts expire after 30 days; preserve complete evidence before expiration.

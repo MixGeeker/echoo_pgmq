@@ -1,0 +1,1507 @@
+{
+  "old_run": 36663717022,
+  "new_run": 36672765081,
+  "qualification": "Separate GitHub VM; runner image changed 20260920.314.1 → 20260927.320.1. Cross-run differences are observational, not causal attribution to wake code.",
+  "groups": [
+    {
+      "broker": "baseline",
+      "profile": "0x0",
+      "requested_rate": 0,
+      "qualification": "Separate GitHub VM; runner image changed 20260920.314.1 → 20260927.320.1. Cross-run differences are observational, not causal attribution to wake code.",
+      "metrics": {
+        "completed_per_s": {
+          "old": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "new": {
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "median_absolute_delta": 0.0,
+          "median_relative_change_percent": null
+        },
+        "synthetic_db_p95_ms": {
+          "old": {
+            "median": 1.223257,
+            "min": 1.214691,
+            "max": 1.238526
+          },
+          "new": {
+            "median": 0.824412,
+            "min": 0.796891,
+            "max": 0.903829
+          },
+          "median_absolute_delta": -0.398845,
+          "median_relative_change_percent": -32.60516800639604
+        },
+        "server_mean_cpu_cores": {
+          "old": {
+            "median": 0.06774234627242635,
+            "min": 0.06670121202937684,
+            "max": 0.06887154906147884
+          },
+          "new": {
+            "median": 0.03706959308519221,
+            "min": 0.035050280934324274,
+            "max": 0.037921429222517344
+          },
+          "median_absolute_delta": -0.030672753187234142,
+          "median_relative_change_percent": -45.2785515634245
+        },
+        "server_peak_cgroup_mib": {
+          "old": {
+            "median": 94.33203125,
+            "min": 94.1796875,
+            "max": 94.42578125
+          },
+          "new": {
+            "median": 94.35546875,
+            "min": 94.33203125,
+            "max": 95.40234375
+          },
+          "median_absolute_delta": 0.0234375,
+          "median_relative_change_percent": 0.0248457493063895
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "old": {
+            "median": 5305768,
+            "min": 5302472,
+            "max": 5308424
+          },
+          "new": {
+            "median": 4739184,
+            "min": 4653208,
+            "max": 4867336
+          },
+          "median_absolute_delta": -566584,
+          "median_relative_change_percent": -10.678642564092513
+        },
+        "measured_sampled_block_write_bytes": {
+          "old": {
+            "median": 200101888,
+            "min": 199442432,
+            "max": 200110080
+          },
+          "new": {
+            "median": 170086400,
+            "min": 164958208,
+            "max": 172912640
+          },
+          "median_absolute_delta": -30015488,
+          "median_relative_change_percent": -15.000102347859906
+        }
+      }
+    },
+    {
+      "broker": "echoo",
+      "profile": "1x1",
+      "requested_rate": 200.0,
+      "qualification": "Separate GitHub VM; runner image changed 20260920.314.1 → 20260927.320.1. Cross-run differences are observational, not causal attribution to wake code.",
+      "metrics": {
+        "completed_per_s": {
+          "old": {
+            "median": 199.75833333333333,
+            "min": 199.73333333333332,
+            "max": 199.825
+          },
+          "new": {
+            "median": 157.60833333333332,
+            "min": 135.80833333333334,
+            "max": 181.15833333333333
+          },
+          "median_absolute_delta": -42.150000000000006,
+          "median_relative_change_percent": -21.10049643319011
+        },
+        "offered_load_achieved_fraction": {
+          "old": {
+            "median": 0.9987916666666666,
+            "min": 0.998625,
+            "max": 0.9991666666666666
+          },
+          "new": {
+            "median": 0.788,
+            "min": 0.679,
+            "max": 0.9058333333333334
+          },
+          "median_absolute_delta": -0.2107916666666666,
+          "median_relative_change_percent": -21.104668140669972
+        },
+        "publish_p95_ms": {
+          "old": {
+            "median": 2.076744,
+            "min": 2.010358,
+            "max": 2.12789
+          },
+          "new": {
+            "median": 2.361883,
+            "min": 1.661133,
+            "max": 3.760419
+          },
+          "median_absolute_delta": 0.28513900000000003,
+          "median_relative_change_percent": 13.73009865443213
+        },
+        "end_to_end_p95_ms": {
+          "old": {
+            "median": 4.086495,
+            "min": 4.009299,
+            "max": 4.166022
+          },
+          "new": {
+            "median": 2.469221,
+            "min": 1.743092,
+            "max": 3.868498
+          },
+          "median_absolute_delta": -1.617274,
+          "median_relative_change_percent": -39.57606702075985
+        },
+        "end_to_end_p99_ms": {
+          "old": {
+            "median": 4.444982,
+            "min": 4.285633,
+            "max": 4.488935
+          },
+          "new": {
+            "median": 48.115584,
+            "min": 10.929708,
+            "max": 89.109957
+          },
+          "median_absolute_delta": 43.670601999999995,
+          "median_relative_change_percent": 982.4697152879357
+        },
+        "synthetic_db_p95_ms": {
+          "old": {
+            "median": 1.86185,
+            "min": 1.819322,
+            "max": 1.935179
+          },
+          "new": {
+            "median": 1.750243,
+            "min": 1.356915,
+            "max": 2.551241
+          },
+          "median_absolute_delta": -0.11160700000000001,
+          "median_relative_change_percent": -5.9944141579611685
+        },
+        "db_p95_absolute_increase_ms": {
+          "old": {
+            "median": 0.647159,
+            "min": 0.5960650000000001,
+            "max": 0.696653
+          },
+          "new": {
+            "median": 0.925831,
+            "min": 0.4530860000000001,
+            "max": 1.75435
+          },
+          "median_absolute_delta": 0.2786719999999999,
+          "median_relative_change_percent": 43.06082431056354
+        },
+        "db_p95_increase_percent": {
+          "old": {
+            "median": 53.277664854683216,
+            "min": 48.72769990280048,
+            "max": 56.24855675213922
+          },
+          "new": {
+            "median": 112.30198007792218,
+            "min": 50.12961522588897,
+            "max": 220.14930523747918
+          },
+          "median_absolute_delta": 59.024315223238965,
+          "median_relative_change_percent": 110.78622793290576
+        },
+        "server_mean_cpu_cores": {
+          "old": {
+            "median": 0.36706452174185067,
+            "min": 0.36256005140198977,
+            "max": 0.36902615981501496
+          },
+          "new": {
+            "median": 0.2232156881329901,
+            "min": 0.1843766927121458,
+            "max": 0.2376984938516491
+          },
+          "median_absolute_delta": -0.14384883360886058,
+          "median_relative_change_percent": -39.188977710579906
+        },
+        "server_peak_cgroup_mib": {
+          "old": {
+            "median": 190.33984375,
+            "min": 190.27734375,
+            "max": 190.546875
+          },
+          "new": {
+            "median": 172.26953125,
+            "min": 171.9140625,
+            "max": 189.26953125
+          },
+          "median_absolute_delta": -18.0703125,
+          "median_relative_change_percent": -9.493709852853655
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "old": {
+            "median": 83947472,
+            "min": 83879144,
+            "max": 83974728
+          },
+          "new": {
+            "median": 66049552,
+            "min": 59795904,
+            "max": 76772080
+          },
+          "median_absolute_delta": -17897920,
+          "median_relative_change_percent": -21.320379963318015
+        },
+        "measured_sampled_block_write_bytes": {
+          "old": {
+            "median": 919265280,
+            "min": 919158784,
+            "max": 919289856
+          },
+          "new": {
+            "median": 723963904,
+            "min": 631840768,
+            "max": 840953856
+          },
+          "median_absolute_delta": -195301376,
+          "median_relative_change_percent": -21.24537717773916
+        }
+      }
+    },
+    {
+      "broker": "echoo",
+      "profile": "1x1",
+      "requested_rate": 400.0,
+      "qualification": "Separate GitHub VM; runner image changed 20260920.314.1 → 20260927.320.1. Cross-run differences are observational, not causal attribution to wake code.",
+      "metrics": {
+        "completed_per_s": {
+          "old": {
+            "median": 397.01666666666665,
+            "min": 395.725,
+            "max": 397.34166666666664
+          },
+          "new": {
+            "median": 347.15,
+            "min": 317.73333333333335,
+            "max": 369.625
+          },
+          "median_absolute_delta": -49.866666666666674,
+          "median_relative_change_percent": -12.560345913269808
+        },
+        "offered_load_achieved_fraction": {
+          "old": {
+            "median": 0.9925416666666667,
+            "min": 0.9892916666666667,
+            "max": 0.993375
+          },
+          "new": {
+            "median": 0.8678541666666667,
+            "min": 0.7943125,
+            "max": 0.9240416666666667
+          },
+          "median_absolute_delta": -0.12468749999999995,
+          "median_relative_change_percent": -12.562444901557445
+        },
+        "publish_p95_ms": {
+          "old": {
+            "median": 2.0167,
+            "min": 1.983121,
+            "max": 2.020339
+          },
+          "new": {
+            "median": 1.200895,
+            "min": 1.155188,
+            "max": 1.488808
+          },
+          "median_absolute_delta": -0.8158050000000001,
+          "median_relative_change_percent": -40.45247185996926
+        },
+        "end_to_end_p95_ms": {
+          "old": {
+            "median": 4.428398,
+            "min": 4.426567,
+            "max": 4.438406
+          },
+          "new": {
+            "median": 1.623365,
+            "min": 1.512945,
+            "max": 1.80168
+          },
+          "median_absolute_delta": -2.805033,
+          "median_relative_change_percent": -63.34193539063111
+        },
+        "end_to_end_p99_ms": {
+          "old": {
+            "median": 4.86422,
+            "min": 4.83889,
+            "max": 5.363771
+          },
+          "new": {
+            "median": 8.364558,
+            "min": 3.613553,
+            "max": 20.807937
+          },
+          "median_absolute_delta": 3.500338,
+          "median_relative_change_percent": 71.96093104341497
+        },
+        "synthetic_db_p95_ms": {
+          "old": {
+            "median": 2.175369,
+            "min": 2.166602,
+            "max": 2.211106
+          },
+          "new": {
+            "median": 1.424864,
+            "min": 1.38069,
+            "max": 1.696715
+          },
+          "median_absolute_delta": -0.750505,
+          "median_relative_change_percent": -34.5001238870279
+        },
+        "db_p95_absolute_increase_ms": {
+          "old": {
+            "median": 0.9606779999999999,
+            "min": 0.9433450000000001,
+            "max": 0.97258
+          },
+          "new": {
+            "median": 0.6004519999999999,
+            "min": 0.583799,
+            "max": 0.792886
+          },
+          "median_absolute_delta": -0.36022600000000005,
+          "median_relative_change_percent": -37.497059368487676
+        },
+        "db_p95_increase_percent": {
+          "old": {
+            "median": 78.52721703056697,
+            "min": 77.1174822625172,
+            "max": 79.0882619530399
+          },
+          "new": {
+            "median": 73.25958004294189,
+            "min": 72.83397136383263,
+            "max": 87.72522235953926
+          },
+          "median_absolute_delta": -5.267636987625082,
+          "median_relative_change_percent": -6.708039819588459
+        },
+        "server_mean_cpu_cores": {
+          "old": {
+            "median": 0.5631651819459346,
+            "min": 0.5570595637644853,
+            "max": 0.6003499218886876
+          },
+          "new": {
+            "median": 0.37822696486245383,
+            "min": 0.3540294777846132,
+            "max": 0.3861249157372529
+          },
+          "median_absolute_delta": -0.18493821708348074,
+          "median_relative_change_percent": -32.83907155702593
+        },
+        "server_peak_cgroup_mib": {
+          "old": {
+            "median": 320.19921875,
+            "min": 316.3125,
+            "max": 320.89453125
+          },
+          "new": {
+            "median": 245.8359375,
+            "min": 244.17578125,
+            "max": 262.98828125
+          },
+          "median_absolute_delta": -74.36328125,
+          "median_relative_change_percent": -23.224067048102377
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "old": {
+            "median": 161148488,
+            "min": 160527552,
+            "max": 161393928
+          },
+          "new": {
+            "median": 138964592,
+            "min": 128038000,
+            "max": 150654432
+          },
+          "median_absolute_delta": -22183896,
+          "median_relative_change_percent": -13.766121094477784
+        },
+        "measured_sampled_block_write_bytes": {
+          "old": {
+            "median": 1644560384,
+            "min": 1641467904,
+            "max": 1644986368
+          },
+          "new": {
+            "median": 1411903488,
+            "min": 1321340928,
+            "max": 1509097472
+          },
+          "median_absolute_delta": -232656896,
+          "median_relative_change_percent": -14.147057065433968
+        }
+      }
+    },
+    {
+      "broker": "echoo",
+      "profile": "4x4",
+      "requested_rate": 200.0,
+      "qualification": "Separate GitHub VM; runner image changed 20260920.314.1 → 20260927.320.1. Cross-run differences are observational, not causal attribution to wake code.",
+      "metrics": {
+        "completed_per_s": {
+          "old": {
+            "median": 200.0,
+            "min": 200.0,
+            "max": 200.00833333333333
+          },
+          "new": {
+            "median": 179.63333333333333,
+            "min": 173.38333333333333,
+            "max": 179.725
+          },
+          "median_absolute_delta": -20.366666666666674,
+          "median_relative_change_percent": -10.183333333333337
+        },
+        "offered_load_achieved_fraction": {
+          "old": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0
+          },
+          "new": {
+            "median": 0.898125,
+            "min": 0.8669166666666667,
+            "max": 0.898625
+          },
+          "median_absolute_delta": -0.10187500000000005,
+          "median_relative_change_percent": -10.187500000000005
+        },
+        "publish_p95_ms": {
+          "old": {
+            "median": 2.702482,
+            "min": 2.423081,
+            "max": 2.914041
+          },
+          "new": {
+            "median": 11.824594,
+            "min": 5.729975,
+            "max": 14.076521
+          },
+          "median_absolute_delta": 9.122112,
+          "median_relative_change_percent": 337.5457079825138
+        },
+        "end_to_end_p95_ms": {
+          "old": {
+            "median": 5.268703,
+            "min": 5.24021,
+            "max": 5.61548
+          },
+          "new": {
+            "median": 12.277409,
+            "min": 7.406992,
+            "max": 15.255785
+          },
+          "median_absolute_delta": 7.008706,
+          "median_relative_change_percent": 133.02526257410977
+        },
+        "end_to_end_p99_ms": {
+          "old": {
+            "median": 5.924506,
+            "min": 5.808672,
+            "max": 6.188562
+          },
+          "new": {
+            "median": 128.8426,
+            "min": 99.015691,
+            "max": 143.969519
+          },
+          "median_absolute_delta": 122.91809400000001,
+          "median_relative_change_percent": 2074.739969881033
+        },
+        "synthetic_db_p95_ms": {
+          "old": {
+            "median": 2.055043,
+            "min": 1.995242,
+            "max": 2.136056
+          },
+          "new": {
+            "median": 1.954524,
+            "min": 1.936176,
+            "max": 2.186675
+          },
+          "median_absolute_delta": -0.10051900000000002,
+          "median_relative_change_percent": -4.891333174050374
+        },
+        "db_p95_absolute_increase_ms": {
+          "old": {
+            "median": 0.8317859999999999,
+            "min": 0.7567159999999999,
+            "max": 0.921365
+          },
+          "new": {
+            "median": 1.111764,
+            "min": 1.050695,
+            "max": 1.3897840000000001
+          },
+          "median_absolute_delta": 0.27997800000000006,
+          "median_relative_change_percent": 33.659859627356084
+        },
+        "db_p95_increase_percent": {
+          "old": {
+            "median": 67.99764889961797,
+            "min": 61.09811178772184,
+            "max": 75.85180099300975
+          },
+          "new": {
+            "median": 134.85538784006056,
+            "min": 116.24931264652938,
+            "max": 174.40076497287586
+          },
+          "median_absolute_delta": 66.85773894044259,
+          "median_relative_change_percent": 98.32360386333625
+        },
+        "server_mean_cpu_cores": {
+          "old": {
+            "median": 0.5028902788718367,
+            "min": 0.49906292320408013,
+            "max": 0.5150160733207361
+          },
+          "new": {
+            "median": 0.3213808449110656,
+            "min": 0.31112368317438027,
+            "max": 0.3316443980405276
+          },
+          "median_absolute_delta": -0.18150943396077107,
+          "median_relative_change_percent": -36.09324768972704
+        },
+        "server_peak_cgroup_mib": {
+          "old": {
+            "median": 191.09375,
+            "min": 191.05859375,
+            "max": 191.30078125
+          },
+          "new": {
+            "median": 181.55078125,
+            "min": 180.984375,
+            "max": 182.140625
+          },
+          "median_absolute_delta": -9.54296875,
+          "median_relative_change_percent": -4.993867538838921
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "old": {
+            "median": 83943088,
+            "min": 83831920,
+            "max": 83957896
+          },
+          "new": {
+            "median": 73901544,
+            "min": 70432056,
+            "max": 75463408
+          },
+          "median_absolute_delta": -10041544,
+          "median_relative_change_percent": -11.962323806815398
+        },
+        "measured_sampled_block_write_bytes": {
+          "old": {
+            "median": 918364160,
+            "min": 918167552,
+            "max": 918368256
+          },
+          "new": {
+            "median": 811290624,
+            "min": 782602240,
+            "max": 811347968
+          },
+          "median_absolute_delta": -107073536,
+          "median_relative_change_percent": -11.659158824316489
+        }
+      }
+    },
+    {
+      "broker": "echoo",
+      "profile": "4x4",
+      "requested_rate": 400.0,
+      "qualification": "Separate GitHub VM; runner image changed 20260920.314.1 → 20260927.320.1. Cross-run differences are observational, not causal attribution to wake code.",
+      "metrics": {
+        "completed_per_s": {
+          "old": {
+            "median": 399.81666666666666,
+            "min": 399.675,
+            "max": 399.8666666666667
+          },
+          "new": {
+            "median": 328.51666666666665,
+            "min": 326.53333333333336,
+            "max": 388.8833333333333
+          },
+          "median_absolute_delta": -71.30000000000001,
+          "median_relative_change_percent": -17.833173537871527
+        },
+        "offered_load_achieved_fraction": {
+          "old": {
+            "median": 0.9995208333333333,
+            "min": 0.9992083333333334,
+            "max": 0.9996666666666667
+          },
+          "new": {
+            "median": 0.8212916666666666,
+            "min": 0.8163333333333334,
+            "max": 0.9721875
+          },
+          "median_absolute_delta": -0.17822916666666666,
+          "median_relative_change_percent": -17.831460908351918
+        },
+        "publish_p95_ms": {
+          "old": {
+            "median": 4.143151,
+            "min": 3.960787,
+            "max": 4.266289
+          },
+          "new": {
+            "median": 7.335093,
+            "min": 3.640833,
+            "max": 8.458371
+          },
+          "median_absolute_delta": 3.191942,
+          "median_relative_change_percent": 77.04141123507206
+        },
+        "end_to_end_p95_ms": {
+          "old": {
+            "median": 5.802543,
+            "min": 5.2412,
+            "max": 6.049251
+          },
+          "new": {
+            "median": 7.756733,
+            "min": 3.994103,
+            "max": 8.549179
+          },
+          "median_absolute_delta": 1.9541899999999996,
+          "median_relative_change_percent": 33.678164901147646
+        },
+        "end_to_end_p99_ms": {
+          "old": {
+            "median": 7.700595,
+            "min": 6.377467,
+            "max": 7.888945
+          },
+          "new": {
+            "median": 89.235133,
+            "min": 10.067081,
+            "max": 93.261575
+          },
+          "median_absolute_delta": 81.534538,
+          "median_relative_change_percent": 1058.8082868921167
+        },
+        "synthetic_db_p95_ms": {
+          "old": {
+            "median": 2.483715,
+            "min": 2.44396,
+            "max": 2.492614
+          },
+          "new": {
+            "median": 2.20063,
+            "min": 1.850751,
+            "max": 2.543109
+          },
+          "median_absolute_delta": -0.28308500000000025,
+          "median_relative_change_percent": -11.397644254674963
+        },
+        "db_p95_absolute_increase_ms": {
+          "old": {
+            "median": 1.254088,
+            "min": 1.220703,
+            "max": 1.2690240000000002
+          },
+          "new": {
+            "median": 1.2968009999999999,
+            "min": 1.05386,
+            "max": 1.7186969999999997
+          },
+          "median_absolute_delta": 0.04271299999999978,
+          "median_relative_change_percent": 3.405901340256806
+        },
+        "db_p95_increase_percent": {
+          "old": {
+            "median": 101.2564936061092,
+            "min": 99.79121313019259,
+            "max": 104.47298942694067
+          },
+          "new": {
+            "median": 143.47857835940206,
+            "min": 132.2464427380909,
+            "max": 208.47549526207766
+          },
+          "median_absolute_delta": 42.22208475329286,
+          "median_relative_change_percent": 41.69815016263356
+        },
+        "server_mean_cpu_cores": {
+          "old": {
+            "median": 0.7271211249193106,
+            "min": 0.7206222449039115,
+            "max": 0.7343768543301324
+          },
+          "new": {
+            "median": 0.46681996259670216,
+            "min": 0.44372658588667524,
+            "max": 0.5170587250827869
+          },
+          "median_absolute_delta": -0.2603011623226084,
+          "median_relative_change_percent": -35.79887221011414
+        },
+        "server_peak_cgroup_mib": {
+          "old": {
+            "median": 312.3203125,
+            "min": 306.64453125,
+            "max": 315.0
+          },
+          "new": {
+            "median": 261.21484375,
+            "min": 254.13671875,
+            "max": 274.25
+          },
+          "median_absolute_delta": -51.10546875,
+          "median_relative_change_percent": -16.363158816319384
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "old": {
+            "median": 162270424,
+            "min": 162187728,
+            "max": 162331888
+          },
+          "new": {
+            "median": 137778488,
+            "min": 131381136,
+            "max": 154519216
+          },
+          "median_absolute_delta": -24491936,
+          "median_relative_change_percent": -15.09328403554304
+        },
+        "measured_sampled_block_write_bytes": {
+          "old": {
+            "median": 1647570944,
+            "min": 1646891008,
+            "max": 1648353280
+          },
+          "new": {
+            "median": 1341034496,
+            "min": 1330126848,
+            "max": 1583624192
+          },
+          "median_absolute_delta": -306536448,
+          "median_relative_change_percent": -18.60535651689667
+        }
+      }
+    },
+    {
+      "broker": "rabbitmq",
+      "profile": "1x1",
+      "requested_rate": 200.0,
+      "qualification": "Separate GitHub VM; runner image changed 20260920.314.1 → 20260927.320.1. Cross-run differences are observational, not causal attribution to wake code.",
+      "metrics": {
+        "completed_per_s": {
+          "old": {
+            "median": 199.98333333333332,
+            "min": 199.93333333333334,
+            "max": 199.99166666666667
+          },
+          "new": {
+            "median": 199.925,
+            "min": 199.40833333333333,
+            "max": 199.98333333333332
+          },
+          "median_absolute_delta": -0.0583333333333087,
+          "median_relative_change_percent": -0.029169097424773083
+        },
+        "offered_load_achieved_fraction": {
+          "old": {
+            "median": 0.9999166666666667,
+            "min": 0.9996666666666667,
+            "max": 0.9999583333333333
+          },
+          "new": {
+            "median": 0.9996666666666667,
+            "min": 0.9970416666666667,
+            "max": 0.999875
+          },
+          "median_absolute_delta": -0.00024999999999997247,
+          "median_relative_change_percent": -0.025002083506956162
+        },
+        "publish_p95_ms": {
+          "old": {
+            "median": 1.988347,
+            "min": 1.873143,
+            "max": 2.018274
+          },
+          "new": {
+            "median": 1.483081,
+            "min": 1.380741,
+            "max": 1.508839
+          },
+          "median_absolute_delta": -0.505266,
+          "median_relative_change_percent": -25.411359284873313
+        },
+        "end_to_end_p95_ms": {
+          "old": {
+            "median": 1.56579,
+            "min": 1.419332,
+            "max": 1.567229
+          },
+          "new": {
+            "median": 1.141308,
+            "min": 1.045487,
+            "max": 1.219102
+          },
+          "median_absolute_delta": -0.424482,
+          "median_relative_change_percent": -27.109765677389692
+        },
+        "end_to_end_p99_ms": {
+          "old": {
+            "median": 1.794442,
+            "min": 1.670966,
+            "max": 1.800249
+          },
+          "new": {
+            "median": 1.359488,
+            "min": 1.262346,
+            "max": 1.511753
+          },
+          "median_absolute_delta": -0.43495400000000006,
+          "median_relative_change_percent": -24.238955619629948
+        },
+        "synthetic_db_p95_ms": {
+          "old": {
+            "median": 1.892057,
+            "min": 1.737259,
+            "max": 1.906237
+          },
+          "new": {
+            "median": 1.413398,
+            "min": 1.267935,
+            "max": 1.446697
+          },
+          "median_absolute_delta": -0.47865900000000017,
+          "median_relative_change_percent": -25.298339320644153
+        },
+        "db_p95_absolute_increase_ms": {
+          "old": {
+            "median": 0.6688000000000001,
+            "min": 0.4987330000000001,
+            "max": 0.691546
+          },
+          "new": {
+            "median": 0.5889859999999999,
+            "min": 0.36410600000000004,
+            "max": 0.6498059999999999
+          },
+          "median_absolute_delta": -0.07981400000000016,
+          "median_relative_change_percent": -11.933911483253612
+        },
+        "db_p95_increase_percent": {
+          "old": {
+            "median": 54.673711247922554,
+            "min": 40.268270508653025,
+            "max": 56.931845218248924
+          },
+          "new": {
+            "median": 71.44316191418851,
+            "min": 40.284832639802445,
+            "max": 81.5426451045375
+          },
+          "median_absolute_delta": 16.769450666265953,
+          "median_relative_change_percent": 30.671871880479202
+        },
+        "server_mean_cpu_cores": {
+          "old": {
+            "median": 0.31833080698658467,
+            "min": 0.31450950095990354,
+            "max": 0.3215602130331066
+          },
+          "new": {
+            "median": 0.2497287179430871,
+            "min": 0.23416058328380962,
+            "max": 0.253681485145639
+          },
+          "median_absolute_delta": -0.06860208904349757,
+          "median_relative_change_percent": -21.550565492829808
+        },
+        "server_peak_cgroup_mib": {
+          "old": {
+            "median": 184.59375,
+            "min": 183.98046875,
+            "max": 189.8203125
+          },
+          "new": {
+            "median": 228.93359375,
+            "min": 225.40625,
+            "max": 231.9453125
+          },
+          "median_absolute_delta": 44.33984375,
+          "median_relative_change_percent": 24.02023023531403
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "old": {
+            "median": 5247440,
+            "min": 5246504,
+            "max": 5253520
+          },
+          "new": {
+            "median": 4784800,
+            "min": 4724160,
+            "max": 4907672
+          },
+          "median_absolute_delta": -462640,
+          "median_relative_change_percent": -8.816489564435228
+        },
+        "measured_sampled_block_write_bytes": {
+          "old": {
+            "median": 199176192,
+            "min": 199131136,
+            "max": 199208960
+          },
+          "new": {
+            "median": 180473856,
+            "min": 178429952,
+            "max": 186515456
+          },
+          "median_absolute_delta": -18702336,
+          "median_relative_change_percent": -9.389845147757418
+        }
+      }
+    },
+    {
+      "broker": "rabbitmq",
+      "profile": "1x1",
+      "requested_rate": 400.0,
+      "qualification": "Separate GitHub VM; runner image changed 20260920.314.1 → 20260927.320.1. Cross-run differences are observational, not causal attribution to wake code.",
+      "metrics": {
+        "completed_per_s": {
+          "old": {
+            "median": 399.19166666666666,
+            "min": 398.89166666666665,
+            "max": 399.23333333333335
+          },
+          "new": {
+            "median": 399.30833333333334,
+            "min": 399.21666666666664,
+            "max": 399.3833333333333
+          },
+          "median_absolute_delta": 0.11666666666667425,
+          "median_relative_change_percent": 0.029225726989960774
+        },
+        "offered_load_achieved_fraction": {
+          "old": {
+            "median": 0.9979583333333333,
+            "min": 0.99725,
+            "max": 0.9980625
+          },
+          "new": {
+            "median": 0.9982916666666667,
+            "min": 0.9980416666666667,
+            "max": 0.9984583333333333
+          },
+          "median_absolute_delta": 0.00033333333333340764,
+          "median_relative_change_percent": 0.03340152811991893
+        },
+        "publish_p95_ms": {
+          "old": {
+            "median": 1.867883,
+            "min": 1.843487,
+            "max": 1.877631
+          },
+          "new": {
+            "median": 1.356184,
+            "min": 1.352439,
+            "max": 1.36022
+          },
+          "median_absolute_delta": -0.5116989999999999,
+          "median_relative_change_percent": -27.39459591419805
+        },
+        "end_to_end_p95_ms": {
+          "old": {
+            "median": 1.425426,
+            "min": 1.403024,
+            "max": 1.431699
+          },
+          "new": {
+            "median": 1.022753,
+            "min": 1.015403,
+            "max": 1.032968
+          },
+          "median_absolute_delta": -0.40267300000000006,
+          "median_relative_change_percent": -28.249309329281214
+        },
+        "end_to_end_p99_ms": {
+          "old": {
+            "median": 1.681756,
+            "min": 1.674701,
+            "max": 1.760101
+          },
+          "new": {
+            "median": 1.227495,
+            "min": 1.201638,
+            "max": 1.235415
+          },
+          "median_absolute_delta": -0.454261,
+          "median_relative_change_percent": -27.011112194634656
+        },
+        "synthetic_db_p95_ms": {
+          "old": {
+            "median": 1.89786,
+            "min": 1.864037,
+            "max": 1.898069
+          },
+          "new": {
+            "median": 1.465545,
+            "min": 1.422221,
+            "max": 1.613421
+          },
+          "median_absolute_delta": -0.432315,
+          "median_relative_change_percent": -22.77907748727514
+        },
+        "db_p95_absolute_increase_ms": {
+          "old": {
+            "median": 0.659543,
+            "min": 0.649346,
+            "max": 0.6746030000000001
+          },
+          "new": {
+            "median": 0.6686540000000001,
+            "min": 0.518392,
+            "max": 0.789009
+          },
+          "median_absolute_delta": 0.009111000000000091,
+          "median_relative_change_percent": 1.3814110679667726
+        },
+        "db_p95_increase_percent": {
+          "old": {
+            "median": 53.45771064410621,
+            "min": 53.25225308148558,
+            "max": 55.14810052180368
+          },
+          "new": {
+            "median": 83.90783683088404,
+            "min": 57.355097037160796,
+            "max": 95.70566658418362
+          },
+          "median_absolute_delta": 30.45012618677783,
+          "median_relative_change_percent": 56.961148952859254
+        },
+        "server_mean_cpu_cores": {
+          "old": {
+            "median": 0.5596324854956659,
+            "min": 0.5557524178276024,
+            "max": 0.5598786651814446
+          },
+          "new": {
+            "median": 0.42391447939309873,
+            "min": 0.42159019626483124,
+            "max": 0.426817042532959
+          },
+          "median_absolute_delta": -0.13571800610256718,
+          "median_relative_change_percent": -24.25127375912817
+        },
+        "server_peak_cgroup_mib": {
+          "old": {
+            "median": 227.9453125,
+            "min": 224.79296875,
+            "max": 231.99609375
+          },
+          "new": {
+            "median": 229.828125,
+            "min": 229.25,
+            "max": 231.7109375
+          },
+          "median_absolute_delta": 1.8828125,
+          "median_relative_change_percent": 0.8259930767385268
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "old": {
+            "median": 5255000,
+            "min": 5253288,
+            "max": 5255568
+          },
+          "new": {
+            "median": 4859872,
+            "min": 4328968,
+            "max": 5020792
+          },
+          "median_absolute_delta": -395128,
+          "median_relative_change_percent": -7.519086584205518
+        },
+        "measured_sampled_block_write_bytes": {
+          "old": {
+            "median": 199155712,
+            "min": 199098368,
+            "max": 200179712
+          },
+          "new": {
+            "median": 176766976,
+            "min": 159375360,
+            "max": 184627200
+          },
+          "median_absolute_delta": -22388736,
+          "median_relative_change_percent": -11.241824688412652
+        }
+      }
+    },
+    {
+      "broker": "rabbitmq",
+      "profile": "4x4",
+      "requested_rate": 200.0,
+      "qualification": "Separate GitHub VM; runner image changed 20260920.314.1 → 20260927.320.1. Cross-run differences are observational, not causal attribution to wake code.",
+      "metrics": {
+        "completed_per_s": {
+          "old": {
+            "median": 200.0,
+            "min": 200.0,
+            "max": 200.0
+          },
+          "new": {
+            "median": 200.0,
+            "min": 200.0,
+            "max": 200.0
+          },
+          "median_absolute_delta": 0.0,
+          "median_relative_change_percent": 0.0
+        },
+        "offered_load_achieved_fraction": {
+          "old": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0
+          },
+          "new": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0
+          },
+          "median_absolute_delta": 0.0,
+          "median_relative_change_percent": 0.0
+        },
+        "publish_p95_ms": {
+          "old": {
+            "median": 1.969764,
+            "min": 1.956829,
+            "max": 2.058911
+          },
+          "new": {
+            "median": 1.702242,
+            "min": 1.634944,
+            "max": 1.926612
+          },
+          "median_absolute_delta": -0.26752200000000004,
+          "median_relative_change_percent": -13.581423967541289
+        },
+        "end_to_end_p95_ms": {
+          "old": {
+            "median": 1.578634,
+            "min": 1.536642,
+            "max": 1.665866
+          },
+          "new": {
+            "median": 1.34618,
+            "min": 1.329316,
+            "max": 1.539012
+          },
+          "median_absolute_delta": -0.23245400000000016,
+          "median_relative_change_percent": -14.72500909013743
+        },
+        "end_to_end_p99_ms": {
+          "old": {
+            "median": 1.847145,
+            "min": 1.803533,
+            "max": 1.959577
+          },
+          "new": {
+            "median": 1.615305,
+            "min": 1.609426,
+            "max": 3.28571
+          },
+          "median_absolute_delta": -0.23184000000000005,
+          "median_relative_change_percent": -12.551261541459931
+        },
+        "synthetic_db_p95_ms": {
+          "old": {
+            "median": 1.175398,
+            "min": 1.158818,
+            "max": 1.864357
+          },
+          "new": {
+            "median": 1.423703,
+            "min": 1.415562,
+            "max": 1.46899
+          },
+          "median_absolute_delta": 0.248305,
+          "median_relative_change_percent": 21.125184831010433
+        },
+        "db_p95_absolute_increase_ms": {
+          "old": {
+            "median": -0.03929300000000002,
+            "min": -0.06443900000000014,
+            "max": 0.625831
+          },
+          "new": {
+            "median": 0.5992909999999999,
+            "min": 0.511733,
+            "max": 0.672099
+          },
+          "median_absolute_delta": 0.6385839999999999,
+          "median_relative_change_percent": -1625.1851474817386
+        },
+        "db_p95_increase_percent": {
+          "old": {
+            "median": -3.2348144507533205,
+            "min": -5.267821888613766,
+            "max": 50.530307801370334
+          },
+          "new": {
+            "median": 72.69314371940243,
+            "min": 56.618342628970744,
+            "max": 84.34014187636703
+          },
+          "median_absolute_delta": 75.92795817015575,
+          "median_relative_change_percent": -2347.2121608852626
+        },
+        "server_mean_cpu_cores": {
+          "old": {
+            "median": 0.3062597324195047,
+            "min": 0.30382392697846033,
+            "max": 0.31866396188244744
+          },
+          "new": {
+            "median": 0.24131066980970992,
+            "min": 0.23994079378558203,
+            "max": 0.2808812468920548
+          },
+          "median_absolute_delta": -0.0649490626097948,
+          "median_relative_change_percent": -21.207183228655627
+        },
+        "server_peak_cgroup_mib": {
+          "old": {
+            "median": 186.32421875,
+            "min": 185.71484375,
+            "max": 236.3984375
+          },
+          "new": {
+            "median": 206.08203125,
+            "min": 186.30859375,
+            "max": 223.69140625
+          },
+          "median_absolute_delta": 19.7578125,
+          "median_relative_change_percent": 10.60399589089918
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "old": {
+            "median": 5238928,
+            "min": 5238192,
+            "max": 5239272
+          },
+          "new": {
+            "median": 4767640,
+            "min": 4747360,
+            "max": 4913472
+          },
+          "median_absolute_delta": -471288,
+          "median_relative_change_percent": -8.995886181295104
+        },
+        "measured_sampled_block_write_bytes": {
+          "old": {
+            "median": 199417856,
+            "min": 199409664,
+            "max": 199598080
+          },
+          "new": {
+            "median": 181993472,
+            "min": 172515328,
+            "max": 183590912
+          },
+          "median_absolute_delta": -17424384,
+          "median_relative_change_percent": -8.737624779197304
+        }
+      }
+    },
+    {
+      "broker": "rabbitmq",
+      "profile": "4x4",
+      "requested_rate": 400.0,
+      "qualification": "Separate GitHub VM; runner image changed 20260920.314.1 → 20260927.320.1. Cross-run differences are observational, not causal attribution to wake code.",
+      "metrics": {
+        "completed_per_s": {
+          "old": {
+            "median": 399.9916666666667,
+            "min": 399.96666666666664,
+            "max": 400.0
+          },
+          "new": {
+            "median": 400.0,
+            "min": 400.0,
+            "max": 400.0
+          },
+          "median_absolute_delta": 0.008333333333325754,
+          "median_relative_change_percent": 0.00208337673701346
+        },
+        "offered_load_achieved_fraction": {
+          "old": {
+            "median": 0.9999791666666666,
+            "min": 0.9999791666666666,
+            "max": 1.0
+          },
+          "new": {
+            "median": 1.0,
+            "min": 1.0,
+            "max": 1.0
+          },
+          "median_absolute_delta": 2.0833333333358794e-05,
+          "median_relative_change_percent": 0.0020833767370179003
+        },
+        "publish_p95_ms": {
+          "old": {
+            "median": 2.380882,
+            "min": 2.082886,
+            "max": 2.841815
+          },
+          "new": {
+            "median": 1.953434,
+            "min": 1.709904,
+            "max": 2.477803
+          },
+          "median_absolute_delta": -0.42744800000000027,
+          "median_relative_change_percent": -17.953346700928492
+        },
+        "end_to_end_p95_ms": {
+          "old": {
+            "median": 1.879586,
+            "min": 1.720166,
+            "max": 2.390318
+          },
+          "new": {
+            "median": 1.567886,
+            "min": 1.344487,
+            "max": 2.071956
+          },
+          "median_absolute_delta": -0.3117000000000001,
+          "median_relative_change_percent": -16.58343911904005
+        },
+        "end_to_end_p99_ms": {
+          "old": {
+            "median": 2.33845,
+            "min": 2.153038,
+            "max": 3.119742
+          },
+          "new": {
+            "median": 2.029225,
+            "min": 1.783112,
+            "max": 2.949125
+          },
+          "median_absolute_delta": -0.3092250000000001,
+          "median_relative_change_percent": -13.223502747546457
+        },
+        "synthetic_db_p95_ms": {
+          "old": {
+            "median": 2.134812,
+            "min": 1.927305,
+            "max": 2.220794
+          },
+          "new": {
+            "median": 2.070185,
+            "min": 1.664227,
+            "max": 2.1629
+          },
+          "median_absolute_delta": -0.06462700000000021,
+          "median_relative_change_percent": -3.027292333001698
+        },
+        "db_p95_absolute_increase_ms": {
+          "old": {
+            "median": 0.9115550000000001,
+            "min": 0.688779,
+            "max": 1.0061030000000002
+          },
+          "new": {
+            "median": 1.166356,
+            "min": 0.8398149999999999,
+            "max": 1.366009
+          },
+          "median_absolute_delta": 0.25480099999999983,
+          "median_relative_change_percent": 27.952345168420972
+        },
+        "db_p95_increase_percent": {
+          "old": {
+            "median": 74.5186825008972,
+            "min": 55.61280102315172,
+            "max": 82.82789614807389
+          },
+          "new": {
+            "median": 129.04609168327195,
+            "min": 101.86836193553708,
+            "max": 171.41729546449892
+          },
+          "median_absolute_delta": 54.527409182374754,
+          "median_relative_change_percent": 73.1728035875007
+        },
+        "server_mean_cpu_cores": {
+          "old": {
+            "median": 0.5114004902446396,
+            "min": 0.4915037533096809,
+            "max": 0.5274154459633109
+          },
+          "new": {
+            "median": 0.38221650865860773,
+            "min": 0.3821340649560538,
+            "max": 0.44008820260132836
+          },
+          "median_absolute_delta": -0.1291839815860319,
+          "median_relative_change_percent": -25.26082474505136
+        },
+        "server_peak_cgroup_mib": {
+          "old": {
+            "median": 232.484375,
+            "min": 232.25,
+            "max": 235.74609375
+          },
+          "new": {
+            "median": 218.53515625,
+            "min": 208.53125,
+            "max": 227.8359375
+          },
+          "median_absolute_delta": -13.94921875,
+          "median_relative_change_percent": -6.000067208817797
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "old": {
+            "median": 5238592,
+            "min": 5232224,
+            "max": 5238656
+          },
+          "new": {
+            "median": 4585784,
+            "min": 4514072,
+            "max": 4696552
+          },
+          "median_absolute_delta": -652808,
+          "median_relative_change_percent": -12.4615163769196
+        },
+        "measured_sampled_block_write_bytes": {
+          "old": {
+            "median": 199811072,
+            "min": 199794688,
+            "max": 199884800
+          },
+          "new": {
+            "median": 168198144,
+            "min": 163160064,
+            "max": 182878208
+          },
+          "median_absolute_delta": -31612928,
+          "median_relative_change_percent": -15.821409536304373
+        }
+      }
+    }
+  ]
+}

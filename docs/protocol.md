@@ -34,7 +34,7 @@ Python Qpid Proton 与服务端共用 Proton 引擎，不能单独作为跨引�
 
 rhea roundtrip保持默认direct AMQP、默认sender、默认FIRST receiver的autoaccept/credit；SECOND设`autoaccept=false, credit_window=0, rcv_settle_mode=1`并显式发1 credit。release使用SASL ANONYMOUS；正常关闭重连使用SASL EXTERNAL；生产均在真实远端Accepted后逐字节核对数据库中的完整encoded message。所有连接都使用同一临时PKI的双向TLS、可信CA与`servername=localhost`验证，`rejectUnauthorized=true`，不降低证书或主机名检查。
 
-PG18普通CI在源码安装、候选归档重装两轮各执行32项既有普通测试＋8项rhea＝40项；PG16/17保持32项。客户端实际Node版本、锁文件散列、传递依赖写入`environment.json`，实际协商TLS/SASL与场景结果写入`independent-client.jsonl`。472e626对应普通CI已逐份核对以上两平台证据；实际checkout为GitHub测试合并提交，身份与归档链接见[验证记录](validation.md)。未来恢复默认全量qualification时，所有平台/PG版本均需先安装并校验这组Node依赖，补齐全量路径的预检及两轮证据输出；具体要求见仓库的`tests/interop/README.md`。当前暂停中的手动工作流不随本次修改或执行。
+PG18普通CI在源码安装、候选归档重装两轮各执行32项既有普通测试＋8项rhea＝40项；PG16/17保持32项。客户端实际Node版本、锁文件散列、传递依赖写入`environment.json`，实际协商TLS/SASL与场景结果写入`independent-client.jsonl`。37fc015对应普通CI已逐份核对以上两平台证据；实际checkout为GitHub测试合并提交，身份与归档链接见[验证记录](validation.md)。未来恢复默认全量qualification时，所有平台/PG版本均需先安装并校验这组Node依赖，补齐全量路径的预检及两轮证据输出；具体要求见仓库的`tests/interop/README.md`。当前暂停中的手动工作流不随本次修改或执行。
 
 这些记录仅证明指定版本和参数下的小规模正常流量，不是任意AMQP客户端、真实ERP、性能或生产认证。Qpid JMS、.NET、其它JavaScript版本、Rust等仍需各自验证。RabbitMQ自有路由地址、管理API与0-9-1客户端并不适用。
 

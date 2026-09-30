@@ -59,3 +59,5 @@ python scripts/check_normal_wake.py /tmp/new-normal-wake \
 新固定预算运行使用独立分支`benchmarks/wake-pg18-20260930`；原始`benchmarks/controlled-pg18-20260930`仍固定51ca717。测量脚本、2CPU/4GiB/0swap、2ms轮询、三轮30秒暖机+120秒测量、到达率、持久性与目标保持一致。记录新固定提交与终态证据后再判断是否保留该权衡，不能把本地tmpfs结果当云端复测已通过。
 
 安全/解析器/新fuzz及故障资格仍暂停；本次没有恢复这些活动。
+
+后续状态：云端复测已结束，完整[诊断性结果](benchmark-wake-results.md)显示基线不稳且不能建立稳定收益，因此37fc015已保守恢复原生基线并重新通过普通CI。上述本地机制数字不被删除，也不再作为保留唤醒代码的依据。

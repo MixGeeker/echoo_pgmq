@@ -67,4 +67,4 @@ TLS使用现有一次性PKI的PEM CA、客户端证书和私钥，设置`servern
 
 ## 已验证范围
 
-本地Linux PG18.6 / Node24.19.0已完成普通验证；fresh构建安装及候选校验重装后，两轮均40项通过且core.sql完成。472e626的Linux与原生Windows PG18 CI均已逐份核对：Node24.21.0/rhea3.0.5，两轮各40项及core.sql通过，包含每轮16条独立客户端JSONL证据。被测checkout、归档与支持边界见[普通验证记录](../../docs/validation.md)。
+本地Linux PG18.6 / Node24.19.0已完成普通验证；fresh构建安装及候选校验重装后，两轮均40项通过且core.sql完成。37fc015的Linux与原生Windows PG18 CI均已逐份核对：Node24.21.0/rhea3.0.5，两轮各40项及core.sql通过，包含每轮16条独立客户端JSONL证据。被测checkout、归档与支持边界见[普通验证记录](../../docs/validation.md)。
