@@ -149,9 +149,14 @@ jobs:
             Where-Object { Test-Path "$($_.FullName)/api-ms-win-crt-private-l1-1-0.dll" } |
             Sort-Object FullName -Descending | Select-Object -First 1
           if ($ucrt) {
-            $ucrt.FullName >> $env:GITHUB_PATH
-            $env:PATH = "$($ucrt.FullName);$env:PATH"
-            Write-Host "Using Microsoft SDK UCRT: $($ucrt.FullName)"
+            # initdb re-executes under PostgreSQL's restricted token. Deploy
+            # Microsoft's redistributable app-locally in this disposable PG
+            # installation rather than rely on SDK PATH/ACL inheritance.
+            Get-ChildItem "$($ucrt.FullName)/*.dll" | ForEach-Object {
+              $target = "$env:RUNNER_TEMP/postgres/bin/$($_.Name)"
+              if (!(Test-Path $target)) { Copy-Item $_.FullName $target }
+            }
+            Write-Host "App-local Microsoft SDK UCRT: $($ucrt.FullName)"
           }
           python scripts/check_windows_runtime.py "$env:RUNNER_TEMP/postgres"
           if ($LASTEXITCODE -ne 0) { throw 'Native PostgreSQL runtime prerequisite failed' }

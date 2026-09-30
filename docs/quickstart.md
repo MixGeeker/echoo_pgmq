@@ -28,7 +28,7 @@ cmake --build build --config RelWithDebInfo
 cmake --install build --config RelWithDebInfo
 ```
 
-原生 PostgreSQL ZIP 还依赖 Microsoft Visual C++ 运行库与 Universal CRT。先直接执行目标 `initdb.exe --version`、`postgres.exe --version` 和 `psql.exe --version`，确认 PostgreSQL 本身能够加载，再排查扩展。若返回 `0xC0000135`，说明进程加载依赖失败，不能当成扩展的 SQL/AMQP 失败。CI 的 `scripts/check_windows_runtime.py` 会输出依赖加载诊断；临时构建机可使用已安装 Windows SDK 的 x64 UCRT redistributable 路径，来源与部署要求见 [Microsoft 官方说明](https://learn.microsoft.com/en-us/cpp/windows/universal-crt-deployment?view=msvc-170)。不要从第三方 DLL 下载站补文件，也不要把构建机临时 PATH 直接当作生产服务配置。
+原生 PostgreSQL ZIP 还依赖 Microsoft Visual C++ 运行库与 Universal CRT。先直接执行目标 `initdb.exe --version`、`postgres.exe --version` 和 `psql.exe --version`，确认 PostgreSQL 本身能够加载，再排查扩展。若返回 `0xC0000135`，说明进程加载依赖失败，不能当成扩展的 SQL/AMQP 失败。CI 的 `scripts/check_windows_runtime.py` 会输出依赖加载诊断；版本输出不会覆盖 initdb 的受限令牌重新执行路径，因此还需在可丢弃目录实际初始化一次。临时构建机使用已安装 Windows SDK 的 x64 UCRT redistributable，将其按微软支持的 app-local 方式复制到测试 PostgreSQL bin，来源与部署要求见 [Microsoft 官方说明](https://learn.microsoft.com/en-us/cpp/windows/universal-crt-deployment?view=msvc-170)。不要从第三方 DLL 下载站补文件，也不要把构建机临时 PATH 直接当作生产服务配置。
 
 如 CMake 未找到 `postgres.lib`，使用 `-DPOSTGRES_LIBRARY=完整路径`。启动 PostgreSQL 的服务进程必须能找到 Proton/OpenSSL DLL；交互式 PowerShell 的 PATH 不等于服务 PATH。不要盲目覆盖 PostgreSQL 自带 SSL DLL，核对依赖 ABI/架构并限制 DLL 目录写权限。首版服务端固定使用 OpenSSL/PEM，不支持默认 SChannel/PFX 的服务端配置。
 

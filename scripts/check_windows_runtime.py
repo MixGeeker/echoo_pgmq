@@ -5,6 +5,7 @@ import ctypes
 import os
 from pathlib import Path
 import subprocess
+import tempfile
 
 
 def main():
@@ -40,7 +41,17 @@ def main():
             raise SystemExit("Native PostgreSQL runtime cannot load; see DLL diagnostics above")
     # An optional diagnostic DLL can be absent while the real native executables
     # run successfully, so the executable results remain authoritative.
-    print("Native PostgreSQL runtime probes passed", flush=True)
+    # --version returns before initdb's restricted-token re-exec. A real
+    # disposable initialization validates that loader path too, without changing
+    # token protections, starting a server, or loading the Echoo extension.
+    with tempfile.TemporaryDirectory(prefix="echoo-native-prerequisite-", dir=args.postgres.parent) as temp:
+        result = subprocess.run([str(bindir / "initdb.exe"), "-D", str(Path(temp) / "data"),
+                                 "-U", "echoo_runtime_probe", "-A", "trust", "--no-locale", "--encoding=UTF8"],
+                                capture_output=True, text=True)
+        print("initdb initialization exit", hex(result.returncode), result.stdout, result.stderr, flush=True)
+        if result.returncode:
+            raise SystemExit("Native PostgreSQL restricted-token initialization failed")
+    print("Native PostgreSQL runtime and initialization probes passed", flush=True)
 
 
 if __name__ == "__main__":
