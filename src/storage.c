@@ -5,6 +5,7 @@
 #include "catalog/pg_type_d.h"
 #include "executor/spi.h"
 #include "miscadmin.h"
+#include "nodes/parsenodes.h"
 #include "utils/builtins.h"
 #include "utils/memutils.h"
 #include "utils/snapmgr.h"
@@ -13,6 +14,34 @@
 
 #include <stdlib.h>
 #include <string.h>
+
+/* Four fixed, process-local plans survive SPI_finish and transaction aborts.
+ * PostgreSQL still revalidates their dependencies and executes each function;
+ * neither authorization decisions nor query results are cached here. */
+static SPIPlanPtr authorize_plan = NULL;
+static SPIPlanPtr publish_plan = NULL;
+static SPIPlanPtr claim_plan = NULL;
+static SPIPlanPtr settle_plan = NULL;
+
+static int
+execute_cached_query(SPIPlanPtr *slot, const char *query, int nargs,
+                     Oid *types, Datum *args)
+{
+    if (*slot == NULL)
+    {
+        SPIPlanPtr plan;
+
+        /* Match SPI_execute_with_args' cursor options. Do not publish a
+         * transaction-owned pointer if preparation or retention fails. */
+        plan = SPI_prepare_cursor(query, nargs, types, CURSOR_OPT_PARALLEL_OK);
+        if (plan == NULL)
+            elog(ERROR, "echoo_pgmq: SPI plan preparation failed");
+        if (SPI_keepplan(plan) != 0)
+            elog(ERROR, "echoo_pgmq: SPI plan retention failed");
+        *slot = plan;
+    }
+    return SPI_execute_plan(*slot, args, NULL, false, 1);
+}
 
 static void
 begin_operation(void)
@@ -71,8 +100,8 @@ echoo_db_authorize(const char *queue, const char *identity, bool publish)
         args[0] = CStringGetTextDatum(queue);
         args[1] = CStringGetTextDatum(identity);
         args[2] = CStringGetTextDatum(publish ? "publish" : "consume");
-        if (SPI_execute_with_args("SELECT echoo_pgmq.authorize($1,$2,$3)",
-                                  3, types, args, NULL, false, 1) != SPI_OK_SELECT ||
+        if (execute_cached_query(&authorize_plan, "SELECT echoo_pgmq.authorize($1,$2,$3)",
+                                 3, types, args) != SPI_OK_SELECT ||
             SPI_processed != 1)
             elog(ERROR, "echoo_pgmq: authorization returned no result");
         allowed = DatumGetBool(SPI_getbinval(SPI_tuptable->vals[0],
@@ -109,8 +138,8 @@ echoo_db_publish(const char *queue, const char *identity,
         args[0] = CStringGetTextDatum(queue);
         args[1] = PointerGetDatum(payload);
         args[2] = CStringGetTextDatum(identity);
-        if (SPI_execute_with_args("SELECT echoo_pgmq.publish($1,$2,$3)",
-                                  3, types, args, NULL, false, 1) != SPI_OK_SELECT ||
+        if (execute_cached_query(&publish_plan, "SELECT echoo_pgmq.publish($1,$2,$3)",
+                                 3, types, args) != SPI_OK_SELECT ||
             SPI_processed != 1)
             elog(ERROR, "echoo_pgmq: publish returned no result");
         commit_operation();
@@ -138,8 +167,8 @@ reject_claimed_message(const char *queue, const char *identity,
     args[3] = PointerGetDatum(owner);
     args[4] = CStringGetTextDatum("rejected");
     args[5] = CStringGetTextDatum(identity);
-    if (SPI_execute_with_args("SELECT echoo_pgmq.settle($1,$2,$3,$4,$5,$6)",
-                              6, types, args, NULL, false, 1) != SPI_OK_SELECT ||
+    if (execute_cached_query(&settle_plan, "SELECT echoo_pgmq.settle($1,$2,$3,$4,$5,$6)",
+                             6, types, args) != SPI_OK_SELECT ||
         SPI_processed != 1)
         elog(ERROR, "echoo_pgmq: poison-message settlement failed");
 }
@@ -172,8 +201,8 @@ echoo_db_claim(const char *queue, const char *identity,
             Datum body_datum;
             HeapTuple tuple;
             TupleDesc desc;
-            if (SPI_execute_with_args("SELECT id,generation,body FROM echoo_pgmq.claim($1,$2,$3,$4)",
-                                      4, types, args, NULL, false, 1) != SPI_OK_SELECT)
+            if (execute_cached_query(&claim_plan, "SELECT id,generation,body FROM echoo_pgmq.claim($1,$2,$3,$4)",
+                                     4, types, args) != SPI_OK_SELECT)
                 elog(ERROR, "echoo_pgmq: claim query failed");
             if (SPI_processed == 0)
                 break;
@@ -233,8 +262,8 @@ echoo_db_settle(const char *queue, const char *identity,
         args[3] = PointerGetDatum(owner);
         args[4] = CStringGetTextDatum(outcome);
         args[5] = CStringGetTextDatum(identity);
-        if (SPI_execute_with_args("SELECT echoo_pgmq.settle($1,$2,$3,$4,$5,$6)",
-                                  6, types, args, NULL, false, 1) != SPI_OK_SELECT ||
+        if (execute_cached_query(&settle_plan, "SELECT echoo_pgmq.settle($1,$2,$3,$4,$5,$6)",
+                                 6, types, args) != SPI_OK_SELECT ||
             SPI_processed != 1)
             elog(ERROR, "echoo_pgmq: settlement returned no result");
         applied = DatumGetBool(SPI_getbinval(SPI_tuptable->vals[0],
