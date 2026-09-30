@@ -17,6 +17,12 @@
 
 这不是 RabbitMQ 的通用替代品：不支持 AMQP 0-9-1、exchange/binding、topic 广播、AMQP 事务协调器、分布式 broker 集群和消息级 exactly-once 业务副作用。不要把 Kafka 协议、PGMQ JSONB 接口或 RabbitMQ 管理 API 套用到本扩展。
 
+## 固定预览试用入口
+
+已交付PG18隔离测试包`preview-20260930.1`，扩展SQL仍0.1.0。先读[版本化外部契约](docs/preview-20260930.1-contract.md)：完整编码64KiB的AMQP限额与SQL默认1MiB存在错位，.2配置修复正在准备；TTL/priority/group仅透传，不执行对应broker语义。原包保持不变，追加Windows实跑与来源见契约页。
+
+本轮优化结论及后续优先级见[阶段总结](docs/performance-round-conclusion.md)，最新证据见[PROGRESS](docs/PROGRESS.md)。
+
 ## 从哪里开始
 
 1. [快速开始](docs/quickstart.md)：构建、安装、角色/证书、AMQP 与 SQL 示例
@@ -57,6 +63,8 @@ CI 上传带 SHA-256 清单的 candidate ZIP，不创建 tag 或最终 Release�
 项目尚未选定许可证，因此没有授予通用开源再分发许可。依赖自身许可证与归属说明见 [docs/licenses.md](docs/licenses.md)。本项目为独立实现，不包含 Kafgres/PGMQ 代码的直接复制。
 
 ## 验证与当前候选状态
+
+以下为历史基线证据，固定450预览的464项普通矩阵见[版本化清单](docs/preview-20260930.1-contract.md)。
 
 恢复基线后的`37fc015`完成Linux/原生Windows × PG18/17/16六组合普通CI：416项、12个core.sql标记及全部归档散列通过；PG18每轮40项，PG16/17每轮32项。见[验证记录与候选下载](docs/validation.md)。
 
