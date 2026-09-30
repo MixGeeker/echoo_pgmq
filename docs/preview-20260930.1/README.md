@@ -19,6 +19,8 @@
 
 用户已经收到的preview20260930.1两个ZIP保持原样，不需重发或静默覆盖。同目录`guide/README.zh-CN.md`和`guide/VALIDATION.json`保留交付时“Windows未运行”的历史事实；本节是其后的新增验证记录，不改写过去。
 
-首轮36752216453在OpenSSL路径前置检查失败，尚未运行候选包；后续选取单个真实命令路径。第二轮36752745701在新CI PIPE捕获方式下长时间未结束，最终状态仍待收集，不能直接认定具体停点。源码与独立普通子进程验证支持Windows长期CMD继承PIPE导致EOF等待的可能性，CI改为文件捕获并逐阶段保存证据；不改变已发guide或产品代码。上述历史失败/未完成运行保留，不算通过。
+首轮36752216453在OpenSSL路径前置检查失败，尚未运行候选包；后续选取单个真实命令路径。第二轮[36752745701](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36752745701)已在25分钟作业上限后终态cancelled。最终日志确认停在start阶段的Python输出捕获，PG及AMQP监听已ready；SQL/AMQP演示均未运行，上传result仍为running、start退出码为null，不能伪装成完整结果。取消时PG日志出现abnormal shutdown，cleanup status3仅确认没有服务器运行，不是正常停机或故障资格证明。
+
+源码与普通子进程验证支持Windows长期CMD继承PIPE导致EOF等待的机制；CI改为文件捕获并逐阶段保存证据，不改变已发guide或产品代码。之前排队的同一文件捕获修正[36754039681](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36754039681)随后也完整通过，原包/12份guide哈希、6阶段退出码、SQL/rhea与正常停机已独立复核。它并非为追求绿色重复发起，而是此前已排队的作业自然执行。[全部尝试终态索引](attempts-final.json)保留首轮前置失败、第二轮取消与两次成功原始证据散列；所有遗留smoke已结束，不再追加运行。
 
 这是普通安装、SQL 和 AMQP 互操作演示，不代表 Windows 11、SSD、断电或生产验收。安全审阅、解析器/模糊测试与新增故障工作仍暂停。此改动不发布 release、不修改运行时代码，也不调整分支保护。
