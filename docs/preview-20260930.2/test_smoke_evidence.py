@@ -1,0 +1,32 @@
+"""Offline normal harness correctness; no PG/network/messages are run."""
+import copy
+import unittest
+from run_windows_smoke import PREVIEW_STAGES, verify_policy, verify_sql_bridge_record
+
+class EvidenceChecks(unittest.TestCase):
+    def setUp(self):
+        self.record = dict(operation='sql-binary', client='rhea', version='3.0.5', received=1,
+                           accepted=1, remote_settlement_confirmed=True, metadata_verified=True,
+                           sql_binary_envelope_verified=True, binary_body_bytes=12)
+        self.policy = dict(preview_label='preview-20260930.2', max_encoded_message_bytes=65536,
+                           worker_max_message_bytes=65536, global_max_message_bytes=65536,
+                           global_message_count=0, global_total_bytes=0, retained_message_rows=0,
+                           queues=[dict(name=f'preview/q{i}', queue_max_message_bytes=65536,
+                                        effective_sql_max_message_bytes=65536, queue_message_count=0,
+                                        queue_total_bytes=0, retained_message_rows=0) for i in range(5)])
+    def test_complete_bridge_and_policy_evidence(self):
+        verify_sql_bridge_record(self.record)
+        verify_policy(self.policy)
+        self.assertEqual(PREVIEW_STAGES, ('install','init','start','sql-demo','amqp-demo','policy-check','stop'))
+    def test_local_ack_is_not_remote_commit_evidence(self):
+        self.record['remote_settlement_confirmed'] = False
+        with self.assertRaises(RuntimeError): verify_sql_bridge_record(self.record)
+    def test_wrong_admission_configuration_is_not_pass(self):
+        self.policy['global_max_message_bytes'] = 1048576
+        with self.assertRaises(RuntimeError): verify_policy(self.policy)
+    def test_missing_queue_evidence_is_not_pass(self):
+        self.policy['queues'].pop()
+        with self.assertRaises(RuntimeError): verify_policy(self.policy)
+    def test_nonempty_demo_is_not_pass(self):
+        self.policy['queues'][0]['retained_message_rows'] = 1
+        with self.assertRaises(RuntimeError): verify_policy(self.policy)
