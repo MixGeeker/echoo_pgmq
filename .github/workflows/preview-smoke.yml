@@ -44,10 +44,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           $ErrorActionPreference = 'Stop'
-          $env:ECHOO_TEST_OPENSSL = (Get-Command openssl -CommandType Application -ErrorAction Stop).Source
-          if (![IO.Path]::IsPathFullyQualified($env:ECHOO_TEST_OPENSSL)) {
-            throw 'The runner OpenSSL executable must have an absolute path'
+          $opensslCommand = Get-Command openssl -CommandType Application -ErrorAction Stop | Select-Object -First 1
+          $opensslPath = [string]$opensslCommand.Source
+          if (![IO.Path]::IsPathFullyQualified($opensslPath) -or !(Test-Path -LiteralPath $opensslPath -PathType Leaf)) {
+            throw 'The runner OpenSSL executable must be one existing absolute file path'
           }
+          $env:ECHOO_TEST_OPENSSL = $opensslPath
+          Write-Host "Resolved OpenSSL executable: $opensslPath"
+          & $opensslPath version
+          if ($LASTEXITCODE -ne 0) { throw 'The resolved runner OpenSSL executable could not report its version' }
           python docs/preview-20260930.1/run_windows_smoke.py
           if ($LASTEXITCODE -ne 0) { throw 'Fixed preview ordinary smoke failed; inspect allowlisted evidence' }
       - name: Preserve ordinary results and sanitized logs only

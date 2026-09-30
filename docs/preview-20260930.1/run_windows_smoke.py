@@ -107,9 +107,11 @@ class Smoke:
         require(sys.version_info[:2] == (3, 12), "Use the pinned Python 3.12 runtime")
         require(os.environ.get("GITHUB_REPOSITORY") == FIXED["artifact"]["repository"],
                 "The fixed artifact must be downloaded from its original repository")
-        openssl = Path(self.env.get("ECHOO_TEST_OPENSSL", ""))
+        openssl_value = self.env.get("ECHOO_TEST_OPENSSL", "")
+        openssl = Path(openssl_value)
+        print(f"ECHOO_TEST_OPENSSL resolved value: {openssl_value!r}", flush=True)
         require(openssl.is_absolute() and openssl.is_file(),
-                "ECHOO_TEST_OPENSSL must name the existing runner OpenSSL executable")
+                f"ECHOO_TEST_OPENSSL must name the existing runner OpenSSL executable; received {openssl_value!r}")
         for relative, digest in FIXED["guide_sha256"].items():
             actual = sha256(GUIDE / relative)
             self.result["script_sha256"]["guide/" + relative] = actual
