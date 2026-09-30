@@ -11,6 +11,7 @@ from pathlib import Path
 import platform
 import re
 import shutil
+import socket
 import subprocess
 import sys
 import time
@@ -59,6 +60,18 @@ def verify_policy(record):
                 "Demo queue SQL admission differs from worker policy")
         for name in ("queue_message_count", "queue_total_bytes", "retained_message_rows"):
             require(queue.get(name) == 0, "Demo queue was not drained: " + name)
+
+
+def available_loopback_ports():
+    # Ask the OS for usable unprivileged ports. Hosted Windows can reserve a
+    # range containing our user-guide defaults. Do not alter that reservation.
+    with socket.socket() as pg_probe, socket.socket() as amqp_probe:
+        pg_probe.bind(("127.0.0.1", 0))
+        amqp_probe.bind(("127.0.0.1", 0))
+        ports = (pg_probe.getsockname()[1], amqp_probe.getsockname()[1])
+    require(ports[0] != ports[1] and all(1024 <= port <= 65535 for port in ports),
+            "OS did not provide two distinct unprivileged loopback ports")
+    return ports
 
 
 class Smoke:
@@ -214,7 +227,10 @@ class Smoke:
         self.run("verify-dependencies", [node_path, GUIDE / "interop/verify_dependencies.js"])
         self.preview("install", "--archive", inner, "--disposable-installation")
         self.init_attempted = True
-        self.preview("init")
+        pg_port, amqp_port = available_loopback_ports()
+        self.result["test_ports"] = {"postgres": pg_port, "amqp": amqp_port,
+                                     "selection": "OS-assigned loopback; fixed defaults not changed"}
+        self.preview("init", "--pg-port", str(pg_port), "--amqp-port", str(amqp_port))
         self.preview("start")
         _, sql = self.preview("sql-demo")
         self.result["checks"]["sql_demo_marker"] = "SQL_ENQUEUE_READ_ACK_OK" in sql

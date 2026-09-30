@@ -4,7 +4,8 @@ import json
 from pathlib import Path
 import copy
 import unittest
-from run_windows_smoke import PREVIEW_STAGES, verify_policy, verify_sql_bridge_record
+from unittest.mock import MagicMock, patch
+from run_windows_smoke import PREVIEW_STAGES, verify_policy, verify_sql_bridge_record, available_loopback_ports
 
 class EvidenceChecks(unittest.TestCase):
     def setUp(self):
@@ -17,6 +18,17 @@ class EvidenceChecks(unittest.TestCase):
                            queues=[dict(name=f'preview/q{i}', queue_max_message_bytes=65536,
                                         effective_sql_max_message_bytes=65536, queue_message_count=0,
                                         queue_total_bytes=0, retained_message_rows=0) for i in range(5)])
+    def test_runner_asks_os_for_two_distinct_loopback_ports(self):
+        first, second = MagicMock(), MagicMock()
+        first.__enter__.return_value = first
+        second.__enter__.return_value = second
+        first.getsockname.return_value = ('127.0.0.1', 61001)
+        second.getsockname.return_value = ('127.0.0.1', 61002)
+        with patch('run_windows_smoke.socket.socket', side_effect=[first, second]):
+            self.assertEqual(available_loopback_ports(), (61001, 61002))
+        first.bind.assert_called_once_with(('127.0.0.1', 0))
+        second.bind.assert_called_once_with(('127.0.0.1', 0))
+
     def test_exact_guide_bytes_match_delivery_pins(self):
         here = Path(__file__).resolve().parent
         pins = json.loads((here / 'fixed-inputs.json').read_text(encoding='utf-8'))['guide_sha256']
