@@ -67,7 +67,7 @@ P3 DB max64.809→25.035ms，改善61.37%，与同对DB p99变差16.79%同时保
 
 两种运行时本地PG18.6各44项普通回归及core.sql通过，0失败/错误/跳过。候选最终测试文件再次44项通过。新增test_lock_timeout_then_recovery_reuses_settings_plan保持queue行锁直到sender收到Rejected，读取新增日志同worker PID的55P03证明lock_timeout执行，排除57014/客户端超时；释放后同sender发布、收件、ACK、计数归零、worker不重启。它是普通数据库争用回归，没有故障注入。
 
-该正常回归值得保留到七计划PR2；合并三SET的运行时改动不保留。新增测试的Linux/Windows×PG18/17/16普通矩阵另行跟踪，不能把此前452项结果说成已覆盖新测试。当前运行时仍470767e，既有六组合452项证据见[上一报告](performance-local-results.md)。安全/parser/fuzz/新故障资格继续暂停，候选仍blocked_security_review，不合并main、不生产发布。
+该正常回归值得保留到七计划PR2；合并三SET的运行时改动不保留。新增测试的[CI36720731289](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36720731289)已核验：Linux/Windows Server2022×PG18/17/16，源码安装与归档重装12轮464项，0失败/错误/跳过；12个core.sql标记及12次55P03日志、12外层附件和6内层候选的全部文件散列通过。head450681d与实际checkout191d994同tree d0abc20；PG18每轮44项、PG16/17每轮36项。详见[可机读验证记录](evidence/spi-plan-ci450681d.json)。不能把此前452项结果说成已覆盖新测试。当前运行时仍470767e，既有六组合452项证据见[上一报告](performance-local-results.md)。安全/parser/fuzz/新故障资格继续暂停，候选仍blocked_security_review，不合并main、不生产发布。
 
 ## 后续方向
 
