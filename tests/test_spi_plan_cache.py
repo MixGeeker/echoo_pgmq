@@ -1,5 +1,7 @@
 """Ordinary worker-plan reuse across transactions, quota errors and benign DDL."""
 import uuid
+import os
+from pathlib import Path
 
 from proton import Delivery, Message
 from proton.utils import SendException
@@ -53,7 +55,7 @@ def test_repeated_worker_operations_and_empty_claims(admin, queue, connect_amqp)
     connection = connect_amqp()
     pid = worker_pid(admin)
     # Exceed PostgreSQL's initial five custom-plan executions, varying queue
-    # and payload parameters while the same process retains only four plans.
+    # and payload parameters while the same process retains its fixed query plans.
     for index in range(8):
         target = (queue, other)[index % 2]
         roundtrip(admin, connection, target, f"cycle-{index}".encode(), empty_claim=True)
@@ -129,4 +131,41 @@ def test_function_cost_change_revalidates_worker_plans(admin, queue, connect_amq
                 admin.execute(sql.SQL("ALTER FUNCTION {} COST {}").format(
                     sql.SQL(signature), sql.Literal(cost)))
     roundtrip(admin, connection, queue, b"after-cost-restoration", empty_claim=True)
+    assert worker_pid(admin) == pid
+
+
+def test_lock_timeout_then_recovery_reuses_settings_plan(admin, queue, connect_amqp):
+    """Normal queue-lock contention must honor SET LOCAL and recover after abort."""
+    connection = connect_amqp()
+    pid = worker_pid(admin)
+    for index in range(8):
+        roundtrip(admin, connection, queue, f"settings-warm-{index}".encode(), empty_claim=True)
+    sender = connection.create_sender(queue)
+    log = Path(os.environ["ECHOO_TEST_LOG"])
+    log_offset = log.stat().st_size
+    # Keep this administrative row lock until send has returned. The worker's
+    # appended SQLSTATE proves the 1s lock_timeout took effect. The 4s client
+    # timeout only bounds waiting; no timing sleeps or injection are used.
+    with admin.transaction():
+        admin.execute("SELECT queue_id FROM echoo_pgmq.queues WHERE name=%s FOR NO KEY UPDATE",
+                      (queue,)).fetchone()
+        with pytest.raises(SendException) as rejected:
+            sender.send(Message(body=b"ordinary-lock-contention"), timeout=4)
+        assert rejected.value.state == Delivery.REJECTED
+        assert retained(admin, queue) == (0, 0)
+        with log.open("rb") as stream:
+            stream.seek(log_offset)
+            appended = stream.read().decode("utf-8", errors="replace")
+        assert any(f"[{pid}]" in line and "SQLSTATE 55P03" in line
+                   for line in appended.splitlines()), appended
+    # The very same sender and worker must execute all settings again after the
+    # SQL transaction abort, then publish and settle a normal durable message.
+    message = Message(body=b"after-normal-lock-release")
+    assert sender.send(message, timeout=5).remote_state == Delivery.ACCEPTED
+    receiver = connection.create_receiver(queue, credit=1)
+    assert receiver.receive(timeout=5).body == message.body
+    receiver.accept()
+    receiver.close()
+    sender.close()
+    eventually(lambda: retained(admin, queue) == (0, 0))
     assert worker_pid(admin) == pid

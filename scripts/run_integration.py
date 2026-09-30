@@ -50,6 +50,7 @@ ORDINARY_TESTS = [
     "tests/test_spi_plan_cache.py::test_repeated_worker_operations_and_empty_claims",
     "tests/test_spi_plan_cache.py::test_capacity_rejection_then_recovery_uses_same_worker",
     "tests/test_spi_plan_cache.py::test_function_cost_change_revalidates_worker_plans",
+    "tests/test_spi_plan_cache.py::test_lock_timeout_then_recovery_reuses_settings_plan",
 ]
 
 
