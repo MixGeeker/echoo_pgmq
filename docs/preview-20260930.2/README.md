@@ -2,6 +2,12 @@
 
 本次只更新预览包装器与普通演示，内层候选ZIP、固定450681d源码、extension SQL0.1.0均不变。旧.1已发字节保留；使用新独立ROOT，.2不会把旧.1ROOT当可升级目标。
 
+## 附带普通六组合CI已收齐（2026-09-30 21:16 UTC）
+
+[CI36776023129](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36776023129)最终六组合成功；[独立逐份核验](ordinary-matrix-36776023129.json)覆盖12个外层artifact、6个内层候选的全部manifest/hash、12份JUnit/environment与6份job日志：464次普通测试，0失败/错误/跳过，12个core.sql标记。PG18每平台每轮44项，PG16/17每平台每轮36项。Linux16/18软件包安装一度较慢，随后正常完成，无需改仓库源或重跑该任务。
+
+此重建使用actual checkout ad589825，资格仍blocked_security_review；不替换已交付.2内的原450二进制。此前普通run36775187167与36775523789因后续修复提交按既有concurrency规则取消，其已通过job和取消状态保留，不合并计作当前通过次数。Windows包装器的两次预检查失败仍见下方原记录。
+
 ## 明确的行为变化
 
 .1的worker限额65,536而SQL默认1MiB，合法SQL消息可能先成功入队再被worker因尺寸转dead。.2在新库初始化时INSERT全局限额65536（扩展刚装好时该表为空），同一常量设置worker GUC和包装器队列限额。SQL admission为min(global,queue)，允许管理员进一步收紧；直接create_queue默认1MiB也受全局65536约束。

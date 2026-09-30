@@ -1,0 +1,234 @@
+{
+  "run": 36776023129,
+  "head": "fd30a1f28adca469c7f17694e9da4aa3da9a2779",
+  "actual_checkout": "ad5898250bed211bde6709c1306238bb2d4b07f5",
+  "actual_tree": "8d8832e51b4faa874fe9efbbb67ac635f4e784db",
+  "normal_tests": 464,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "core_sql_markers": 12,
+  "outer_artifacts_verified": 12,
+  "inner_candidates_verified": 6,
+  "six_job_logs_verified": true,
+  "qualification": "blocked_security_review; ordinary regression only",
+  "delivery": "These freshly rebuilt candidates do not replace the original450 binaries in preview.2",
+  "artifacts": [
+    {
+      "artifact_id": 11127315737,
+      "name": "linux-pg16-evidence",
+      "bytes": 8628,
+      "sha256": "f767299ee3cffaa3fe6f6de807934f3cb6336487eaadecb6236f362afdf09a91",
+      "rounds": [
+        {
+          "phase": "evidence",
+          "tests": 36,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "core_sql_marker": true,
+          "postgres": "postgres (PostgreSQL) 16.15 (Ubuntu 16.15-1.pgdg24.04+2)"
+        },
+        {
+          "phase": "candidate-evidence",
+          "tests": 36,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "core_sql_marker": true,
+          "postgres": "postgres (PostgreSQL) 16.15 (Ubuntu 16.15-1.pgdg24.04+2)"
+        }
+      ]
+    },
+    {
+      "artifact_id": 11127105868,
+      "name": "linux-pg16-candidate",
+      "bytes": 5882957,
+      "sha256": "693ece731c19aa1e177412571982a39c9b57583c970b8199612e627cc665624c",
+      "inner_sha256": "0a1a853087ad9002ff76c501373e71f4565fc09b0d3985a1a04cc96ce5d99f9f",
+      "inner_manifest_files": 100,
+      "commit": "ad5898250bed211bde6709c1306238bb2d4b07f5",
+      "qualification": "blocked_security_review"
+    },
+    {
+      "artifact_id": 11127030782,
+      "name": "linux-pg18-candidate",
+      "bytes": 5883383,
+      "sha256": "7c1e8847aeacedc5dbd2555c1bcbb255c8170813b80a4c02b6bd05fe0529c287",
+      "inner_sha256": "09d6d016fff130deedf3aa4d051212c7fd223da807a1f8e293728fafaf56e6d3",
+      "inner_manifest_files": 100,
+      "commit": "ad5898250bed211bde6709c1306238bb2d4b07f5",
+      "qualification": "blocked_security_review"
+    },
+    {
+      "artifact_id": 11126150838,
+      "name": "native-windows-server2022-pg17-candidate",
+      "bytes": 682159,
+      "sha256": "250e18b0b5fe0bf0419ca172c1d867e79458012176b82eece2ed5ff645e7cb5d",
+      "inner_sha256": "272e6f59043e29c7c905eca0315c065fda5c67c2631f2ef490dd54deb512e340",
+      "inner_manifest_files": 95,
+      "commit": "ad5898250bed211bde6709c1306238bb2d4b07f5",
+      "qualification": "blocked_security_review"
+    },
+    {
+      "artifact_id": 11126142703,
+      "name": "linux-pg18-evidence",
+      "bytes": 11674,
+      "sha256": "11993dd48797750a7b3353ab40538aef91f1c07a530b85d8d6c9dfda3cb7694f",
+      "rounds": [
+        {
+          "phase": "evidence",
+          "tests": 44,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "core_sql_marker": true,
+          "postgres": "postgres (PostgreSQL) 18.6 (Ubuntu 18.6-1.pgdg24.04+2)"
+        },
+        {
+          "phase": "candidate-evidence",
+          "tests": 44,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "core_sql_marker": true,
+          "postgres": "postgres (PostgreSQL) 18.6 (Ubuntu 18.6-1.pgdg24.04+2)"
+        }
+      ]
+    },
+    {
+      "artifact_id": 11126070798,
+      "name": "linux-pg17-candidate",
+      "bytes": 5883449,
+      "sha256": "1b590857609df2e2f09a6bd87b0913527315aeaf55a3e15891e08f8f6cc5de3d",
+      "inner_sha256": "99871497f602b1949729908773a4eda06ce7f321d37ce373d153714f719e3f3f",
+      "inner_manifest_files": 100,
+      "commit": "ad5898250bed211bde6709c1306238bb2d4b07f5",
+      "qualification": "blocked_security_review"
+    },
+    {
+      "artifact_id": 11125948425,
+      "name": "native-windows-server2022-pg17-evidence",
+      "bytes": 8723,
+      "sha256": "83ed1fe5a1b5acc63ca179cb1f187a7c464cc27ec815859744e2101281ad3764",
+      "rounds": [
+        {
+          "phase": "evidence",
+          "tests": 36,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "core_sql_marker": true,
+          "postgres": "postgres (PostgreSQL) 17.11"
+        },
+        {
+          "phase": "candidate-evidence",
+          "tests": 36,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "core_sql_marker": true,
+          "postgres": "postgres (PostgreSQL) 17.11"
+        }
+      ]
+    },
+    {
+      "artifact_id": 11125938242,
+      "name": "linux-pg17-evidence",
+      "bytes": 8670,
+      "sha256": "e61ab54e1e9c0e16bf11a699362a406bbe2890215388a2957b86219279faf46a",
+      "rounds": [
+        {
+          "phase": "evidence",
+          "tests": 36,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "core_sql_marker": true,
+          "postgres": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)"
+        },
+        {
+          "phase": "candidate-evidence",
+          "tests": 36,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "core_sql_marker": true,
+          "postgres": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)"
+        }
+      ]
+    },
+    {
+      "artifact_id": 11125713648,
+      "name": "native-windows-server2022-pg16-evidence",
+      "bytes": 8708,
+      "sha256": "c732bbc9b94964c56b1e2041a6278a5ff3f1d3d06bbbe5614e367c4bc8b0601b",
+      "rounds": [
+        {
+          "phase": "evidence",
+          "tests": 36,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "core_sql_marker": true,
+          "postgres": "postgres (PostgreSQL) 16.15"
+        },
+        {
+          "phase": "candidate-evidence",
+          "tests": 36,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "core_sql_marker": true,
+          "postgres": "postgres (PostgreSQL) 16.15"
+        }
+      ]
+    },
+    {
+      "artifact_id": 11125593821,
+      "name": "native-windows-server2022-pg16-candidate",
+      "bytes": 682259,
+      "sha256": "4dffb36e2eccdd33ca2462e36c7e886ebc2e6eb0498b8c7565be5931af8d414e",
+      "inner_sha256": "2690b8b1c4486426818d17d5e5cb2c6da158e16e38c3ac48a27feb7247261bc2",
+      "inner_manifest_files": 95,
+      "commit": "ad5898250bed211bde6709c1306238bb2d4b07f5",
+      "qualification": "blocked_security_review"
+    },
+    {
+      "artifact_id": 11125118571,
+      "name": "native-windows-server2022-pg18-evidence",
+      "bytes": 11826,
+      "sha256": "8017981b4f6ed074b1b645b6858ed4d5431d7687647b5455477941cafd4a5e10",
+      "rounds": [
+        {
+          "phase": "evidence",
+          "tests": 44,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "core_sql_marker": true,
+          "postgres": "postgres (PostgreSQL) 18.6"
+        },
+        {
+          "phase": "candidate-evidence",
+          "tests": 44,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "core_sql_marker": true,
+          "postgres": "postgres (PostgreSQL) 18.6"
+        }
+      ]
+    },
+    {
+      "artifact_id": 11124878853,
+      "name": "native-windows-server2022-pg18-candidate",
+      "bytes": 682130,
+      "sha256": "1374c85ad7472a02eb6af40db1873b941b358761893dfed48357eb4185d6320d",
+      "inner_sha256": "c9b0c30b591053c10ddc41ff142ac05fdea76db32fcf050d45ac377492f300b7",
+      "inner_manifest_files": 95,
+      "commit": "ad5898250bed211bde6709c1306238bb2d4b07f5",
+      "qualification": "blocked_security_review"
+    }
+  ]
+}
