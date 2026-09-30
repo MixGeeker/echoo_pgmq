@@ -1,6 +1,16 @@
 # 开发与验收进度
 
-最后核实：2026-09-30 20:38 UTC。草稿 PR#1–#4 继续保留，已有固定 PG18 隔离测试预览；尚未达到生产发布或合并 main 的条件。
+最后核实：2026-09-30 21:02 UTC。草稿 PR#1–#4 继续保留，已有固定 PG18 隔离测试预览；尚未达到生产发布或合并 main 的条件。
+
+## preview-20260930.2配置修复已完成双平台普通闭环（21:02 UTC）
+
+[.2入门、逐项验证与失败历史](https://github.com/MixGeeker/echoo_pgmq/blob/bce8ff98d7a6bc7d6820d8646a03a304c28c029e/docs/preview-20260930.2/README.md)。保留450681d原内层ZIP/extension0.1.0，仅新ROOT包装器把SQL全局、生成队列与worker上限统一为65,536最终编码字节；不是64KiB业务payload，也不是0.1.2迁移。SQL先包装再按octet_length计量，worker检查同一存储bytea长度。旧.1及其历史字节不替换，.2拒绝将旧ROOT当成已升级实例。
+
+Linux PG18.6七阶段通过；Windows Server2022 PG18.6 [36776023123](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36776023123)实跑七阶段和12项离线回归通过。原ZIP、12guide字节、控制器/输入hash、SQL事务demo、三个既有rhea场景、新增12字节SQL→AMQP远端SECOND、worker/global/5队列实际限额与归零、正常stop/status3均核验。独立只读窄正确性复核未发现阻断，不等于完整安全审阅。
+
+最初Linux控制器错计12字节为11及TIME_WAIT探针错误、Windows LF→CRLF散列失败及固定端口WinError10013均保留。最终仅新guide固定eol=lf，CI使用OS分配可绑定loopback端口；未改用户默认端口、系统权限/防火墙或放宽散列。Windows测试head fd30a1f，实际checkout ad589825整树多18项报告/未安装诊断patch，运行时/guide无差异。六组合普通重建CI36776023129仍单独收齐终态，不以它替代现有原450的464次证据。
+
+两平台.2独立套件已完成17成员及SHA256SUMS核验，Windows536119字节（ae2feb17…），Linux5730143字节（f3f64706…）；完整hash在上述验证页。每包附最终VERIFICATION覆盖guide中生成时的准备快照。仍只供可丢弃本机合成数据测试；blocked_security_review及Win11/真实SSD/ERP/生产SLA门槛未满足，不合并main或正式发布。
 
 ## 本轮优化收敛与预览契约修复（20:38 UTC）
 

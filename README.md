@@ -19,7 +19,7 @@
 
 ## 固定预览试用入口
 
-已交付PG18隔离测试包`preview-20260930.1`，扩展SQL仍0.1.0。先读[版本化外部契约](docs/preview-20260930.1-contract.md)：完整编码64KiB的AMQP限额与SQL默认1MiB存在错位，.2配置修复正在准备；TTL/priority/group仅透传，不执行对应broker语义。原包保持不变，追加Windows实跑与来源见契约页。
+PG18隔离测试修订包已到`preview-20260930.2`，扩展SQL仍0.1.0、原450681d二进制不变。[.2入门与双平台普通验证](https://github.com/MixGeeker/echoo_pgmq/blob/bce8ff98d7a6bc7d6820d8646a03a304c28c029e/docs/preview-20260930.2/README.md)修复新ROOT的SQL/AMQP完整编码限额错位，统一为65,536字节；原.1字节保留，使用全新目录试.2。TTL/priority/group仅透传，不执行对应broker语义；其它固定运行时边界见[版本化外部契约](docs/preview-20260930.1-contract.md)及.2变更说明。
 
 本轮优化结论及后续优先级见[阶段总结](docs/performance-round-conclusion.md)，最新证据见[PROGRESS](docs/PROGRESS.md)。
 
