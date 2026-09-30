@@ -1,0 +1,64 @@
+name: One-shot ordinary tail diagnostic (600s controller)
+
+on:
+  push:
+    branches: [diagnostics/ordinary-tail-20260930]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ordinary-tail-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  diagnostic:
+    if: github.ref == 'refs/heads/diagnostics/ordinary-tail-20260930' && github.run_attempt == 1
+    runs-on: ubuntu-24.04
+    # Step ceilings: 2 + 2 + 3 + 16 + 11 + 5 = 39 min; 1 min scheduling headroom.
+    # Neither upload nor job headroom extends the internal 900s/600s budgets.
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        timeout-minutes: 2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        timeout-minutes: 2
+        with:
+          python-version: '3.12'
+      - name: Validate deterministic controller and trace contracts without workload
+        timeout-minutes: 3
+        run: |
+          set -euo pipefail
+          python -c 'import os; assert len(os.sched_getaffinity(0)) >= 4'
+          python -m pip install -r bench/requirements.txt
+          python -m compileall -q bench/diagnostic
+          python -m unittest discover -s bench/diagnostic -p 'test_*.py' -v
+      - name: Build both arms once in one immutable image (separate 900s budget)
+        timeout-minutes: 16
+        run: |
+          python bench/diagnostic/build_image.py --tag echoo-tail:${GITHUB_SHA} \
+            --output "$RUNNER_TEMP/tail-build"
+      - name: Run one bounded session; failed PG gate stops without retry
+        timeout-minutes: 11
+        run: |
+          # Internally 600 seconds for controller/client work, including
+          # preparation and attempted normal cleanup/evidence. A hard stop can
+          # leave owned-container cleanup pending; it does not force-kill PG.
+          # Workflow headroom does not extend this controller budget.
+          python bench/diagnostic/controller.py --image echoo-tail:${GITHUB_SHA} \
+            --output "$RUNNER_TEMP/ordinary-tail"
+      - name: Preserve build metadata and every full, partial or unrun-stage result
+        timeout-minutes: 5
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pg18-ordinary-tail-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/tail-build/
+            ${{ runner.temp }}/ordinary-tail/
+          if-no-files-found: warn
+          retention-days: 30

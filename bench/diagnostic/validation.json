@@ -1,0 +1,137 @@
+{
+  "scope": "local harness validation only; no GitHub diagnostic or long benchmark executed",
+  "product_base": "6867f2b280730634531d00f23043795165df8dd5",
+  "tests": {
+    "diagnostic_unittest": {
+      "passed": 26
+    },
+    "existing_measurement_pytest": {
+      "passed": 13
+    },
+    "python_syntax": "passed",
+    "workflow_yaml_parse": "passed"
+  },
+  "compile": {
+    "postgresql": "18.6",
+    "test_hooks": "OFF",
+    "build_type": "RelWithDebInfo",
+    "variants": [
+      "A",
+      "B"
+    ],
+    "result": "passed"
+  },
+  "local_smoke": {
+    "warmup_seconds": 0.2,
+    "measurement_seconds": 1,
+    "per_arm": {
+      "A": {
+        "status": "passed",
+        "all_phases": {
+          "attempted": 240,
+          "accepted": 240,
+          "received_unique": 240
+        },
+        "errors": [],
+        "trace_complete": true,
+        "trace_event_count": 21041,
+        "trace_errors": [],
+        "trace_footer": {
+          "record": "footer",
+          "normal_shutdown": true,
+          "events": 21041,
+          "attempted_events": 21041,
+          "dropped_events": 0,
+          "clock_failures": 0,
+          "identity_failures": 0,
+          "observation_failures": 0,
+          "complete": true
+        },
+        "native_sha256": "564652c706834ce2f6945e2a74de72a4d942e2fddd963be7c70734b6c4585e11",
+        "mapped_native_sha256": "564652c706834ce2f6945e2a74de72a4d942e2fddd963be7c70734b6c4585e11",
+        "mapped_worker_pid_matches_trace": true,
+        "consumer_accepted_first": true,
+        "traversal": {
+          "comparable_loops": 1039,
+          "reversed_loops": 0
+        }
+      },
+      "B": {
+        "status": "passed",
+        "all_phases": {
+          "attempted": 240,
+          "accepted": 240,
+          "received_unique": 240
+        },
+        "errors": [],
+        "trace_complete": true,
+        "trace_event_count": 19873,
+        "trace_errors": [],
+        "trace_footer": {
+          "record": "footer",
+          "normal_shutdown": true,
+          "events": 19873,
+          "attempted_events": 19873,
+          "dropped_events": 0,
+          "clock_failures": 0,
+          "identity_failures": 0,
+          "observation_failures": 0,
+          "complete": true
+        },
+        "native_sha256": "f185175253d88776dc26d58e0bc03425234a503df7507118c9339c4169172e64",
+        "mapped_native_sha256": "f185175253d88776dc26d58e0bc03425234a503df7507118c9339c4169172e64",
+        "mapped_worker_pid_matches_trace": true,
+        "consumer_accepted_first": true,
+        "traversal": {
+          "comparable_loops": 962,
+          "reversed_loops": 0
+        }
+      }
+    },
+    "storage": "/tmp tmpfs; no disk/performance/durability qualification",
+    "retained_earlier_attempts": "Initial local copy-path setup failure was preserved; after path correction short smoke passed. No PG gate or diagnostic workload was run/retried."
+  },
+  "unrun": [
+    "Docker image build",
+    "Docker HTTP/cgroup runtime integration",
+    "GitHub single-session 310s planned diagnostic",
+    "PG stability gates",
+    "security/parser/fuzz/fault/qualification work (paused)"
+  ],
+  "notes": [
+    "Product checkout and original benchmark files unchanged",
+    "No binary, PGDATA or test key material included",
+    "599s fail-stop bounds controller/client work and records insufficient evidence; normal cleanup is attempted within budget but an owned stopped-or-still-running container may remain and requires explicit normal-cleanup follow-through. No absolute <=600s server-lifetime guarantee."
+  ],
+  "observer_overhead": {
+    "capacity_events": 1048576,
+    "record_bytes": 248,
+    "pre_touched_buffer_bytes": 260046848,
+    "pre_touched_buffer_MiB": 248,
+    "within_server_4GiB_budget": true,
+    "overhead_against_uninstrumented_not_measured": true,
+    "differential_event_volume_may_change_cpu_cache_memory_cost": true,
+    "timing_scope": "Fixed-instrumentation ordinary mechanism diagnostic only; not product timing",
+    "capacity_reason": "Conservative fixed room for ~7000 messages plus repeated loop/connection/wait/send/claim events; no claim of a proven no-drop upper bound",
+    "native_instrumentation_changed_after_final_smoke": false
+  },
+  "workflow_budgets": {
+    "job_minutes": 40,
+    "checkout_minutes": 2,
+    "setup_python_minutes": 2,
+    "validation_minutes": 3,
+    "build_step_minutes": 16,
+    "internal_build_seconds": 900,
+    "controller_step_minutes": 11,
+    "internal_controller_seconds": 600,
+    "hard_fail_stop_seconds": 599,
+    "artifact_upload_minutes": 5,
+    "step_ceiling_sum_minutes": 39,
+    "job_headroom_minutes": 1
+  },
+  "review_corrections": {
+    "scope": "Documentation and workflow time allowances only",
+    "new_workload_or_CI_run": false,
+    "native_source_and_instrumentation_unchanged": true
+  }
+}
