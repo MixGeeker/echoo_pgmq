@@ -1,0 +1,35 @@
+{
+  "preview_label": "preview-20260930.1",
+  "source_commit": "450681d71c2fefef0a92e57098643701dabcf4f5",
+  "candidate_checkout": "191d9947d181aab14667562513eae54109a7ea54",
+  "equal_source_tree": "d0abc20c68ce627015ba2934b38d0a600b812844",
+  "package_version": "0.1.0",
+  "artifact": {
+    "repository": "MixGeeker/echoo_pgmq",
+    "run_id": 36720731289,
+    "artifact_id": 11099301285,
+    "outer_sha256": "b9a42d4f7d3116b923f400d2aac178e322ba8a5fa782f040e8fec03aa8083c12",
+    "inner_name": "echoo-pgmq-0.1.0-candidate-pg18-windows-amd64.zip",
+    "inner_sha256": "a8107211653c966dca2792726a84e4013bd7c1eb010e40700f755d3d425ff164"
+  },
+  "postgres": {
+    "dependency": "postgres-windows-18",
+    "version": "18.6",
+    "url": "https://get.enterprisedb.com/postgresql/postgresql-18.6-1-windows-x64-binaries.zip",
+    "sha256": "fbe23da234ee31547bf8a36d29dfd81e82b849df2d2b78d2eecb43d360252f8c"
+  },
+  "guide_sha256": {
+    "HELPER-PROVENANCE.json": "920e05381c5ad19544d8c701e292345f8ebf4c7b98267701018a5c63bc907a77",
+    "README.zh-CN.md": "5dfe97221f19421c7a0b2075c12d3c9bcbbe9e79b56cc22f07a08e4b80c9e9fe",
+    "VALIDATION.json": "1991190097c909016e8d5d90234e06bc3b5e9ace034aea170e257220e92c5dbc",
+    "interop/package-lock.json": "d7a27f9650204b01abf22d00460080d41197652f1974ba9e8bb9d53a53e1dc18",
+    "interop/package.json": "1b47fb33332b826d4e0e985e3d24d5a68c697b2d0607ac9f6c9a2b070ccaf804",
+    "interop/rhea_client.js": "25406337bf0ecd89fe1e3c873d83fe61f4f9db28e1449854cbfdfc707baecdd3",
+    "interop/verify_dependencies.js": "6813ac1a39d82babd91d72ab447c0ea1d38a22e86563e81464fbcb4de36c9184",
+    "preview.py": "f39a3a96eca34d432c589f01e504c69286e6dc284ebc80bd794b607b605149af",
+    "scripts/check_windows_runtime.py": "73e3dfc4a560e20d4d5107d2b743e8d0324a013ddb395087c42cfce51ac785ab",
+    "scripts/fetch_dependency.py": "e656a77070af8828bc32fccf4e9152d63cf3fd733b524497c2849087943d93c2",
+    "scripts/install_candidate.py": "4b0f8562f29c9fd320ded5ddb182d05ca54bbfb13dabdc4b6d01bd918262851f",
+    "scripts/make_test_certs.py": "d38eb66074060f4299fef04b99203bde5a1a1759194794b9e290fff133f8170a"
+  }
+}
