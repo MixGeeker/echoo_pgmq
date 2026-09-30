@@ -15,17 +15,19 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* Four fixed, process-local plans survive SPI_finish and transaction aborts.
+/* Seven fixed, process-local plans survive SPI_finish and transaction aborts.
  * PostgreSQL still revalidates their dependencies and executes each function;
  * neither authorization decisions nor query results are cached here. */
 static SPIPlanPtr authorize_plan = NULL;
 static SPIPlanPtr publish_plan = NULL;
 static SPIPlanPtr claim_plan = NULL;
 static SPIPlanPtr settle_plan = NULL;
+static SPIPlanPtr sync_commit_plan = NULL;
+static SPIPlanPtr search_path_plan = NULL;
+static SPIPlanPtr lock_timeout_plan = NULL;
 
-static int
-execute_cached_query(SPIPlanPtr *slot, const char *query, int nargs,
-                     Oid *types, Datum *args)
+static SPIPlanPtr
+get_cached_plan(SPIPlanPtr *slot, const char *query, int nargs, Oid *types)
 {
     if (*slot == NULL)
     {
@@ -40,7 +42,26 @@ execute_cached_query(SPIPlanPtr *slot, const char *query, int nargs,
             elog(ERROR, "echoo_pgmq: SPI plan retention failed");
         *slot = plan;
     }
-    return SPI_execute_plan(*slot, args, NULL, false, 1);
+    return *slot;
+}
+
+static int
+execute_cached_query(SPIPlanPtr *slot, const char *query, int nargs,
+                     Oid *types, Datum *args)
+{
+    return SPI_execute_plan(get_cached_plan(slot, query, nargs, types),
+                            args, NULL, false, 1);
+}
+
+/* Keep SET LOCAL as SQL utility execution, including normal GUC permissions,
+ * assignment hooks, ProcessUtility hooks and transaction-local restoration.
+ * Cache only its immutable parse/plan, not settings or execution results. */
+static void
+execute_cached_setting(SPIPlanPtr *slot, const char *query)
+{
+    if (SPI_execute_plan(get_cached_plan(slot, query, 0, NULL),
+                         NULL, NULL, false, 0) != SPI_OK_UTILITY)
+        elog(ERROR, "echoo_pgmq: transaction-local setting failed");
 }
 
 static void
@@ -55,9 +76,9 @@ begin_operation(void)
         elog(ERROR, "echoo_pgmq: SPI connection failed");
     /* Publisher acceptance and consumer settlement are never sent before
      * the WAL commit record has been synchronously flushed. */
-    SPI_execute("SET LOCAL synchronous_commit = on", false, 0);
-    SPI_execute("SET LOCAL search_path = pg_catalog", false, 0);
-    SPI_execute("SET LOCAL lock_timeout = '1000ms'", false, 0);
+    execute_cached_setting(&sync_commit_plan, "SET LOCAL synchronous_commit = on");
+    execute_cached_setting(&search_path_plan, "SET LOCAL search_path = pg_catalog");
+    execute_cached_setting(&lock_timeout_plan, "SET LOCAL lock_timeout = '1000ms'");
     enable_timeout_after(STATEMENT_TIMEOUT, echoo_statement_timeout_ms);
 }
 
