@@ -40,3 +40,9 @@ worker 要求 `fsync=on`、`full_page_writes=on`，并在自己的事务中强�
 ## 供应链
 
 GitHub Actions 固定 commit SHA，默认仅 `contents: read`，checkout 不保留凭据。上游 Proton 与 Windows PG 下载先核对仓库固定的散列。OS 包使用发行方签名源，Python 包固定直接版本；构建环境及传递依赖并非完整 hermetic/reproducible-build 锁定。候选包含文件 SHA-256 与依赖许可，但未代码签名，也未附带第三方安全审计证明。
+
+## 当前审查状态（2026-09-30）
+
+自动检查已在提交d24d57a通过：GCC静态分析、限定时间的Proton解析器ASAN/UBSAN fuzz、Python依赖公告审计。它们只证明列明检查的结果。
+
+人工安全审查尚未完成。协议解析深度及解码后资源上限存在一个尚未验证的静态候选问题；未运行其针对性复现，不能把候选写成已确认漏洞，也不能把自动CI通过视为已消除风险。相关解析器调查、模糊测试和新的故障注入现已暂停；安全发布闸门仍未通过，产品不得宣称可生产发布。

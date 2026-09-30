@@ -15,6 +15,36 @@ from make_test_certs import generate
 
 REPO = Path(__file__).resolve().parents[1]
 
+# Explicit allowlist: adding a new test does not silently expand automatic CI
+# into adversarial-input, resource-exhaustion, fault-injection or crash testing.
+ORDINARY_TESTS = [
+    "tests/sql/test_bounded_storage.py::test_concurrent_same_key_creates_one_message",
+    "tests/sql/test_bounded_storage.py::test_concurrent_key_quota_cannot_overbook",
+    "tests/sql/test_bounded_storage.py::test_rollback_releases_message_bytes_and_key_budget",
+    "tests/sql/test_bounded_storage.py::test_global_limits_apply_across_queues_and_rollback",
+    "tests/sql/test_bounded_storage.py::test_logical_dump_restores_payload_acl_ledger_receipts_and_sequences",
+    "tests/sql/test_bounded_storage.py::test_binary_helper_preserves_application_bytes",
+    "tests/sql/test_bounded_storage.py::test_expired_key_reuses_bounded_slot",
+    "tests/sql/test_bounded_storage.py::test_dropped_or_recreated_role_does_not_inherit_queue_acl",
+    "tests/sql/test_bounded_storage.py::test_administrative_retry_invalidates_old_receipt",
+    "tests/sql/test_bounded_storage.py::test_expired_final_attempt_cleanup_is_bounded",
+    "tests/sql/test_bounded_storage.py::test_poison_quarantine_does_not_deadlock_with_late_ack",
+    "tests/test_storage_integration.py::test_concurrent_claims_are_unique",
+    "tests/test_storage_integration.py::test_concurrent_capacity_cannot_overbook",
+    "tests/test_storage_integration.py::test_ordinary_role_cannot_call_private_worker_api",
+    "tests/test_storage_integration.py::test_upgrade_failure_rolls_back_and_retry_preserves_data",
+    "tests/test_candidate_packaging.py::test_candidate_manifest_and_archive_checksums",
+    "tests/test_candidate_packaging.py::test_candidate_archive_tampering_fails",
+    "tests/test_candidate_packaging.py::test_candidate_manifest_tampering_fails",
+    "tests/test_candidate_packaging.py::test_candidate_unsafe_members_fail",
+    "tests/test_candidate_packaging.py::test_candidate_unlisted_member_fails",
+    "tests/test_amqp_integration.py::test_binary_and_metadata_roundtrip_preserves_encoded_wire",
+    "tests/test_amqp_integration.py::test_sender_accepted_is_not_sent_before_commit",
+    "tests/test_amqp_integration.py::test_abandoned_delivery_is_redelivered",
+    "tests/test_amqp_integration.py::test_late_ack_does_not_delete_new_delivery",
+    "tests/test_amqp_integration.py::test_release_retries_and_reject_retains_dead_letter",
+]
+
 
 def run(command, **kwargs):
     print("+", " ".join(map(str, command)), flush=True)
@@ -35,9 +65,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--pg-config", default="pg_config")
     parser.add_argument("--work-dir", type=Path)
+    parser.add_argument("--ordinary", action="store_true",
+                        help="run the explicit ordinary regression allowlist, without security/fault/crash tests")
     parser.add_argument("--keep", action="store_true", help="keep cluster files after shutdown; includes ephemeral private keys")
     parser.add_argument("pytest_args", nargs=argparse.REMAINDER)
     args = parser.parse_args()
+    if args.ordinary and args.pytest_args:
+        parser.error("--ordinary uses a fixed reviewed allowlist; pytest overrides are not accepted")
     if hasattr(os, "geteuid") and os.geteuid() == 0:
         parser.error("initdb must run as an unprivileged OS user")
     version = subprocess.check_output([args.pg_config, "--version"], text=True).strip()
@@ -116,23 +150,29 @@ def main():
                 time.sleep(0.1)
         manifest = {"pg_config": str(Path(args.pg_config).resolve()) if Path(args.pg_config).exists() else args.pg_config,
                     "postgres_version": subprocess.check_output([binary("postgres"), "--version"], text=True).strip(),
-                    "python": sys.version, "platform": sys.platform, "process_crash_only": True}
+                    "python": sys.version, "platform": sys.platform,
+                    "test_scope": "ordinary-regression" if args.ordinary else "qualification-or-explicit-selection",
+                    "ordinary_test_allowlist": ORDINARY_TESTS if args.ordinary else None,
+                    "process_crash_tests_enabled": not args.ordinary,
+                    "physical_power_loss_tested": False,
+                    "qualification_status": "blocked_security_review"}
         (root / "environment.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
         env = dict(base_env, ECHOO_TEST_DSN=dsn,
                    ECHOO_TEST_AMQP_URL=f"amqps://localhost:{amqpport}",
                    ECHOO_TEST_CERT_DIR=str(certs), ECHOO_TEST_PGDATA=str(data),
                    ECHOO_TEST_PGCTL=str(binary("pg_ctl")), ECHOO_TEST_LOG=str(log))
-        pytest_args = args.pytest_args
+        pytest_args = ORDINARY_TESTS if args.ordinary else args.pytest_args
         if pytest_args[:1] == ["--"]:
             pytest_args = pytest_args[1:]
         run([sys.executable, "-m", "pytest", *(pytest_args or ["tests"]),
              f"--junitxml={root / 'junit.xml'}"], cwd=REPO, env=env)
         # Independently execute the SQL agent's contract assertions if provided.
-        for sql in sorted((REPO / "tests" / "sql").glob("*.sql")):
+        sql_tests = [REPO / "tests" / "sql" / "core.sql"] if args.ordinary else sorted((REPO / "tests" / "sql").glob("*.sql"))
+        for sql in sql_tests:
             run([binary("psql"), dsn, "-X", "-v", "ON_ERROR_STOP=1", "-f", sql], env=base_env)
     finally:
         if started:
-            subprocess.run([str(binary("pg_ctl")), "-D", str(data), "-m", "immediate", "-w", "stop"], env=base_env)
+            subprocess.run([str(binary("pg_ctl")), "-D", str(data), "-m", "fast" if args.ordinary else "immediate", "-w", "stop"], env=base_env)
         if log.exists():
             print("\n--- PostgreSQL log ---\n" + log.read_text(encoding="utf-8", errors="replace"), flush=True)
         print(f"Test evidence: {root}", flush=True)

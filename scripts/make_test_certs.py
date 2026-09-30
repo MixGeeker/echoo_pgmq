@@ -12,7 +12,7 @@ def generate(directory: Path) -> None:
         directory.chmod(0o700)
 
     def openssl(*args):
-        subprocess.run(["openssl", *args], cwd=directory, check=True, stdout=subprocess.DEVNULL,
+        subprocess.run([os.environ.get("ECHOO_TEST_OPENSSL", "openssl"), *args], cwd=directory, check=True, stdout=subprocess.DEVNULL,
                        stderr=subprocess.PIPE)
 
     openssl("req", "-x509", "-newkey", "rsa:2048", "-nodes", "-sha256", "-days", "2",

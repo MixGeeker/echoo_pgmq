@@ -1,0 +1,16 @@
+{
+  "postgresql": {
+    "fsync": "on",
+    "full_page_writes": "on",
+    "server_version": "18.6",
+    "shared_buffers": "16384",
+    "synchronous_commit": "on",
+    "wal_sync_method": "fdatasync"
+  },
+  "rabbitmq": "4.0.5",
+  "rabbitmq_erlang_schedulers": 2,
+  "proton_python": "0.40.0",
+  "echoo_poll_interval_ms": 2,
+  "note": "Cloud Linux capacity probe; not Win11, physical power loss or real ERP qualification",
+  "ordering": "Each repetition baseline, then alternating broker order; both receive same synthetic DB load"
+}

@@ -44,11 +44,11 @@ cmake -S . -B build -DPG_CONFIG=/usr/lib/postgresql/18/bin/pg_config -DPROTON_RO
 cmake --build build --parallel 2
 sudo cmake --install build
 python -m pip install -r requirements-dev.txt
-LD_LIBRARY_PATH=/tmp/echoo-proton/lib python scripts/run_integration.py \
+LD_LIBRARY_PATH=/tmp/echoo-proton/lib python scripts/run_integration.py --ordinary \
   --pg-config /usr/lib/postgresql/18/bin/pg_config --work-dir /tmp/echoo-test --keep
 ```
 
-测试脚本会生成一次性 CA/证书，启动只监听 loopback 的临时 PostgreSQL，执行真实 AMQP/TLS/SQL 测试，并停止集群。`--keep` 保留的目录含私钥和临时数据库，勿上传；CI 仅上传日志、JUnit 与环境信息。Windows 的原生构建步骤在 [快速开始](docs/quickstart.md) 与工作流中。
+测试脚本会生成一次性 CA/证书，启动只监听 loopback 的临时 PostgreSQL，执行允许的普通 AMQP/TLS/SQL 回归，并正常停止集群。完整 qualification 与安全/故障测试当前等待审阅，不随普通 CI 执行；普通通过不等于完整验收。`--keep` 保留的目录含私钥和临时数据库，勿上传；CI 仅上传日志、JUnit 与环境信息。Windows 的原生构建步骤在 [快速开始](docs/quickstart.md) 与工作流中。
 
 ## 交付状态与许可
 

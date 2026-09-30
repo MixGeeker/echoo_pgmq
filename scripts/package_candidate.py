@@ -77,16 +77,23 @@ def main():
             "lib/ 扩展复制到相同 PostgreSQL 主版本的 pkglibdir；share/extension/ 复制到 sharedir/extension。\n"
             "Windows runtime-bin/ 中 Proton DLL 需要由 postgres.exe 找到；先核对依赖、ABI、路径与 ACL。\n"
             "OpenSSL 动态运行库由受信任的系统/PG 发行版提供，包不覆盖现有 OpenSSL DLL。\n"
+            "完整 qualification 当前状态为 blocked_security_review，普通回归通过不能替代完整验收。\n"
             "本包没有通过签名发布，也不代表 Windows 11、物理断电、生产 ERP 集成或吞吐指标已经验收。\n",
             encoding="utf-8")
         files = {str(p.relative_to(stage)).replace(os.sep, "/"): hashlib.sha256(p.read_bytes()).hexdigest()
                  for p in sorted(stage.rglob("*")) if p.is_file()}
         manifest = {"status": "candidate-not-production-release", "version": "0.1.0", "commit": commit,
-                    "postgres_build": version, "os": platform.platform(), "architecture": platform.machine(),
+                    "qualification_status": "blocked_security_review",
+                    "postgres_build": version, "os": platform.platform(), "system": platform.system(), "architecture": platform.machine(),
                     "proton": "0.40.0",
                     "proton_windows_openssl_patch": bool(list(args.proton_root.rglob("ECHOO_WINDOWS_OPENSSL_PATCH.txt"))),
                     "cmake_cache_sha256": hashlib.sha256(cache.read_bytes()).hexdigest(),
                     "project_license": "pending-owner-decision",
+                    "runtime_dependencies": {
+                        "bundled": "Apache Qpid Proton 0.40.0",
+                        "external": ["matching PostgreSQL major and architecture", "OpenSSL 3.x from trusted PostgreSQL/system distribution", "platform C runtime (Microsoft Visual C++/UCRT on Windows)"],
+                        "openssl_bundled": False,
+                        "test_python_runtime_required_for_service": False},
                     "windows11_validation": "not-established-by-server-ci",
                     "files_sha256": files}
         (stage / "MANIFEST.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")

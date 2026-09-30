@@ -164,7 +164,7 @@ BEGIN
     v_size := octet_length(p_body);
     -- All paths changing capacity acquire global, queue, then message locks.
     SELECT * INTO STRICT v_limits FROM echoo_pgmq.limits WHERE singleton FOR UPDATE;
-    SELECT * INTO STRICT v_queue FROM echoo_pgmq.queues WHERE queue_id=v_queue_id FOR UPDATE;
+    SELECT * INTO STRICT v_queue FROM echoo_pgmq.queues WHERE queue_id=v_queue_id FOR NO KEY UPDATE;
     v_now := clock_timestamp();
     IF p_idempotency_key IS NOT NULL THEN
         -- Targeted expiration ensures this key can be reused even if the bounded
@@ -284,11 +284,13 @@ BEGIN
     IF p_outcome IS NULL OR p_outcome NOT IN ('accepted','released','rejected','modified') THEN
         RAISE EXCEPTION 'unknown settlement outcome' USING ERRCODE='22023';
     END IF;
+    -- Queue counters never change queue_id. NO KEY UPDATE remains exclusive
+    -- against quota writers while permitting FK KEY SHARE during quarantine.
     -- Only ACK deletes payload and changes quota counters. Retry/reject must
     -- not acquire quota locks while a caller already holds the claimed row.
     IF p_outcome='accepted' THEN
         PERFORM 1 FROM echoo_pgmq.limits WHERE singleton FOR UPDATE;
-        PERFORM 1 FROM echoo_pgmq.queues WHERE queue_id=v_queue_id FOR UPDATE;
+        PERFORM 1 FROM echoo_pgmq.queues WHERE queue_id=v_queue_id FOR NO KEY UPDATE;
     END IF;
     SELECT * INTO v_message FROM echoo_pgmq.messages
      WHERE messages.id=p_id AND queue_id=v_queue_id FOR UPDATE;
@@ -344,7 +346,7 @@ BEGIN
         RAISE EXCEPTION 'purge batch must be 1..10000' USING ERRCODE='22023';
     END IF;
     PERFORM 1 FROM echoo_pgmq.limits WHERE singleton FOR UPDATE;
-    SELECT queue_id INTO STRICT v_queue_id FROM echoo_pgmq.queues WHERE name=p_queue FOR UPDATE;
+    SELECT queue_id INTO STRICT v_queue_id FROM echoo_pgmq.queues WHERE name=p_queue FOR NO KEY UPDATE;
     WITH candidates AS (
         SELECT id FROM echoo_pgmq.messages WHERE queue_id=v_queue_id AND state='dead'
          ORDER BY id FOR UPDATE SKIP LOCKED LIMIT p_limit

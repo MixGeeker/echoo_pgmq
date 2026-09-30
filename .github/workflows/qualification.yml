@@ -1,9 +1,8 @@
-name: Ordinary native PostgreSQL regression (not qualification)
+name: Manual native qualification (requires security review)
 
+# Retained intact for later reviewed qualification. Do not dispatch while
+# qualification_status is blocked_security_review.
 on:
-  push:
-    branches: [main]
-  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -65,11 +64,11 @@ jobs:
           sudo cp -L "$PROTON_ROOT"/lib/libqpid-proton*.so* "$($PG_CONFIG --pkglibdir)/"
           python -m pip install -r requirements-dev.txt
           python -m compileall -q scripts tests
-      - name: Exercise ordinary SQL, AMQP semantics and upgrade regressions
+      - name: Exercise installed extension, real protocol, upgrade, quota and process crashes
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/run_integration.py --ordinary --pg-config "$PG_CONFIG" --work-dir "$RUNNER_TEMP/evidence" --keep
+          python scripts/run_integration.py --pg-config "$PG_CONFIG" --work-dir "$RUNNER_TEMP/evidence" --keep
       - name: Package candidate only
         shell: bash
         run: |
@@ -78,13 +77,13 @@ jobs:
           python -m pip freeze > dist/python-build-inputs.txt
           "$PG_CONFIG" --configure > dist/postgres-build-options.txt
           ldd build/echoo_pgmq.so > dist/native-link-dependencies.txt
-      - name: Reinstall candidate archive and run ordinary regressions without build-tree libraries
+      - name: Install and exercise candidate archive without build-tree libraries
         shell: bash
         run: |
           set -euo pipefail
           archive=$(find dist -maxdepth 1 -name '*.zip' -print -quit)
           sudo "$(command -v python)" scripts/install_candidate.py --archive "$archive" --pg-config "$PG_CONFIG" --disposable-installation
-          env -u LD_LIBRARY_PATH -u PROTON_ROOT python scripts/run_integration.py --ordinary \
+          env -u LD_LIBRARY_PATH -u PROTON_ROOT python scripts/run_integration.py \
             --pg-config "$PG_CONFIG" --work-dir "$RUNNER_TEMP/candidate-evidence" --keep
       - name: Preserve test evidence without data or private keys
         if: always()
@@ -189,9 +188,9 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Python test dependencies failed' }
           python -m compileall -q scripts tests
           if ($LASTEXITCODE -ne 0) { throw 'Python syntax check failed' }
-      - name: Test ordinary native Windows SQL, AMQP semantics and upgrade
+      - name: Test native Windows processes, TLS AMQP, upgrade and abrupt restart
         run: |
-          python scripts/run_integration.py --ordinary --pg-config "$env:PG_CONFIG" --work-dir "$env:RUNNER_TEMP/evidence" --keep
+          python scripts/run_integration.py --pg-config "$env:PG_CONFIG" --work-dir "$env:RUNNER_TEMP/evidence" --keep
           if ($LASTEXITCODE -ne 0) { throw 'Integration tests failed' }
       - name: Package candidate only
         run: |
@@ -200,7 +199,7 @@ jobs:
           python -m pip freeze | Out-File -Encoding utf8 dist/python-build-inputs.txt
           & $env:PG_CONFIG --configure | Out-File -Encoding utf8 dist/postgres-build-options.txt
           openssl version -a | Out-File -Encoding utf8 dist/openssl-build-version.txt
-      - name: Reinstall candidate archive and run ordinary regressions without build-tree DLL paths
+      - name: Install and exercise candidate archive without build-tree DLL paths
         run: |
           $ErrorActionPreference = 'Stop'
           $archive = (Get-ChildItem dist/*.zip | Select-Object -First 1).FullName
@@ -214,7 +213,7 @@ jobs:
             ([IO.Path]::GetFullPath($_).TrimEnd('\') -ine $opensslBin)
           }) -join ';'
           Remove-Item Env:PROTON_ROOT
-          python scripts/run_integration.py --ordinary --pg-config "$env:PG_CONFIG" --work-dir "$env:RUNNER_TEMP/candidate-evidence" --keep
+          python scripts/run_integration.py --pg-config "$env:PG_CONFIG" --work-dir "$env:RUNNER_TEMP/candidate-evidence" --keep
           if ($LASTEXITCODE -ne 0) { throw 'Candidate-only integration tests failed' }
       - name: Preserve test evidence without data or private keys
         if: always()

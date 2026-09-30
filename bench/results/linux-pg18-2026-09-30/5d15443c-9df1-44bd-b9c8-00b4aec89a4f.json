@@ -1,0 +1,53 @@
+{
+  "format_version": 1,
+  "run_id": "5d15443c-9df1-44bd-b9c8-00b4aec89a4f",
+  "label": "rabbitmq-2",
+  "status": "passed",
+  "host": {
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "cpu_logical": 9,
+    "memory_bytes": 10451460096
+  },
+  "conditions": {
+    "payload_bytes": 1024,
+    "messages": 5000,
+    "credit": 32,
+    "producer_connections": 1,
+    "consumer_connections": 1,
+    "confirmation": "per-message remote ACCEPTED; durable=True; manual consumer ACCEPTED",
+    "tls": "mutual TLS and server-name validation",
+    "sasl": "EXTERNAL",
+    "broker_version": "4.0.5",
+    "queue_type": "classic-durable",
+    "synthetic_db": true,
+    "db_interval_s": 0.005,
+    "baseline_seconds": 0
+  },
+  "elapsed_s": 10.634906488000524,
+  "publish": {
+    "count": 5000,
+    "p50_ms": 1.941807,
+    "p95_ms": 3.365842,
+    "p99_ms": 6.44521,
+    "mean_ms": 2.1249106566
+  },
+  "end_to_end": {
+    "count": 5000,
+    "p50_ms": 1.655206,
+    "p95_ms": 3.253202,
+    "p99_ms": 10.169674,
+    "mean_ms": 1.944471448
+  },
+  "synthetic_db": {
+    "count": 2068,
+    "p50_ms": 1.045569,
+    "p95_ms": 1.931917,
+    "p99_ms": 2.719573,
+    "mean_ms": 1.1121847872340425
+  },
+  "confirmed_publish_per_s": 470.3327828853381,
+  "completed_per_s": 470.1498791401271,
+  "duplicates": 0,
+  "errors": [],
+  "resource_note": "RSS is summed across processes and double-counts shared pages; CPU process samples are indicative, not isolated accounting"
+}
