@@ -73,6 +73,9 @@ static int poll_interval_ms = 50;
 static int idle_timeout_ms = 30000;
 int echoo_statement_timeout_ms = 5000;
 int echoo_max_message_bytes = 1024 * 1024;
+#ifdef ECHOO_ENABLE_TEST_HOOKS
+bool echoo_test_fail_settle_before_commit = false;
+#endif
 
 static volatile sig_atomic_t stop_requested = false;
 static volatile sig_atomic_t reload_requested = false;
@@ -101,6 +104,7 @@ typedef struct EchooLink
     pg_uuid_t owner;
     unsigned char *incoming;
     size_t incoming_size;
+    size_t incoming_capacity;
     int inflight;
     EchooReceipt *receipts;
     int64 next_poll;
@@ -214,10 +218,11 @@ link_error(EchooLink *link, const char *name, const char *message)
 static void
 free_incoming(EchooLink *link)
 {
-    inbound_bytes -= link->incoming_size;
+    inbound_bytes -= link->incoming_capacity;
     free(link->incoming);
     link->incoming = NULL;
     link->incoming_size = 0;
+    link->incoming_capacity = 0;
 }
 
 static void
@@ -283,8 +288,7 @@ receive_message(EchooConnection *connection, EchooLink *link, pn_delivery_t *del
     size_t pending;
     ssize_t received;
     unsigned char *grown;
-    pn_message_t *decoded;
-    int decode_result;
+    bool valid;
 
     if (link->closed || !pn_delivery_readable(delivery))
         return;
@@ -322,6 +326,9 @@ receive_message(EchooConnection *connection, EchooLink *link, pn_delivery_t *del
             return;
         }
         link->incoming = grown;
+        inbound_bytes -= link->incoming_capacity;
+        link->incoming_capacity = link->incoming_size + pending;
+        inbound_bytes += link->incoming_capacity;
         received = pn_link_recv(link->link, (char *) grown + link->incoming_size, pending);
         if (received < 0)
         {
@@ -329,15 +336,11 @@ receive_message(EchooConnection *connection, EchooLink *link, pn_delivery_t *del
             return;
         }
         link->incoming_size += received;
-        inbound_bytes += received;
     }
     if (pn_delivery_partial(delivery) || pn_delivery_pending(delivery))
         return;
-    decoded = pn_message();
-    decode_result = decoded && link->incoming_size ?
-        pn_message_decode(decoded, (const char *) link->incoming, link->incoming_size) : -1;
-    pn_message_free(decoded);
-    if (decode_result != 0)
+    valid = echoo_message_valid(link->incoming, link->incoming_size);
+    if (!valid)
     {
         pn_condition_t *condition = pn_disposition_condition(pn_delivery_local(delivery));
         pn_condition_set_name(condition, "amqp:decode-error");
@@ -424,7 +427,11 @@ open_link(EchooConnection *connection, pn_link_t *pnlink)
         pn_condition_set_name(pn_link_condition(pnlink), "amqp:invalid-field");
         pn_condition_set_description(pn_link_condition(pnlink), "A named queue and unsettled delivery are required; link limit may also be reached");
         pn_link_close(pnlink);
-        pn_link_free(pnlink);
+        /* Do not free before the peer's detach: Proton can still emit remote
+         * close events for this endpoint. Freeing here and again on detach
+         * double-frees its engine state. Close the connection to bound refused
+         * endpoints even when a hostile peer never acknowledges the detach. */
+        connection_error(connection, "amqp:invalid-field", "Attach rejected");
         return;
     }
     if (!echoo_db_authorize(queue, connection->identity, publishing))
@@ -432,7 +439,7 @@ open_link(EchooConnection *connection, pn_link_t *pnlink)
         pn_condition_set_name(pn_link_condition(pnlink), "amqp:unauthorized-access");
         pn_condition_set_description(pn_link_condition(pnlink), "Queue not available to this certificate principal");
         pn_link_close(pnlink);
-        pn_link_free(pnlink);
+        connection_error(connection, "amqp:unauthorized-access", "Queue access denied");
         return;
     }
     link = calloc(1, sizeof(*link));
@@ -776,7 +783,13 @@ echoo_pgmq_main(Datum main_arg)
     pqsignal(SIGPIPE, SIG_IGN);
 #endif
     BackgroundWorkerUnblockSignals();
+#if PG_VERSION_NUM >= 170000
     BackgroundWorkerInitializeConnection(database, worker_role, BGWORKER_BYPASS_ROLELOGINCHECK);
+#else
+    /* PostgreSQL 16 requires a LOGIN role even for managed workers. Configure
+     * no password and reject this role explicitly in pg_hba.conf. */
+    BackgroundWorkerInitializeConnection(database, worker_role, 0);
+#endif
     initialize_tls();
 #ifdef WIN32
     /* PG's Winsock wrappers otherwise emulate blocking even on an OS
@@ -847,7 +860,8 @@ echoo_pgmq_main(Datum main_arg)
         {
             uint32 flags = 0;
             if (!pn_connection_driver_read_closed(&connection->driver) &&
-                !pn_connection_driver_has_event(&connection->driver))
+                !pn_connection_driver_has_event(&connection->driver) &&
+                pn_connection_driver_read_buffer(&connection->driver).size)
                 flags |= WL_SOCKET_READABLE;
             if (pn_connection_driver_write_buffer(&connection->driver).size)
                 flags |= WL_SOCKET_WRITEABLE;
@@ -908,6 +922,14 @@ _PG_init(void)
     INT_GUC("statement_timeout_ms", "Maximum time for each queue SQL operation.", &echoo_statement_timeout_ms, 5000, 100, 60000);
 #undef STRING_GUC
 #undef INT_GUC
+#ifdef ECHOO_ENABLE_TEST_HOOKS
+    /* Compiled out of normal builds. PGC_SIGHUP settings can only be changed
+     * through administrator-controlled server configuration. */
+    DefineCustomBoolVariable("echoo_pgmq.test_fail_settle_before_commit",
+        "TEST BUILD ONLY: abort settlement immediately before transaction commit.", NULL,
+        &echoo_test_fail_settle_before_commit, false, PGC_SIGHUP,
+        GUC_NOT_IN_SAMPLE | GUC_SUPERUSER_ONLY, NULL, NULL, NULL);
+#endif
     MarkGUCPrefixReserved("echoo_pgmq");
     if (!process_shared_preload_libraries_in_progress || !enabled)
         return;

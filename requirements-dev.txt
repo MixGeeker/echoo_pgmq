@@ -1,4 +1,4 @@
 # 用于开发/CI；不安装到 PostgreSQL 服务运行环境。
-pytest==8.3.5
-psycopg[binary]==3.2.6
+pytest==9.1.1
+psycopg[binary]==3.3.6
 python-qpid-proton==0.40.0

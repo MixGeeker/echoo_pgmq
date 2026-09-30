@@ -284,8 +284,12 @@ BEGIN
     IF p_outcome IS NULL OR p_outcome NOT IN ('accepted','released','rejected','modified') THEN
         RAISE EXCEPTION 'unknown settlement outcome' USING ERRCODE='22023';
     END IF;
-    PERFORM 1 FROM echoo_pgmq.limits WHERE singleton FOR UPDATE;
-    PERFORM 1 FROM echoo_pgmq.queues WHERE queue_id=v_queue_id FOR UPDATE;
+    -- Only ACK deletes payload and changes quota counters. Retry/reject must
+    -- not acquire quota locks while a caller already holds the claimed row.
+    IF p_outcome='accepted' THEN
+        PERFORM 1 FROM echoo_pgmq.limits WHERE singleton FOR UPDATE;
+        PERFORM 1 FROM echoo_pgmq.queues WHERE queue_id=v_queue_id FOR UPDATE;
+    END IF;
     SELECT * INTO v_message FROM echoo_pgmq.messages
      WHERE messages.id=p_id AND queue_id=v_queue_id FOR UPDATE;
     v_now := clock_timestamp();

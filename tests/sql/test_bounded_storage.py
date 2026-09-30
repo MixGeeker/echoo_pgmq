@@ -92,6 +92,8 @@ def test_logical_dump_restores_payload_acl_ledger_receipts_and_sequences(dsn, ad
     for database in (source, restored):
         admin.execute(sql.SQL("CREATE DATABASE {}").format(sql.Identifier(database)))
     owner = uuid.uuid4()
+    backup_principal = "backup_role_" + suffix[:20]
+    admin.execute(sql.SQL("CREATE ROLE {}").format(sql.Identifier(backup_principal)))
     try:
         options["dbname"] = source
         source_dsn = make_conninfo(**options)
@@ -100,6 +102,7 @@ def test_logical_dump_restores_payload_acl_ledger_receipts_and_sequences(dsn, ad
             for queue_name in ("backup/one", "backup/two", "backup/three"):
                 conn.execute("SELECT echoo_pgmq.create_queue(%s)", (queue_name,))
                 conn.execute("SELECT echoo_pgmq.grant_queue(%s,session_user::text)", (queue_name,))
+            conn.execute("SELECT echoo_pgmq.grant_queue('backup/one',%s)", (backup_principal,))
             first = conn.execute("SELECT echoo_pgmq.enqueue('backup/one',%s,'backup-key')", (b"\x00\xff\x80first",)).fetchone()[0]
             receipt = conn.execute("SELECT * FROM echoo_pgmq.read('backup/one',%s,3600)", (owner,)).fetchone()
             conn.execute("SELECT echoo_pgmq.enqueue('backup/two',%s)", (b"second",))
@@ -109,11 +112,24 @@ def test_logical_dump_restores_payload_acl_ledger_receipts_and_sequences(dsn, ad
             assert first == receipt[0]
         dump = tmp_path / "echoo.sql"
         subprocess.run([pg_dump, "--dbname", source_dsn, "--file", str(dump)], check=True, capture_output=True, text=True)
+        # Simulate a target cluster resolving the same role name to a new OID.
+        old_role = admin.execute("SELECT oid FROM pg_roles WHERE rolname=%s", (backup_principal,)).fetchone()[0]
+        admin.execute(sql.SQL("DROP ROLE {}").format(sql.Identifier(backup_principal)))
+        admin.execute(sql.SQL("CREATE ROLE {}").format(sql.Identifier(backup_principal)))
+        assert admin.execute("SELECT oid FROM pg_roles WHERE rolname=%s", (backup_principal,)).fetchone()[0] != old_role
         options["dbname"] = restored
         restore_dsn = make_conninfo(**options)
+        # pg_dump omits the extension version from CREATE EXTENSION. Preserve
+        # the source API contract explicitly, not merely its table contents.
+        with psycopg.connect(restore_dsn, autocommit=True) as conn:
+            conn.execute("CREATE EXTENSION echoo_pgmq VERSION '0.1.1'")
         subprocess.run([psql, "--dbname", restore_dsn, "-X", "-v", "ON_ERROR_STOP=1", "--file", str(dump)],
                        check=True, capture_output=True, text=True)
         with psycopg.connect(restore_dsn, autocommit=True) as conn:
+            assert conn.execute("SELECT extversion FROM pg_extension WHERE extname='echoo_pgmq'").fetchone()[0] == "0.1.1"
+            assert conn.execute("SELECT to_regclass('echoo_pgmq.queue_stats')").fetchone()[0] is not None
+            assert conn.execute("SELECT count(*) FROM echoo_pgmq.queue_stats").fetchone()[0] == 3
+            assert conn.execute("SELECT echoo_pgmq.authorize('backup/one',%s,'consume')", (backup_principal,)).fetchone()[0]
             assert conn.execute("SELECT message_count,total_bytes FROM echoo_pgmq.limits").fetchone() == counters
             assert conn.execute("SELECT echoo_pgmq.enqueue('backup/one',%s,'backup-key')", (b"ignored",)).fetchone()[0] == first
             assert conn.execute("SELECT body,generation,owner FROM echoo_pgmq.messages WHERE id=%s", (first,)).fetchone() == (b"\x00\xff\x80first", receipt[1], owner)
@@ -124,6 +140,7 @@ def test_logical_dump_restores_payload_acl_ledger_receipts_and_sequences(dsn, ad
     finally:
         for database in (source, restored):
             admin.execute(sql.SQL("DROP DATABASE {} WITH (FORCE)").format(sql.Identifier(database)))
+        admin.execute(sql.SQL("DROP ROLE IF EXISTS {}").format(sql.Identifier(backup_principal)))
 
 
 def test_binary_helper_preserves_application_bytes(client, queue):
@@ -169,3 +186,70 @@ def test_dropped_or_recreated_role_does_not_inherit_queue_acl(admin, queue):
     finally:
         admin.execute("SELECT echoo_pgmq.revoke_queue(%s,%s)", (queue,principal))
         admin.execute(sql.SQL("DROP ROLE IF EXISTS {}").format(sql.Identifier(principal)))
+
+
+def test_administrative_retry_invalidates_old_receipt(admin, client, queue):
+    owner = uuid.uuid4()
+    ident = client.execute("SELECT echoo_pgmq.enqueue(%s,%s)", (queue, b"retry-body")).fetchone()[0]
+    first = client.execute("SELECT * FROM echoo_pgmq.read(%s,%s,30)", (queue, owner)).fetchone()
+    assert client.execute("SELECT echoo_pgmq.reject(%s,%s,%s,%s)", (queue,ident,first[1],owner)).fetchone()[0]
+    assert admin.execute("SELECT echoo_pgmq.retry_dead(%s,%s)", (queue,ident)).fetchone()[0]
+    current = client.execute("SELECT * FROM echoo_pgmq.read(%s,%s,30)", (queue,owner)).fetchone()
+    assert current[1] > first[1]
+    assert current[2] == b"retry-body"
+    assert not client.execute("SELECT echoo_pgmq.ack(%s,%s,%s,%s)", (queue,ident,first[1],owner)).fetchone()[0]
+    assert client.execute("SELECT echoo_pgmq.ack(%s,%s,%s,%s)", (queue,ident,current[1],owner)).fetchone()[0]
+
+
+def test_expired_final_attempt_cleanup_is_bounded(admin, client, queue):
+    admin.execute("UPDATE echoo_pgmq.queues SET max_attempts=1 WHERE name=%s", (queue,))
+    owner = uuid.uuid4()
+    for index in range(70):
+        client.execute("SELECT echoo_pgmq.enqueue(%s,%s)", (queue, bytes([index])))
+        assert client.execute("SELECT * FROM echoo_pgmq.read(%s,%s,3600)", (queue,owner)).fetchone()
+    assert client.execute("SELECT * FROM echoo_pgmq.read(%s,%s,30)", (queue,owner)).fetchone() is None
+    # Advance lease timestamps without a long test sleep; receipt-expiration by
+    # actual elapsed time is separately asserted by tests/sql/core.sql.
+    admin.execute("UPDATE echoo_pgmq.messages m SET available_at=clock_timestamp()-interval '1 second',"
+                  "lease_until=clock_timestamp()-interval '1 second' FROM echoo_pgmq.queues q "
+                  "WHERE m.queue_id=q.queue_id AND q.name=%s", (queue,))
+    assert client.execute("SELECT * FROM echoo_pgmq.read(%s,%s,30)", (queue,owner)).fetchone() is None
+    count_dead = "SELECT count(*) FROM echoo_pgmq.messages m JOIN echoo_pgmq.queues q USING(queue_id) WHERE q.name=%s AND m.state='dead'"
+    assert admin.execute(count_dead, (queue,)).fetchone()[0] == 64
+    assert client.execute("SELECT * FROM echoo_pgmq.read(%s,%s,30)", (queue,owner)).fetchone() is None
+    assert admin.execute(count_dead, (queue,)).fetchone()[0] == 70
+    assert admin.execute("SELECT echoo_pgmq.purge_dead(%s,17)", (queue,)).fetchone()[0] == 17
+    assert admin.execute("SELECT message_count,total_bytes FROM echoo_pgmq.queues WHERE name=%s", (queue,)).fetchone() == (53,53)
+
+
+def test_poison_quarantine_does_not_deadlock_with_late_ack(admin, client, user_dsn, queue):
+    """A claim owns the message row while an old ACK owns the quota lock."""
+    import time
+    old_owner, new_owner = uuid.uuid4(), uuid.uuid4()
+    ident = client.execute("SELECT echoo_pgmq.enqueue(%s,%s)", (queue, b"")).fetchone()[0]
+    old = client.execute("SELECT * FROM echoo_pgmq.read(%s,%s,60)", (queue, old_owner)).fetchone()
+    admin.execute("UPDATE echoo_pgmq.messages SET lease_until=clock_timestamp()-interval '1 second',"
+                  "available_at=clock_timestamp()-interval '1 second' WHERE id=%s", (ident,))
+    with psycopg.connect(user_dsn) as claimant, psycopg.connect(user_dsn, autocommit=True) as stale:
+        new = claimant.execute("SELECT * FROM echoo_pgmq.read(%s,%s,60)", (queue,new_owner)).fetchone()
+        stale_pid = stale.info.backend_pid
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(lambda: stale.execute("SELECT echoo_pgmq.ack(%s,%s,%s,%s)",
+                                     (queue,ident,old[1],old_owner)).fetchone()[0])
+            deadline = time.monotonic()+5
+            while time.monotonic() < deadline:
+                blocked = admin.execute("SELECT %s=ANY(pg_blocking_pids(%s))",
+                                        (claimant.info.backend_pid,stale_pid)).fetchone()[0]
+                if blocked:
+                    break
+                time.sleep(.01)
+            assert blocked, "late ACK did not reach the intended row-lock boundary"
+            # A two-second timeout makes a reversed-lock regression deterministic,
+            # rather than hanging the suite until a PostgreSQL deadlock is chosen.
+            claimant.execute("SET LOCAL statement_timeout='2s'")
+            assert claimant.execute("SELECT echoo_pgmq.reject(%s,%s,%s,%s)",
+                                    (queue,ident,new[1],new_owner)).fetchone()[0]
+            claimant.commit()
+            assert future.result(timeout=5) is False
+    assert admin.execute("SELECT state FROM echoo_pgmq.messages WHERE id=%s", (ident,)).fetchone()[0] == "dead"
+    assert admin.execute("SELECT message_count,total_bytes FROM echoo_pgmq.queues WHERE name=%s", (queue,)).fetchone() == (1,0)

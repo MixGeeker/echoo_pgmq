@@ -40,6 +40,8 @@ def main():
     args = parser.parse_args()
     if hasattr(os, "geteuid") and os.geteuid() == 0:
         parser.error("initdb must run as an unprivileged OS user")
+    version = subprocess.check_output([args.pg_config, "--version"], text=True).strip()
+    major = int(version.split()[1].split(".")[0])
     bindir = Path(subprocess.check_output([args.pg_config, "--bindir"], text=True).strip())
     def binary(name):
         return bindir / (name + (".exe" if os.name == "nt" else ""))
@@ -53,6 +55,13 @@ def main():
     while amqpport == pgport:
         amqpport = port()
     run([binary("initdb"), "-D", data, "-U", "echoo_admin", "-A", "trust", "--encoding=UTF8", "--no-locale"])
+    # PG16 requires LOGIN even for background workers. Deny its external access
+    # before generic temporary-cluster trust rules. PG17 supports NOLOGIN bypass.
+    hba = data / "pg_hba.conf"
+    reject = "host all echoo_pgmq_worker 0.0.0.0/0 reject\nhost all echoo_pgmq_worker ::0/0 reject\n"
+    if os.name != "nt":
+        reject = "local all echoo_pgmq_worker reject\n" + reject
+    hba.write_text(reject + hba.read_text(encoding="utf-8"), encoding="utf-8")
     # Trust is confined to a newly-created loopback cluster. It is not a production recipe.
     with (data / "postgresql.conf").open("a", encoding="utf-8") as stream:
         stream.write(f"\nlisten_addresses='127.0.0.1'\nport={pgport}\n")
@@ -73,7 +82,7 @@ def main():
         dsn = dsn.replace("dbname=postgres", "dbname=echoo_test")
         with psycopg.connect(dsn, autocommit=True) as conn:
             conn.execute("CREATE EXTENSION echoo_pgmq VERSION '0.1.0'")
-            conn.execute("CREATE ROLE echoo_pgmq_worker NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION")
+            conn.execute(f"CREATE ROLE echoo_pgmq_worker {'NOLOGIN' if major >= 17 else 'LOGIN'} NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION")
             conn.execute("CREATE ROLE echoo_test_user LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION")
             conn.execute("CREATE ROLE echoo_denied LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION")
             conn.execute("GRANT USAGE ON SCHEMA echoo_pgmq TO echoo_pgmq_worker")

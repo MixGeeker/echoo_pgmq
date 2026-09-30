@@ -21,19 +21,32 @@ def main():
     parser.add_argument("--proton-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=Path("dist"))
     args = parser.parse_args()
+    cache = args.build_dir / "CMakeCache.txt"
+    if not cache.is_file():
+        raise SystemExit("CMake build cache missing; cannot verify production build flags")
+    if "ECHOO_ENABLE_TEST_HOOKS:BOOL=ON" in cache.read_text(encoding="utf-8", errors="replace"):
+        raise SystemExit("Refusing to package a fault-injection-enabled build")
     version = subprocess.check_output([args.pg_config, "--version"], text=True).strip()
     major = version.split()[1].split(".")[0]
     suffix = ".dll" if os.name == "nt" else ".so"
     candidates = list(args.build_dir.rglob("echoo_pgmq" + suffix))
     if len(candidates) != 1:
         raise SystemExit(f"expected exactly one built extension, found {candidates}")
+    # Package the installed module, whose CMake INSTALL_RPATH is $ORIGIN, not
+    # the build-tree module with a machine-specific absolute BUILD_RPATH.
+    pkglibdir = Path(subprocess.check_output([args.pg_config, "--pkglibdir"], text=True).strip())
+    installed = pkglibdir / ("echoo_pgmq" + suffix)
+    if not installed.is_file():
+        raise SystemExit("installed module missing; run cmake --install before packaging")
+    if b"echoo_pgmq.test_fail_settle_before_commit" in installed.read_bytes():
+        raise SystemExit("Refusing installed module containing fault-injection hook; reinstall normal build")
     artifact = f"echoo-pgmq-0.1.0-candidate-pg{major}-{platform.system().lower()}-{platform.machine().lower()}"
     args.output.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="echoo-package-") as temp:
         stage = Path(temp) / artifact
         (stage / "lib").mkdir(parents=True)
         (stage / "share" / "extension").mkdir(parents=True)
-        shutil.copy2(candidates[0], stage / "lib" / candidates[0].name)
+        shutil.copy2(installed, stage / "lib" / installed.name)
         for path in [ROOT / "echoo_pgmq.control", *sorted((ROOT / "sql").glob("*.sql"))]:
             shutil.copy2(path, stage / "share" / "extension" / path.name)
         runtime = stage / ("runtime-bin" if os.name == "nt" else "lib")
@@ -49,24 +62,16 @@ def main():
             shutil.copy2(ROOT / filename, stage / filename)
         shutil.copytree(ROOT / "docs", stage / "docs")
         (stage / "third-party").mkdir()
-        licenses = list(args.proton_root.rglob("LICENSE*")) + list(args.proton_root.rglob("NOTICE*"))
+        licenses = list(args.proton_root.rglob("LICENSE*")) + list(args.proton_root.rglob("NOTICE*")) + list(args.proton_root.rglob("ECHOO_WINDOWS_OPENSSL_PATCH.txt"))
         for path in licenses:
             if path.is_file():
                 shutil.copy2(path, stage / "third-party" / ("proton-" + path.name))
-        if not any((stage / "third-party").iterdir()):
+        if not list((stage / "third-party").glob("proton-LICENSE*")) or not list((stage / "third-party").glob("proton-NOTICE*")):
             raise SystemExit("Proton license/NOTICE absent; install or copy upstream notices before packaging")
         try:
             commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
         except subprocess.CalledProcessError:
             commit = "uncommitted"
-        files = {str(p.relative_to(stage)).replace(os.sep, "/"): hashlib.sha256(p.read_bytes()).hexdigest()
-                 for p in sorted(stage.rglob("*")) if p.is_file()}
-        manifest = {"status": "candidate-not-production-release", "version": "0.1.0", "commit": commit,
-                    "postgres_build": version, "os": platform.platform(), "architecture": platform.machine(),
-                    "proton": "0.40.0", "project_license": "pending-owner-decision",
-                    "windows11_validation": "not-established-by-server-ci",
-                    "files_sha256": files}
-        (stage / "MANIFEST.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
         (stage / "INSTALL-CANDIDATE.txt").write_text(
             "候选构建，禁止直接覆盖生产安装。按 docs/quickstart.md 与 docs/admin.md 验证并安装。\n"
             "lib/ 扩展复制到相同 PostgreSQL 主版本的 pkglibdir；share/extension/ 复制到 sharedir/extension。\n"
@@ -74,6 +79,17 @@ def main():
             "OpenSSL 动态运行库由受信任的系统/PG 发行版提供，包不覆盖现有 OpenSSL DLL。\n"
             "本包没有通过签名发布，也不代表 Windows 11、物理断电、生产 ERP 集成或吞吐指标已经验收。\n",
             encoding="utf-8")
+        files = {str(p.relative_to(stage)).replace(os.sep, "/"): hashlib.sha256(p.read_bytes()).hexdigest()
+                 for p in sorted(stage.rglob("*")) if p.is_file()}
+        manifest = {"status": "candidate-not-production-release", "version": "0.1.0", "commit": commit,
+                    "postgres_build": version, "os": platform.platform(), "architecture": platform.machine(),
+                    "proton": "0.40.0",
+                    "proton_windows_openssl_patch": bool(list(args.proton_root.rglob("ECHOO_WINDOWS_OPENSSL_PATCH.txt"))),
+                    "cmake_cache_sha256": hashlib.sha256(cache.read_bytes()).hexdigest(),
+                    "project_license": "pending-owner-decision",
+                    "windows11_validation": "not-established-by-server-ci",
+                    "files_sha256": files}
+        (stage / "MANIFEST.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
         archive = args.output / (artifact + ".zip")
         with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as output:
             for path in sorted(stage.rglob("*")):

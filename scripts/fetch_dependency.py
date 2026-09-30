@@ -15,6 +15,11 @@ DEPENDENCIES = {
         "algorithm": "sha512",
         "digest": "3e7fe56ca1423f45f71d81f5e1d6ec5f21c073cc580628e12a8dbd545a86805b7312834e0d1234dde43797633d575ed639f21a96239b217500cc0a824482aae3",
     },
+    "postgres-windows-18": {
+        "url": "https://get.enterprisedb.com/postgresql/postgresql-18.6-1-windows-x64-binaries.zip",
+        "algorithm": "sha256",
+        "digest": "fbe23da234ee31547bf8a36d29dfd81e82b849df2d2b78d2eecb43d360252f8c",
+    },
     # Direct official EDB archives; hashes measured from these exact upstream URLs.
     # Refresh through review, not by fetching a checksum from the same URL at runtime.
     "postgres-windows-16": {

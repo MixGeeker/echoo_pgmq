@@ -30,7 +30,7 @@
 
 ## 最短验证路径
 
-在安装了 PostgreSQL 16/17 开发文件、CMake、OpenSSL 和编译器的非 root 开发环境中：
+在安装了 PostgreSQL 18（主要目标）及16/17 开发文件、CMake、OpenSSL 和编译器的非 root 开发环境中：
 
 ```sh
 python scripts/fetch_dependency.py proton /tmp/echoo-proton-src
@@ -40,12 +40,12 @@ cmake -S /tmp/echoo-proton-src -B /tmp/echoo-proton-build \
   -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TOOLS=OFF
 cmake --build /tmp/echoo-proton-build --parallel 2
 cmake --install /tmp/echoo-proton-build
-cmake -S . -B build -DPG_CONFIG=/usr/lib/postgresql/17/bin/pg_config -DPROTON_ROOT=/tmp/echoo-proton
+cmake -S . -B build -DPG_CONFIG=/usr/lib/postgresql/18/bin/pg_config -DPROTON_ROOT=/tmp/echoo-proton
 cmake --build build --parallel 2
 sudo cmake --install build
 python -m pip install -r requirements-dev.txt
 LD_LIBRARY_PATH=/tmp/echoo-proton/lib python scripts/run_integration.py \
-  --pg-config /usr/lib/postgresql/17/bin/pg_config --work-dir /tmp/echoo-test --keep
+  --pg-config /usr/lib/postgresql/18/bin/pg_config --work-dir /tmp/echoo-test --keep
 ```
 
 测试脚本会生成一次性 CA/证书，启动只监听 loopback 的临时 PostgreSQL，执行真实 AMQP/TLS/SQL 测试，并停止集群。`--keep` 保留的目录含私钥和临时数据库，勿上传；CI 仅上传日志、JUnit 与环境信息。Windows 的原生构建步骤在 [快速开始](docs/quickstart.md) 与工作流中。

@@ -124,6 +124,26 @@ echoo_db_publish(const char *queue, const char *identity,
     return success;
 }
 
+/* Called only inside the active claim transaction. Poison rows remain durable
+ * dead letters, rather than rolling their claim back and starving the queue. */
+static void
+reject_claimed_message(const char *queue, const char *identity,
+                       const pg_uuid_t *owner, int64 id, int64 generation)
+{
+    Oid types[] = {TEXTOID, INT8OID, INT8OID, UUIDOID, TEXTOID, TEXTOID};
+    Datum args[6];
+    args[0] = CStringGetTextDatum(queue);
+    args[1] = Int64GetDatum(id);
+    args[2] = Int64GetDatum(generation);
+    args[3] = PointerGetDatum(owner);
+    args[4] = CStringGetTextDatum("rejected");
+    args[5] = CStringGetTextDatum(identity);
+    if (SPI_execute_with_args("SELECT echoo_pgmq.settle($1,$2,$3,$4,$5,$6)",
+                              6, types, args, NULL, false, 1) != SPI_OK_SELECT ||
+        SPI_processed != 1)
+        elog(ERROR, "echoo_pgmq: poison-message settlement failed");
+}
+
 int
 echoo_db_claim(const char *queue, const char *identity,
                const pg_uuid_t *owner, int visibility_seconds,
@@ -136,22 +156,29 @@ echoo_db_claim(const char *queue, const char *identity,
     {
         Oid types[] = {TEXTOID, TEXTOID, UUIDOID, INT4OID};
         Datum args[4];
+        int inspected;
         begin_operation();
         args[0] = CStringGetTextDatum(queue);
         args[1] = CStringGetTextDatum(identity);
         args[2] = PointerGetDatum(owner);
         args[3] = Int32GetDatum(visibility_seconds);
-        if (SPI_execute_with_args("SELECT id,generation,body FROM echoo_pgmq.claim($1,$2,$3,$4)",
-                                  4, types, args, NULL, false, 1) != SPI_OK_SELECT)
-            elog(ERROR, "echoo_pgmq: claim query failed");
         result = 0;
-        if (SPI_processed == 1)
+        /* Bound poison scanning per transaction to preserve event-loop
+         * fairness and statement timeout, even for a large corrupt backlog. */
+        for (inspected = 0; inspected < 8; ++inspected)
         {
             bool isnull;
             bytea *payload;
             Datum body_datum;
-            HeapTuple tuple = SPI_tuptable->vals[0];
-            TupleDesc desc = SPI_tuptable->tupdesc;
+            HeapTuple tuple;
+            TupleDesc desc;
+            if (SPI_execute_with_args("SELECT id,generation,body FROM echoo_pgmq.claim($1,$2,$3,$4)",
+                                      4, types, args, NULL, false, 1) != SPI_OK_SELECT)
+                elog(ERROR, "echoo_pgmq: claim query failed");
+            if (SPI_processed == 0)
+                break;
+            tuple = SPI_tuptable->vals[0];
+            desc = SPI_tuptable->tupdesc;
             message->id = DatumGetInt64(SPI_getbinval(tuple, desc, 1, &isnull));
             if (isnull) elog(ERROR, "echoo_pgmq: null message id");
             message->generation = DatumGetInt64(SPI_getbinval(tuple, desc, 2, &isnull));
@@ -160,12 +187,18 @@ echoo_db_claim(const char *queue, const char *identity,
             if (isnull) elog(ERROR, "echoo_pgmq: null message body");
             payload = DatumGetByteaPP(body_datum);
             message->size = VARSIZE_ANY_EXHDR(payload);
-            if (message->size == 0 || message->size > (size_t) echoo_max_message_bytes)
-                elog(ERROR, "echoo_pgmq: stored message exceeds worker limit");
+            if (message->size == 0 || message->size > (size_t) echoo_max_message_bytes ||
+                !echoo_message_valid((const unsigned char *) VARDATA_ANY(payload), message->size))
+            {
+                reject_claimed_message(queue, identity, owner, message->id, message->generation);
+                memset(message, 0, sizeof(*message));
+                continue;
+            }
             message->body = malloc(message->size);
             if (!message->body) elog(ERROR, "echoo_pgmq: message allocation failed");
             memcpy(message->body, VARDATA_ANY(payload), message->size);
             result = 1;
+            break;
         }
         commit_operation();
     }
@@ -192,6 +225,7 @@ echoo_db_settle(const char *queue, const char *identity,
         Oid types[] = {TEXTOID, INT8OID, INT8OID, UUIDOID, TEXTOID, TEXTOID};
         Datum args[6];
         bool isnull;
+        bool applied;
         begin_operation();
         args[0] = CStringGetTextDatum(queue);
         args[1] = Int64GetDatum(id);
@@ -203,10 +237,15 @@ echoo_db_settle(const char *queue, const char *identity,
                                   6, types, args, NULL, false, 1) != SPI_OK_SELECT ||
             SPI_processed != 1)
             elog(ERROR, "echoo_pgmq: settlement returned no result");
-        success = DatumGetBool(SPI_getbinval(SPI_tuptable->vals[0],
+        applied = DatumGetBool(SPI_getbinval(SPI_tuptable->vals[0],
                                             SPI_tuptable->tupdesc, 1, &isnull));
-        success = success && !isnull;
+        applied = applied && !isnull;
+#ifdef ECHOO_ENABLE_TEST_HOOKS
+        if (echoo_test_fail_settle_before_commit)
+            elog(ERROR, "echoo_pgmq: test-injected failure before settlement commit");
+#endif
         commit_operation();
+        success = applied;
     }
     PG_CATCH();
     {

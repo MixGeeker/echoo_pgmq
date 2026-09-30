@@ -2,6 +2,7 @@ name: Native PostgreSQL and AMQP validation
 
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -20,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pg: ['16', '17']
+        pg: ['18', '16', '17']
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
@@ -51,7 +52,7 @@ jobs:
           cmake --build "$RUNNER_TEMP/proton-build" --parallel 2
           cmake --install "$RUNNER_TEMP/proton-build"
           mkdir -p "$PROTON_ROOT/share/licenses/proton"
-          cp "$RUNNER_TEMP/proton-src/LICENSE" "$RUNNER_TEMP/proton-src/NOTICE" "$PROTON_ROOT/share/licenses/proton/"
+          cp "$RUNNER_TEMP/proton-src/LICENSE.txt" "$RUNNER_TEMP/proton-src/NOTICE.txt" "$PROTON_ROOT/share/licenses/proton/"
           echo "LD_LIBRARY_PATH=$PROTON_ROOT/lib:$PROTON_ROOT/lib64" >> "$GITHUB_ENV"
       - name: Compile and install extension
         shell: bash
@@ -103,7 +104,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pg: ['16', '17']
+        pg: ['18', '16', '17']
     defaults:
       run:
         shell: pwsh
@@ -133,6 +134,8 @@ jobs:
           $ErrorActionPreference = 'Stop'
           python scripts/fetch_dependency.py proton "$env:RUNNER_TEMP/proton-src"
           if ($LASTEXITCODE -ne 0) { throw 'Proton verification failed' }
+          python scripts/patch_proton_windows.py "$env:RUNNER_TEMP/proton-src"
+          if ($LASTEXITCODE -ne 0) { throw 'Verified Windows OpenSSL patch failed' }
           cmake -S "$env:RUNNER_TEMP/proton-src" -B "$env:RUNNER_TEMP/proton-build" -A x64 `
             "-DCMAKE_INSTALL_PREFIX=$env:PROTON_ROOT" "-DOPENSSL_ROOT_DIR=$env:OPENSSL_ROOT_DIR" `
             -DSSL_IMPL=openssl -DSASL_IMPL=none -DBUILD_CPP=OFF -DBUILD_PYTHON=OFF `
@@ -143,7 +146,8 @@ jobs:
           cmake --install "$env:RUNNER_TEMP/proton-build" --config RelWithDebInfo
           if ($LASTEXITCODE -ne 0) { throw 'Proton install failed' }
           New-Item -Type Directory -Force "$env:PROTON_ROOT/share/licenses/proton" | Out-Null
-          Copy-Item "$env:RUNNER_TEMP/proton-src/LICENSE", "$env:RUNNER_TEMP/proton-src/NOTICE" "$env:PROTON_ROOT/share/licenses/proton/"
+          Copy-Item "$env:RUNNER_TEMP/proton-src/LICENSE.txt", "$env:RUNNER_TEMP/proton-src/NOTICE.txt" "$env:PROTON_ROOT/share/licenses/proton/"
+          Copy-Item "$env:RUNNER_TEMP/proton-src/ECHOO_WINDOWS_OPENSSL_PATCH.txt" "$env:PROTON_ROOT/share/licenses/proton/"
           "$env:PROTON_ROOT/bin" >> $env:GITHUB_PATH
       - name: Compile and install native PostgreSQL DLL
         run: |

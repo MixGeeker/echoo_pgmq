@@ -17,7 +17,7 @@
 
 ## 数据库权限
 
-扩展由受信任管理员安装。worker 使用专用 `NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION` 角色；只授予 schema USAGE 与文档列出的四个私有接口。原生 worker 显式绕过该角色的 LOGIN 检查来建立内部连接，普通网络客户端不能因此登录。
+扩展由受信任管理员安装。PostgreSQL17/18 的 worker 使用专用 `NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION` 角色；只授予 schema USAGE 与文档列出的四个私有接口。PostgreSQL17/18 原生 worker 显式绕过该角色的 LOGIN 检查来建立内部连接，普通网络客户端不能因此登录。PostgreSQL16 无此绕过标志，必须使用不设密码的 LOGIN worker 角色，同时在 pg_hba.conf 通用规则之前显式 reject 该角色的所有TCP/Unix-socket外部登录（详见快速开始）；不能把 NOLOGIN17 的保证套用到16。
 
 业务角色只获得公开 enqueue/read/ack/release/reject 接口，通过 session_user 与队列 ACL 授权。不向业务角色授予底表、序列或私有 `publish/claim/settle/authorize` 的权限。不把 worker 角色授予业务角色，不使用超级用户运行 listener。SECURITY DEFINER 函数固定 search_path；管理员仍应禁止不可信用户修改扩展 schema。
 

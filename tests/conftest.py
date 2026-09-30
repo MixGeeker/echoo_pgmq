@@ -81,3 +81,18 @@ def connect_amqp():
             connection.close()
         except Exception:
             pass
+
+
+@pytest.fixture(autouse=True)
+def no_unexpected_worker_restart(request):
+    """A protocol rejection must never be reported as success after worker crash."""
+    if not request.node.get_closest_marker("integration") or request.node.get_closest_marker("crash"):
+        yield
+        return
+    dsn = request.getfixturevalue("dsn")
+    with psycopg.connect(dsn, autocommit=True) as guard:
+        before = guard.execute("SELECT pid FROM pg_stat_activity WHERE usename='echoo_pgmq_worker'").fetchone()
+        assert before, "native worker is not running at test entry"
+        yield
+        after = guard.execute("SELECT pid FROM pg_stat_activity WHERE usename='echoo_pgmq_worker'").fetchone()
+        assert after == before, "native worker exited/restarted during a non-crash test"
