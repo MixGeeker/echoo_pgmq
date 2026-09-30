@@ -6,11 +6,11 @@
 
 `.github/workflows/benchmark.yml` 只允许手动执行，以及已明确授权的专用分支 `benchmarks/controlled-pg18-20260930` push。普通 PR/main push 不触发，不调用 security/qualification、异常输入、模糊测试、故障注入或崩溃测试。使用标准公共 `ubuntu-24.04` runner，不申请付费大规格 runner。
 
-这是**固定到达率、有限时窗的普通负载实验**，不是最大容量搜索、24小时长稳、真实ERP或门店硬件验收。文件存在不等于实验已通过；在获得并审阅 GitHub artifacts 前，不填写新的性能结论。本机短时验证只证明新客户端能正常工作。
+这是**固定到达率、有限时窗的普通负载实验**，不是最大容量搜索、24小时长稳、真实ERP或门店硬件验收。固定提交51ca717的27单元实验现已完成，并逐条复算。结果与原始证据见[2026-09-30固定预算报告](benchmark-results.md)：正常流量与对账通过，但echoo12/12、RabbitMQ10/12消息单元未满足暂定合成DB p95增幅≤10%，不把工作流绿灯当作性能目标通过。
 
 完整矩阵前必须先通过**真实Docker基础设施冒烟**：同一image ID/预算，baseline、echoo、RabbitMQ各一个单元，2秒预热+5秒测量，消息单元为1×1、100条/秒。它实际覆盖HTTP资源采样、cgroup读回、两侧mTLS/发布/消费、数据库采样与正常清理；任何失败立刻停止，不进入27单元。冒烟证据立即单独上传，明确标记`infrastructure_smoke`，不参与性能比较。
 
-首次容器尝试[run 36662006820](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662006820)已完成镜像构建和27次实际预算读回，但HTTP采样客户端误用Python上下文管理器，全部在预热前停止、测量样本为0。[原失败artifact](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662006820/artifacts/11074643223)保留；它不能说明任何代理性能或ERP目标。代码已改为显式关闭连接并加回归测试，待新的真实Docker冒烟和完整矩阵验证。
+首次容器尝试[run 36662006820](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662006820)已完成镜像构建和27次实际预算读回，但HTTP采样客户端误用Python上下文管理器，全部在预热前停止、测量样本为0。[原失败artifact](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662006820/artifacts/11074643223)保留；它不能说明任何代理性能或ERP目标。代码已改为显式关闭连接并加回归测试；新运行36663717022的真实Docker冒烟3/3及完整矩阵27/27均已完成，原失败数据继续保留。
 
 ### 资源与持久化
 

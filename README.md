@@ -58,4 +58,4 @@ CI 上传带 SHA-256 清单的 candidate ZIP，不创建 tag 或最终 Release�
 
 ## 已验证候选
 
-提交 `152a73c` 的Linux/原生Windows × PG18/17/16六个普通矩阵，均通过两轮32项测试及显式core.sql执行，包括候选归档重装。见 [完整普通验证记录与下载](docs/validation.md)。完整安全/故障资格仍未完成，不能用于生产发布。
+提交 `a501852` 的Linux/原生Windows × PG18/17/16六个普通矩阵通过：PG18两轮各40项（含独立JavaScript rhea互操作8项），PG16/17两轮各32项，均显式执行core.sql并完成候选归档重装。见 [完整普通验证记录与下载](docs/validation.md)。完整安全/故障资格仍未完成，不能用于生产发布。

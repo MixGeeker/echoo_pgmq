@@ -130,3 +130,5 @@ python scripts/run_integration.py --ordinary --pg-config /path/to/pg_config --wo
 ```
 
 `--ordinary` 只运行明确列出的普通 SQL/AMQP/归档回归，使用正常 fast 启停；不运行畸形协议、资源耗尽、进程强杀或提交故障注入。完整 qualification 当前暂停于安全审阅，普通回归通过不等于完整验收。必须以普通 OS 用户运行，工作目录必须没有既存 data/certs。不要指向生产目录。保留的测试目录包含私钥，手动安全清理。
+
+PG18的独立JavaScript客户端验证额外使用Node.js 24与锁定的rhea3.0.5。安装命令、默认FIRST/手动SECOND、释放与正常重连场景见[独立客户端说明](https://github.com/MixGeeker/echoo_pgmq/blob/a501852e2137f3f46e710384a8ada9c4315f9939/tests/interop/README.md)。这些仅为开发依赖，PostgreSQL服务不需要Node/Python进程。

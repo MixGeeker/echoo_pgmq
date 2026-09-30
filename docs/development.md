@@ -25,7 +25,7 @@ python scripts/run_integration.py --ordinary --pg-config /path/to/pg_config --wo
 
 ## CI策略
 
-GitHub Actions在PR与main推送上运行，六个功能矩阵：Ubuntu24.04 PG18（主要目标）及16/17、WindowsServer2022原生PG18（主要目标）及16/17。每个自动任务安装扩展，执行 `--ordinary` 明确允许的 SQL/storage 并发、备份/升级、候选归档单元测试，以及正常 AMQP 二进制/提交/重投/迟到 ACK/release 语义，成功后才打包 candidate。自动任务不包含畸形输入、连接耗尽、进程强杀或故障注入。actions固定commit SHA，权限只读，checkout不保留凭据，没有publish-release、token写权限、continue-on-error或伪造成功。
+GitHub Actions在PR与main推送上运行，六个功能矩阵：Ubuntu24.04 PG18（主要目标）及16/17、WindowsServer2022原生PG18（主要目标）及16/17。每个自动任务安装扩展，执行 `--ordinary` 明确允许的 SQL/storage 并发、备份/升级、候选归档单元测试，以及正常 AMQP 二进制/提交/重投/迟到 ACK/release 语义，PG18额外安装锁定的Node/rhea测试依赖并运行8项独立实现互操作，合计每轮40项；PG16/17每轮32项。源码安装和归档重装均成功后保留candidate证据。自动任务不包含畸形输入、连接耗尽、进程强杀或故障注入。actions固定commit SHA，权限只读，checkout不保留凭据，没有publish-release、token写权限、continue-on-error或伪造成功。
 
 完整功能矩阵保留在 `qualification.yml`，安全矩阵保留在 `security.yml`，均仅允许手动 `workflow_dispatch`，当前等待安全审阅，不自动触发。所有 candidate manifest 均明确写入 `qualification_status=blocked_security_review`。普通任务通过不等于完整验收，未执行的测试不会被记作通过。
 
@@ -64,4 +64,4 @@ Linux 从候选复制扩展、SQL 与 Proton 库，随后去掉 `LD_LIBRARY_PATH
 
 SHA256 用于发现文件损坏和清单不一致，不代表签名认证；不可信来源能够同时替换 ZIP 与散列。正式发布仍需独立可信分发与签名流程。
 
-当前已知良好普通候选为152a73c：六组合两轮各32项，core.sql显式完成记录齐全，见[验证记录](validation.md)。文档后续变更不自动变更该被测提交或完整安全资格状态。
+当前已核实普通候选对应a501852：PG18 Linux/原生Windows两轮各40项（含独立rhea 8项），PG16/17各两轮32项，core.sql显式完成记录齐全，见[验证记录](validation.md)。文档后续变更不自动变更该被测提交或完整安全资格状态。
