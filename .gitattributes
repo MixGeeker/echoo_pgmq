@@ -1,0 +1,2 @@
+# PostgreSQL 16/17 preserve SQL file line endings in installed function bodies.
+*.sql text eol=lf

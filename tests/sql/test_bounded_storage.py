@@ -10,6 +10,8 @@ from psycopg import sql
 from psycopg.conninfo import conninfo_to_dict, make_conninfo
 import pytest
 
+from scripts.extension_identity import installed_identity
+
 pytestmark = pytest.mark.integration
 
 
@@ -83,7 +85,8 @@ def test_global_limits_apply_across_queues_and_rollback(admin, client, queue):
     assert admin.execute("SELECT message_count,total_bytes FROM echoo_pgmq.limits").fetchone() == (before[0]+1,before[1]+3)
 
 
-def test_logical_dump_restores_payload_acl_ledger_receipts_and_sequences(dsn, admin, tmp_path):
+@pytest.mark.parametrize("extension_version", ["0.1.1", "0.1.2"])
+def test_logical_dump_restores_payload_acl_ledger_receipts_and_sequences(dsn, admin, tmp_path, extension_version):
     pg_dump, psql = shutil.which("pg_dump"), shutil.which("psql")
     assert pg_dump and psql, "PostgreSQL bin directory must be on PATH"
     suffix = uuid.uuid4().hex
@@ -98,7 +101,8 @@ def test_logical_dump_restores_payload_acl_ledger_receipts_and_sequences(dsn, ad
         options["dbname"] = source
         source_dsn = make_conninfo(**options)
         with psycopg.connect(source_dsn, autocommit=True) as conn:
-            conn.execute("CREATE EXTENSION echoo_pgmq VERSION '0.1.1'")
+            conn.execute(sql.SQL("CREATE EXTENSION echoo_pgmq VERSION {}").format(sql.Literal(extension_version)))
+            source_identity = installed_identity(conn, extension_version)
             for queue_name in ("backup/one", "backup/two", "backup/three"):
                 conn.execute("SELECT echoo_pgmq.create_queue(%s)", (queue_name,))
                 conn.execute("SELECT echoo_pgmq.grant_queue(%s,session_user::text)", (queue_name,))
@@ -122,11 +126,11 @@ def test_logical_dump_restores_payload_acl_ledger_receipts_and_sequences(dsn, ad
         # pg_dump omits the extension version from CREATE EXTENSION. Preserve
         # the source API contract explicitly, not merely its table contents.
         with psycopg.connect(restore_dsn, autocommit=True) as conn:
-            conn.execute("CREATE EXTENSION echoo_pgmq VERSION '0.1.1'")
+            conn.execute(sql.SQL("CREATE EXTENSION echoo_pgmq VERSION {}").format(sql.Literal(extension_version)))
         subprocess.run([psql, "--dbname", restore_dsn, "-X", "-v", "ON_ERROR_STOP=1", "--file", str(dump)],
                        check=True, capture_output=True, text=True)
         with psycopg.connect(restore_dsn, autocommit=True) as conn:
-            assert conn.execute("SELECT extversion FROM pg_extension WHERE extname='echoo_pgmq'").fetchone()[0] == "0.1.1"
+            assert installed_identity(conn, extension_version) == source_identity
             assert conn.execute("SELECT to_regclass('echoo_pgmq.queue_stats')").fetchone()[0] is not None
             assert conn.execute("SELECT count(*) FROM echoo_pgmq.queue_stats").fetchone()[0] == 3
             assert conn.execute("SELECT echoo_pgmq.authorize('backup/one',%s,'consume')", (backup_principal,)).fetchone()[0]

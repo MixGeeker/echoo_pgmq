@@ -1,0 +1,94 @@
+{
+  "date_utc": "2026-09-30",
+  "status": "ordinary-regression-passed-not-production-qualified",
+  "baseline_commit": "aa3f21de73de5ce200e26c2ec889e5c8db874463",
+  "prototype_sha256": "cba28ca5049adb04397270322c5119e4ff35343ca2ddef2808a2211dc3721a30",
+  "prototype_function_preserved_except_name_and_migration_create_or_replace": true,
+  "postgres": "18.6",
+  "platform": "Linux x86-64",
+  "proton": "0.40.0",
+  "test_hooks": false,
+  "source_and_historical_sql_unchanged": {
+    "src/echoo_pgmq.c": "578f4c4430f8555873dd319da913e8762e823c93bae3bd3b8bf6f3106ea4b272",
+    "src/message.c": "bc1633ff058f7f26125dad7fa0dae9dde88607db9c198e3ae9c3205f5190bde2",
+    "src/storage.c": "5ef7f9bc66240a69fe3be42994cbaf5c58c129f64918f3ff1896b3458bf0532f",
+    "include/echoo_pgmq.h": "e14d877b0fc37dfabd2bba9ce320e51d87ff1aa38a7a2e5837e57b39730c96dc",
+    "sql/echoo_pgmq--0.1.0.sql": "92f0eb223eda5ad49706211ab4d91ce27dbcf85a9c943f63558a902d5030ecce",
+    "sql/echoo_pgmq--0.1.1.sql": "dbda25fbd0b8e222fbce1c32386602f790b1e2fe44e7d61342560b5ce46dee42",
+    "sql/echoo_pgmq--0.1.0--0.1.1.sql": "df9236f20494ccbe2aec8149488d8ed7bcecf3099f6a30ad41934b5b5b8ce160"
+  },
+  "attempts": [
+    {
+      "directory": "attempt-1",
+      "tests": 55,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0,
+      "elapsed_seconds": "13.285",
+      "extension_identity": {
+        "extversion": "0.1.2",
+        "function": "echoo_pgmq._enqueue(text,bytea,text,text)",
+        "enqueue_prosrc_sha256": "6d294ce35e68505d92ff559f6fad48d4304b55da22ccf63f5a4887f01efa6d08",
+        "source_sql_sha256": "e0dcad316df2dd4b8bfc76e59e034e1b60b516fa87b6e759d1e363c26459a51f"
+      },
+      "sql_scripts_passed": [],
+      "cleanup": {
+        "stop_mode": "fast",
+        "stop_returncode": 0,
+        "status_returncode": 3,
+        "postmaster_pid_absent": true
+      },
+      "evidence_sha256": {
+        "junit.xml": "e876d5d31eaf64104b94e4e8532329cee20fffadb00ebcd054995583cdc13046",
+        "environment.json": "6bf31511d5147c0fb4aeaf348ca4b40899523efd12fbc10722d646aa63a4c3eb",
+        "cleanup.json": "60bb146f25cf52f1a764af483a0fba1647532f64425f7eb98e264079f8169fbd",
+        "independent-client.jsonl": "c297131684632bf0cee1d4fcaedeab5b497b27eb23e23fc155a7fff61570417a",
+        "postgres.log": "85165d49195f43fac16127f4a5e844aa421517dad6732c65f17975a4689692aa"
+      }
+    },
+    {
+      "directory": "attempt-2",
+      "tests": 55,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "elapsed_seconds": "13.323",
+      "extension_identity": {
+        "extversion": "0.1.2",
+        "function": "echoo_pgmq._enqueue(text,bytea,text,text)",
+        "enqueue_prosrc_sha256": "6d294ce35e68505d92ff559f6fad48d4304b55da22ccf63f5a4887f01efa6d08",
+        "source_sql_sha256": "e0dcad316df2dd4b8bfc76e59e034e1b60b516fa87b6e759d1e363c26459a51f"
+      },
+      "sql_scripts_passed": [
+        "core.sql"
+      ],
+      "cleanup": {
+        "stop_mode": "fast",
+        "stop_returncode": 0,
+        "status_returncode": 3,
+        "postmaster_pid_absent": true
+      },
+      "evidence_sha256": {
+        "junit.xml": "73a00e999a1b7be91a20ebfb757c80e256b859d2e4739d413dbfcd0cc73adc7c",
+        "environment.json": "6b63ddde2f07a417b1338ac802276a48e6e4b9fffa0d8ccd864842d2cc2b705b",
+        "cleanup.json": "60bb146f25cf52f1a764af483a0fba1647532f64425f7eb98e264079f8169fbd",
+        "independent-client.jsonl": "427cead9dd804a8494f690625164ea8cc93d5e8937f0bda6718a84b7e5caf5ce",
+        "postgres.log": "cb538d2decab36a9dd1c08c238b3ef56639be35b3a551b1e48982378af550344"
+      }
+    }
+  ],
+  "attempt_1_failure": "New test fixture set global limits before create_queue had initialized singleton; fixed setup ordering and asserted UPDATE rowcount=1; product SQL unchanged.",
+  "not_run": [
+    "Windows candidate",
+    "remote CI candidate",
+    "native candidate performance",
+    "security/parser/fuzz/new fault/crash tests",
+    "manual qualification workflow",
+    "long qualification",
+    "physical power loss",
+    "Win11 SSD",
+    "ERP integration"
+  ],
+  "evidence_root": "/workspace/shared/reservation-0.1.2-evidence",
+  "command": "python scripts/run_integration.py --ordinary --independent-client --pg-config /workspace/shared/pg18-reservation-test/bin/pg_config --work-dir /workspace/shared/reservation-0.1.2-evidence/attempt-2 --keep"
+}

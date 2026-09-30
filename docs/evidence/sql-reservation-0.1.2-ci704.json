@@ -1,0 +1,433 @@
+{
+  "run_id": 36749616970,
+  "pr_number": 3,
+  "head": "67df046ae29b59c648c15b94a0af687e00172419",
+  "actual_checkout": "e60b8f25258360cb0831bfc4e9565e27aa75e78f",
+  "verified_equal_tree": "4ce9c6aacf34fae6ba4261216a8be3b34887b8ad",
+  "tests": 704,
+  "rounds": 12,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "core_sql_completion_markers": 12,
+  "candidate_packages": 6,
+  "outer_artifacts": 12,
+  "results": [
+    {
+      "id": 11114930335,
+      "name": "native-windows-server2022-pg16-candidate",
+      "bytes": 541279,
+      "sha256": "e4ccb7f7a72117d267c581261134b239f20ff5154f0b11bdd0c11724ced7e079",
+      "outer_verified": true,
+      "package": {
+        "inner_name": "echoo-pgmq-0.1.2-candidate-pg16-windows-amd64.zip",
+        "inner_sha256": "be44ea36fe7456b90cab4eb3adfc559c908c36d19133966a3113e72e831e6295",
+        "file_hashes_verified": 51,
+        "commit": "e60b8f25258360cb0831bfc4e9565e27aa75e78f",
+        "postgres": "PostgreSQL 16.15",
+        "system": "Windows",
+        "qualification_status": "blocked_security_review",
+        "project_license": "pending-owner-decision",
+        "manifest_sha256": "7878737e1d1f692cfdc493ed2c2ea2563907288ab74f18bb2a18ca164fb5693c"
+      }
+    },
+    {
+      "id": 11114875253,
+      "name": "native-windows-server2022-pg17-candidate",
+      "bytes": 541205,
+      "sha256": "8bb8fd6666f8d1a250ef105a84114879eb28b7272eec30547f117a267b10fd6b",
+      "outer_verified": true,
+      "package": {
+        "inner_name": "echoo-pgmq-0.1.2-candidate-pg17-windows-amd64.zip",
+        "inner_sha256": "35c43ec37adb74d94b9857374b002bdef8ed555a809bb582e63d030d5dab1ed8",
+        "file_hashes_verified": 51,
+        "commit": "e60b8f25258360cb0831bfc4e9565e27aa75e78f",
+        "postgres": "PostgreSQL 17.11",
+        "system": "Windows",
+        "qualification_status": "blocked_security_review",
+        "project_license": "pending-owner-decision",
+        "manifest_sha256": "2f593f515b8051d6e32ff30acc91519490a6f4385cd19fc4960a76fc992485ac"
+      }
+    },
+    {
+      "id": 11114775060,
+      "name": "linux-pg17-candidate",
+      "bytes": 5743057,
+      "sha256": "56e9082c8fb6fa425e64703ca718b20c7a8f9fa8e74b3e72d540d8f86164f0aa",
+      "outer_verified": true,
+      "package": {
+        "inner_name": "echoo-pgmq-0.1.2-candidate-pg17-linux-x86_64.zip",
+        "inner_sha256": "4069160eea5cfaaea63240f20e904cc668afe5eaee91e8a1578ef3db4fcc08c5",
+        "file_hashes_verified": 56,
+        "commit": "e60b8f25258360cb0831bfc4e9565e27aa75e78f",
+        "postgres": "PostgreSQL 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+        "system": "Linux",
+        "qualification_status": "blocked_security_review",
+        "project_license": "pending-owner-decision",
+        "manifest_sha256": "bbeb871e024c7a223222772a7c3109aaeb8e6428ef96f5da534d8efeb9783e66"
+      }
+    },
+    {
+      "id": 11114700650,
+      "name": "native-windows-server2022-pg16-evidence",
+      "bytes": 11800,
+      "sha256": "386df8631b48661f6f1be8c3382cd0b4445f020f633ed6cb60fd3f0fbca0cbcf",
+      "outer_verified": true,
+      "rounds": [
+        {
+          "prefix": "evidence",
+          "tests": 56,
+          "identity_cases": 9,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 16.15",
+          "platform": "win32",
+          "core_sql": true,
+          "extension_identity": {
+            "extversion": "0.1.2",
+            "function": "echoo_pgmq._enqueue(text,bytea,text,text)",
+            "enqueue_prosrc_sha256": "6d294ce35e68505d92ff559f6fad48d4304b55da22ccf63f5a4887f01efa6d08",
+            "source_sql_sha256": "e0dcad316df2dd4b8bfc76e59e034e1b60b516fa87b6e759d1e363c26459a51f"
+          },
+          "cleanup": {
+            "stop_mode": "fast",
+            "stop_returncode": 0,
+            "status_returncode": 3,
+            "postmaster_pid_absent": true
+          }
+        },
+        {
+          "prefix": "candidate-evidence",
+          "tests": 56,
+          "identity_cases": 9,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 16.15",
+          "platform": "win32",
+          "core_sql": true,
+          "extension_identity": {
+            "extversion": "0.1.2",
+            "function": "echoo_pgmq._enqueue(text,bytea,text,text)",
+            "enqueue_prosrc_sha256": "6d294ce35e68505d92ff559f6fad48d4304b55da22ccf63f5a4887f01efa6d08",
+            "source_sql_sha256": "e0dcad316df2dd4b8bfc76e59e034e1b60b516fa87b6e759d1e363c26459a51f"
+          },
+          "cleanup": {
+            "stop_mode": "fast",
+            "stop_returncode": 0,
+            "status_returncode": 3,
+            "postmaster_pid_absent": true
+          }
+        }
+      ]
+    },
+    {
+      "id": 11114545753,
+      "name": "native-windows-server2022-pg17-evidence",
+      "bytes": 11949,
+      "sha256": "dbc682eace0533ef529bd3ae165c4aefdacd8f3354fdee616916a8de1e30d054",
+      "outer_verified": true,
+      "rounds": [
+        {
+          "prefix": "evidence",
+          "tests": 56,
+          "identity_cases": 9,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 17.11",
+          "platform": "win32",
+          "core_sql": true,
+          "extension_identity": {
+            "extversion": "0.1.2",
+            "function": "echoo_pgmq._enqueue(text,bytea,text,text)",
+            "enqueue_prosrc_sha256": "6d294ce35e68505d92ff559f6fad48d4304b55da22ccf63f5a4887f01efa6d08",
+            "source_sql_sha256": "e0dcad316df2dd4b8bfc76e59e034e1b60b516fa87b6e759d1e363c26459a51f"
+          },
+          "cleanup": {
+            "stop_mode": "fast",
+            "stop_returncode": 0,
+            "status_returncode": 3,
+            "postmaster_pid_absent": true
+          }
+        },
+        {
+          "prefix": "candidate-evidence",
+          "tests": 56,
+          "identity_cases": 9,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 17.11",
+          "platform": "win32",
+          "core_sql": true,
+          "extension_identity": {
+            "extversion": "0.1.2",
+            "function": "echoo_pgmq._enqueue(text,bytea,text,text)",
+            "enqueue_prosrc_sha256": "6d294ce35e68505d92ff559f6fad48d4304b55da22ccf63f5a4887f01efa6d08",
+            "source_sql_sha256": "e0dcad316df2dd4b8bfc76e59e034e1b60b516fa87b6e759d1e363c26459a51f"
+          },
+          "cleanup": {
+            "stop_mode": "fast",
+            "stop_returncode": 0,
+            "status_returncode": 3,
+            "postmaster_pid_absent": true
+          }
+        }
+      ]
+    },
+    {
+      "id": 11113952467,
+      "name": "linux-pg16-evidence",
+      "bytes": 11568,
+      "sha256": "ca674db5224d15cf78ef3d0937b50b753416c252d7138b7f55aa81aab58de858",
+      "outer_verified": true,
+      "rounds": [
+        {
+          "prefix": "evidence",
+          "tests": 56,
+          "identity_cases": 9,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 16.15 (Ubuntu 16.15-1.pgdg24.04+2)",
+          "platform": "linux",
+          "core_sql": true,
+          "extension_identity": {
+            "extversion": "0.1.2",
+            "function": "echoo_pgmq._enqueue(text,bytea,text,text)",
+            "enqueue_prosrc_sha256": "6d294ce35e68505d92ff559f6fad48d4304b55da22ccf63f5a4887f01efa6d08",
+            "source_sql_sha256": "e0dcad316df2dd4b8bfc76e59e034e1b60b516fa87b6e759d1e363c26459a51f"
+          },
+          "cleanup": {
+            "stop_mode": "fast",
+            "stop_returncode": 0,
+            "status_returncode": 3,
+            "postmaster_pid_absent": true
+          }
+        },
+        {
+          "prefix": "candidate-evidence",
+          "tests": 56,
+          "identity_cases": 9,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 16.15 (Ubuntu 16.15-1.pgdg24.04+2)",
+          "platform": "linux",
+          "core_sql": true,
+          "extension_identity": {
+            "extversion": "0.1.2",
+            "function": "echoo_pgmq._enqueue(text,bytea,text,text)",
+            "enqueue_prosrc_sha256": "6d294ce35e68505d92ff559f6fad48d4304b55da22ccf63f5a4887f01efa6d08",
+            "source_sql_sha256": "e0dcad316df2dd4b8bfc76e59e034e1b60b516fa87b6e759d1e363c26459a51f"
+          },
+          "cleanup": {
+            "stop_mode": "fast",
+            "stop_returncode": 0,
+            "status_returncode": 3,
+            "postmaster_pid_absent": true
+          }
+        }
+      ]
+    },
+    {
+      "id": 11113877842,
+      "name": "native-windows-server2022-pg18-evidence",
+      "bytes": 14867,
+      "sha256": "0dc850c38b38bb9bcdf2cae5da19baac3631da82a82de2d4de09479d4c2cf0c4",
+      "outer_verified": true,
+      "rounds": [
+        {
+          "prefix": "evidence",
+          "tests": 64,
+          "identity_cases": 9,
+          "rhea_cases": 8,
+          "postgres": "postgres (PostgreSQL) 18.6",
+          "platform": "win32",
+          "core_sql": true,
+          "extension_identity": {
+            "extversion": "0.1.2",
+            "function": "echoo_pgmq._enqueue(text,bytea,text,text)",
+            "enqueue_prosrc_sha256": "6d294ce35e68505d92ff559f6fad48d4304b55da22ccf63f5a4887f01efa6d08",
+            "source_sql_sha256": "e0dcad316df2dd4b8bfc76e59e034e1b60b516fa87b6e759d1e363c26459a51f"
+          },
+          "cleanup": {
+            "stop_mode": "fast",
+            "stop_returncode": 0,
+            "status_returncode": 3,
+            "postmaster_pid_absent": true
+          }
+        },
+        {
+          "prefix": "candidate-evidence",
+          "tests": 64,
+          "identity_cases": 9,
+          "rhea_cases": 8,
+          "postgres": "postgres (PostgreSQL) 18.6",
+          "platform": "win32",
+          "core_sql": true,
+          "extension_identity": {
+            "extversion": "0.1.2",
+            "function": "echoo_pgmq._enqueue(text,bytea,text,text)",
+            "enqueue_prosrc_sha256": "6d294ce35e68505d92ff559f6fad48d4304b55da22ccf63f5a4887f01efa6d08",
+            "source_sql_sha256": "e0dcad316df2dd4b8bfc76e59e034e1b60b516fa87b6e759d1e363c26459a51f"
+          },
+          "cleanup": {
+            "stop_mode": "fast",
+            "stop_returncode": 0,
+            "status_returncode": 3,
+            "postmaster_pid_absent": true
+          }
+        }
+      ]
+    },
+    {
+      "id": 11113847699,
+      "name": "linux-pg18-candidate",
+      "bytes": 5742370,
+      "sha256": "8bb42397eb9946660030235f0c357e179042ee7b8d682847bc7ffd9101ae04fb",
+      "outer_verified": true,
+      "package": {
+        "inner_name": "echoo-pgmq-0.1.2-candidate-pg18-linux-x86_64.zip",
+        "inner_sha256": "1913acb1d1e14cb6b6adbc9c57abaa62ed63c0841fef05d97f40ed4f44e66dc9",
+        "file_hashes_verified": 56,
+        "commit": "e60b8f25258360cb0831bfc4e9565e27aa75e78f",
+        "postgres": "PostgreSQL 18.6 (Ubuntu 18.6-1.pgdg24.04+2)",
+        "system": "Linux",
+        "qualification_status": "blocked_security_review",
+        "project_license": "pending-owner-decision",
+        "manifest_sha256": "b29d13d1ca774d7d69812f150e18a2f8614433bc2ff192d47f106db0439d866c"
+      }
+    },
+    {
+      "id": 11113619148,
+      "name": "linux-pg18-evidence",
+      "bytes": 14606,
+      "sha256": "def5a8362b056bfc3fdc4dc20f1d10db2214e7297266d0f40d4a312689a0ce8b",
+      "outer_verified": true,
+      "rounds": [
+        {
+          "prefix": "evidence",
+          "tests": 64,
+          "identity_cases": 9,
+          "rhea_cases": 8,
+          "postgres": "postgres (PostgreSQL) 18.6 (Ubuntu 18.6-1.pgdg24.04+2)",
+          "platform": "linux",
+          "core_sql": true,
+          "extension_identity": {
+            "extversion": "0.1.2",
+            "function": "echoo_pgmq._enqueue(text,bytea,text,text)",
+            "enqueue_prosrc_sha256": "6d294ce35e68505d92ff559f6fad48d4304b55da22ccf63f5a4887f01efa6d08",
+            "source_sql_sha256": "e0dcad316df2dd4b8bfc76e59e034e1b60b516fa87b6e759d1e363c26459a51f"
+          },
+          "cleanup": {
+            "stop_mode": "fast",
+            "stop_returncode": 0,
+            "status_returncode": 3,
+            "postmaster_pid_absent": true
+          }
+        },
+        {
+          "prefix": "candidate-evidence",
+          "tests": 64,
+          "identity_cases": 9,
+          "rhea_cases": 8,
+          "postgres": "postgres (PostgreSQL) 18.6 (Ubuntu 18.6-1.pgdg24.04+2)",
+          "platform": "linux",
+          "core_sql": true,
+          "extension_identity": {
+            "extversion": "0.1.2",
+            "function": "echoo_pgmq._enqueue(text,bytea,text,text)",
+            "enqueue_prosrc_sha256": "6d294ce35e68505d92ff559f6fad48d4304b55da22ccf63f5a4887f01efa6d08",
+            "source_sql_sha256": "e0dcad316df2dd4b8bfc76e59e034e1b60b516fa87b6e759d1e363c26459a51f"
+          },
+          "cleanup": {
+            "stop_mode": "fast",
+            "stop_returncode": 0,
+            "status_returncode": 3,
+            "postmaster_pid_absent": true
+          }
+        }
+      ]
+    },
+    {
+      "id": 11113583941,
+      "name": "linux-pg16-candidate",
+      "bytes": 5742893,
+      "sha256": "7473901111019ac4f29c97eaaf6b8e5bc30fd152d590846d95f82d4cae1d8c86",
+      "outer_verified": true,
+      "package": {
+        "inner_name": "echoo-pgmq-0.1.2-candidate-pg16-linux-x86_64.zip",
+        "inner_sha256": "e8c763c96978f8d6532d69449b047fa96ee7debc3e3986e46add6c8bce546f83",
+        "file_hashes_verified": 56,
+        "commit": "e60b8f25258360cb0831bfc4e9565e27aa75e78f",
+        "postgres": "PostgreSQL 16.15 (Ubuntu 16.15-1.pgdg24.04+2)",
+        "system": "Linux",
+        "qualification_status": "blocked_security_review",
+        "project_license": "pending-owner-decision",
+        "manifest_sha256": "49f2fa2f64ee7c47990281395e538518609c17f791aa21c2f394e5bbc8a5da49"
+      }
+    },
+    {
+      "id": 11113464353,
+      "name": "native-windows-server2022-pg18-candidate",
+      "bytes": 541119,
+      "sha256": "063bec069b4f993237408686cbe2fd8da2630f48b1946dd9e0bef214ba088f19",
+      "outer_verified": true,
+      "package": {
+        "inner_name": "echoo-pgmq-0.1.2-candidate-pg18-windows-amd64.zip",
+        "inner_sha256": "f0fdd728a9abc10d4c2ce158e9257927e309fe343f2d346692f882c18d0b9d50",
+        "file_hashes_verified": 51,
+        "commit": "e60b8f25258360cb0831bfc4e9565e27aa75e78f",
+        "postgres": "PostgreSQL 18.6",
+        "system": "Windows",
+        "qualification_status": "blocked_security_review",
+        "project_license": "pending-owner-decision",
+        "manifest_sha256": "0588424ccfa7ca3f989162d662ffd6582172b5b75d67bc1be6abafc783581ed3"
+      }
+    },
+    {
+      "id": 11113339953,
+      "name": "linux-pg17-evidence",
+      "bytes": 11634,
+      "sha256": "a5aa32ca41ed7a0d323a74627e27c85c1165f0f0d1ac8ab9c5fc02e52234e779",
+      "outer_verified": true,
+      "rounds": [
+        {
+          "prefix": "evidence",
+          "tests": 56,
+          "identity_cases": 9,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+          "platform": "linux",
+          "core_sql": true,
+          "extension_identity": {
+            "extversion": "0.1.2",
+            "function": "echoo_pgmq._enqueue(text,bytea,text,text)",
+            "enqueue_prosrc_sha256": "6d294ce35e68505d92ff559f6fad48d4304b55da22ccf63f5a4887f01efa6d08",
+            "source_sql_sha256": "e0dcad316df2dd4b8bfc76e59e034e1b60b516fa87b6e759d1e363c26459a51f"
+          },
+          "cleanup": {
+            "stop_mode": "fast",
+            "stop_returncode": 0,
+            "status_returncode": 3,
+            "postmaster_pid_absent": true
+          }
+        },
+        {
+          "prefix": "candidate-evidence",
+          "tests": 56,
+          "identity_cases": 9,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+          "platform": "linux",
+          "core_sql": true,
+          "extension_identity": {
+            "extversion": "0.1.2",
+            "function": "echoo_pgmq._enqueue(text,bytea,text,text)",
+            "enqueue_prosrc_sha256": "6d294ce35e68505d92ff559f6fad48d4304b55da22ccf63f5a4887f01efa6d08",
+            "source_sql_sha256": "e0dcad316df2dd4b8bfc76e59e034e1b60b516fa87b6e759d1e363c26459a51f"
+          },
+          "cleanup": {
+            "stop_mode": "fast",
+            "stop_returncode": 0,
+            "status_returncode": 3,
+            "postmaster_pid_absent": true
+          }
+        }
+      ]
+    }
+  ],
+  "qualification_status": "blocked_security_review",
+  "scope": "Ordinary source install and archive reinstall only; no preview promotion, Windows11 or full qualification"
+}

@@ -12,12 +12,24 @@ import tempfile
 import time
 
 from make_test_certs import generate
+from extension_identity import candidate_version, installed_identity
 
 REPO = Path(__file__).resolve().parents[1]
 
 # Explicit allowlist: adding a new test does not silently expand automatic CI
 # into adversarial-input, resource-exhaustion, fault-injection or crash testing.
 ORDINARY_TESTS = [
+    "tests/test_extension_identity.py::test_sql_checkout_uses_lf_with_autocrlf",
+    "tests/test_extension_identity.py::test_source_body_preserves_exact_utf8_text",
+    "tests/test_extension_identity.py::test_source_body_rejects_crlf",
+    "tests/test_extension_identity.py::test_installed_identity_matches_exact_source",
+    "tests/test_extension_identity.py::test_installed_body_mutation_fails_with_diagnostics",
+    "tests/test_sql_reservation.py::test_current_install_and_source_identity",
+    "tests/test_sql_reservation.py::test_upgrade_preserves_contract_and_retained_state",
+    "tests/test_sql_reservation.py::test_explicit_upgrade_rollback_then_retry",
+    "tests/test_sql_reservation.py::test_full_global_waits_for_pending_release",
+    "tests/test_sql_reservation.py::test_full_queue_waits_for_pending_capacity_increase",
+    "tests/test_sql_reservation.py::test_cross_queue_global_quota_cannot_overbook",
     "tests/sql/test_bounded_storage.py::test_concurrent_same_key_creates_one_message",
     "tests/sql/test_bounded_storage.py::test_concurrent_key_quota_cannot_overbook",
     "tests/sql/test_bounded_storage.py::test_rollback_releases_message_bytes_and_key_budget",
@@ -160,7 +172,8 @@ def main():
             conn.execute("CREATE DATABASE echoo_test")
         dsn = dsn.replace("dbname=postgres", "dbname=echoo_test")
         with psycopg.connect(dsn, autocommit=True) as conn:
-            conn.execute("CREATE EXTENSION echoo_pgmq VERSION '0.1.0'")
+            conn.execute("CREATE EXTENSION echoo_pgmq")
+            extension_identity = installed_identity(conn, candidate_version())
             conn.execute(f"CREATE ROLE echoo_pgmq_worker {'NOLOGIN' if major >= 17 else 'LOGIN'} NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION")
             conn.execute("CREATE ROLE echoo_test_user LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION")
             conn.execute("CREATE ROLE echoo_denied LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION")
@@ -196,6 +209,7 @@ def main():
         manifest = {"pg_config": str(Path(args.pg_config).resolve()) if Path(args.pg_config).exists() else args.pg_config,
                     "postgres_version": subprocess.check_output([binary("postgres"), "--version"], text=True).strip(),
                     "python": sys.version, "platform": sys.platform,
+                    "extension_identity": extension_identity,
                     "test_scope": "ordinary-regression" if args.ordinary else "qualification-or-explicit-selection",
                     "ordinary_test_allowlist": ordinary_tests if args.ordinary else None,
                     "independent_client": independent_client,
@@ -224,7 +238,15 @@ def main():
             (root / "environment.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     finally:
         if started:
-            subprocess.run([str(binary("pg_ctl")), "-D", str(data), "-m", "fast" if args.ordinary else "immediate", "-w", "stop"], env=base_env)
+            stop_mode = "fast" if args.ordinary else "immediate"
+            stopped = subprocess.run([str(binary("pg_ctl")), "-D", str(data), "-m", stop_mode, "-w", "stop"], env=base_env)
+            status = subprocess.run([str(binary("pg_ctl")), "-D", str(data), "status"], env=base_env)
+            cleanup = {"stop_mode": stop_mode, "stop_returncode": stopped.returncode,
+                       "status_returncode": status.returncode,
+                       "postmaster_pid_absent": not (data / "postmaster.pid").exists()}
+            (root / "cleanup.json").write_text(json.dumps(cleanup, indent=2), encoding="utf-8")
+            if stopped.returncode != 0 or status.returncode != 3 or not cleanup["postmaster_pid_absent"]:
+                raise RuntimeError("PostgreSQL shutdown not confirmed; inspect cleanup.json")
         if log.exists():
             print("\n--- PostgreSQL log ---\n" + log.read_text(encoding="utf-8", errors="replace"), flush=True)
         print(f"Test evidence: {root}", flush=True)

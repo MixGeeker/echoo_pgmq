@@ -1,6 +1,6 @@
 # 快速开始
 
-以下用于隔离开发/验收环境。不要直接对现有 ERP 生产 PostgreSQL 复制配置或执行 crash 测试。0.1.0 是候选版本；部署前阅读 [安全策略](../SECURITY.md) 与 [支持边界](support.md)。
+以下用于隔离开发/验收环境。不要直接对现有 ERP 生产 PostgreSQL 复制配置或执行 crash 测试。0.1.2 是候选版本；部署前阅读 [安全策略](../SECURITY.md) 与 [支持边界](support.md)。
 
 ## 1. 编译与安装
 
@@ -37,7 +37,7 @@ cmake --install build --config RelWithDebInfo
 先安装扩展与角色，之后启用 listener 并重启。由管理员执行：
 
 ```sql
-CREATE EXTENSION echoo_pgmq VERSION '0.1.0';
+CREATE EXTENSION echoo_pgmq VERSION '0.1.2';
 CREATE ROLE echoo_pgmq_worker NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION;
 CREATE ROLE erp_app LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION;
 GRANT USAGE ON SCHEMA echoo_pgmq TO echoo_pgmq_worker;
