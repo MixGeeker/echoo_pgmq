@@ -1,6 +1,12 @@
 # 开发与验收进度
 
-最后核实：2026-09-30 21:02 UTC。草稿 PR#1–#4 继续保留，已有固定 PG18 隔离测试预览；尚未达到生产发布或合并 main 的条件。
+最后核实：2026-09-30 21:16 UTC。草稿 PR#1–#4 继续保留，已有固定 PG18 隔离测试预览；尚未达到生产发布或合并 main 的条件。
+
+## 附带普通CI六组合最终通过（21:16 UTC）
+
+[CI36776023129](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36776023129)与[独立核验](evidence/preview2-ordinary-36776023129.json)：Linux/Windows Server2022×PG18/17/16全部成功，源码及归档两轮共464次普通执行，0失败/错误/跳过，12个core完成标记。12外层artifact、6内层候选全部manifest/hash及12份JUnit/environment、6份job日志均复核。Linux16/18曾停留软件包安装，随后正常完成；前两个旧run按既有concurrency被新提交取消，不拼接为全通过。
+
+测试head fd30a1f、实际checkout ad589825/tree8d8832，后续提交只更新报告。此重建不替换.2已经验证并交付的原450二进制，也不扩大普通清单为安全/故障资格。当前没有等待判定的CI；保持隔离预览状态、不合并main。
 
 ## preview-20260930.2配置修复已完成双平台普通闭环（21:02 UTC）
 
