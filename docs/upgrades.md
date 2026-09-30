@@ -5,8 +5,10 @@
 - `0.1.0`：基础队列表、受限 SQL 接口、原生 worker 与 AMQP 1.0
 - `0.1.0--0.1.1`：真实的加法迁移，增加按 session_user ACL 过滤的 queue_stats 视图；不重写消息正文
 - `0.1.1`：提供相同最终结构的全新安装脚本，用于恢复与回归验证
+- `0.1.1--0.1.2`：只替换私有 `_enqueue` 函数的正文，保留函数 OID、ACL 与持久数据
+- `0.1.2`：当前 SQL 性能开发候选的全新安装脚本；与顺序升级使用相同 `_enqueue` 正文
 
-0.1.1 当前用于迁移路线演练，不代表已发布一个独立生产版本。默认安装版本仍为0.1.0；需要时显式指定版本。
+默认安装版本为0.1.2，CMake 与候选包版本同步。0.1.0、0.1.1 和原有迁移文件保留不改；历史版本仍可显式安装。全部均为开发候选，未完成生产资格验证。
 
 ## 升级前
 
@@ -22,7 +24,9 @@
 
 ```sql
 BEGIN;
+-- 当前为0.1.0时，先执行这一行；已是0.1.1时跳过。
 ALTER EXTENSION echoo_pgmq UPDATE TO '0.1.1';
+ALTER EXTENSION echoo_pgmq UPDATE TO '0.1.2';
 SELECT extversion FROM pg_extension WHERE extname='echoo_pgmq';
 COMMIT;
 ```
@@ -38,7 +42,11 @@ COMMIT;
 - 原始消息正文与 id 不变
 - 再次升级成功且数据仍在
 
-这是事务性升级回滚测试，不等于在所有 DDL 阶段断电或磁盘损坏注入。CI 另测原生 worker 强杀、PostgreSQL immediate restart 与逻辑备份恢复。
+这是事务性升级回滚测试，不等于在所有 DDL 阶段断电或磁盘损坏注入。历史完整资格流程包含进程故障用例，但当前普通 allowlist 不运行强杀或 immediate restart；完整资格仍暂停于安全审阅。
+
+0.1.2 新增普通事务演练：在0.1.1写入二进制正文、队列/函数ACL、去重键与在途receipt，显式执行 `BEGIN; ALTER EXTENSION ... UPDATE TO '0.1.2'; ROLLBACK;`，核验旧版本、旧函数正文/ACL和全部数据恢复，再正常升级。另测0.1.0→0.1.1→0.1.2与全新安装函数一致、旧receipt仍可ACK、已消费消息的去重键仍保留。没有新增故障注入。
+
+逻辑恢复必须在目标空库先执行 `CREATE EXTENSION echoo_pgmq VERSION '0.1.2';`，再恢复对应0.1.2源库的逻辑备份；`pg_dump` 的扩展创建语句不携带版本。普通测试核验源/目标 extversion 与 `_enqueue` 正文 SHA-256。历史0.1.1恢复用例继续保留。
 
 ## 回退原则
 

@@ -2,7 +2,7 @@
 
 ## 候选状态
 
-这是0.1.0开发候选，未发布生产支持承诺。测试、编译与打包失败会让 CI 失败，不允许用 skip/continue-on-error 把缺失能力伪装为通过。查看所使用提交的 GitHub Actions 日志与候选 MANIFEST，不只看分支徽标。
+这是0.1.2开发候选，未发布生产支持承诺。测试、编译与打包失败会让 CI 失败，不允许用 skip/continue-on-error 把缺失能力伪装为通过。查看所使用提交的 GitHub Actions 日志与候选 MANIFEST，不只看分支徽标。下表保留历史平台证据；这些结果不能视为0.1.2已通过的平台验证。0.1.2的独立结果见[候选说明](sql-reservation-candidate.md)。
 
 | 验证对象 | 说明 |
 |---|---|

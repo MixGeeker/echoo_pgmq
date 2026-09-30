@@ -2,7 +2,7 @@
 
 面向本地/门店 ERP 的 PostgreSQL 原生持久队列候选实现。扩展在 PostgreSQL 管理的 background worker 内直接监听 AMQP 1.0，协议编解码使用 Apache Qpid Proton；消息与领取状态存放在普通 WAL-logged PostgreSQL 表中。
 
-**当前版本：0.1.0 开发候选，尚非生产发布。** 仓库包含可执行实现、自动化验证与候选打包流程。通过某个平台 CI 仅证明该次提交在该环境中的测试结果。Windows Server CI 不等于 Windows 11 实机验收；进程强杀不等于物理断电试验；真实 ERP 联调另行进行。项目许可证仍待所有者决定。
+**当前版本：0.1.2 SQL 性能开发候选，尚非生产发布。** 仓库包含可执行实现、自动化验证与候选打包流程。通过某个平台 CI 仅证明该次提交在该环境中的测试结果。Windows Server CI 不等于 Windows 11 实机验收；进程强杀不等于物理断电试验；真实 ERP 联调另行进行。项目许可证仍待所有者决定。0.1.2 的变更与验证边界见 [候选说明](docs/sql-reservation-candidate.md)。
 
 ## 设计边界
 
@@ -24,7 +24,7 @@
 3. [运维手册](docs/admin.md)：配置、监控、容量、备份恢复与故障处理
 4. [存储设计](docs/storage.md)：表、事务、租约、幂等键与 ACL
 5. [开发与验证](docs/development.md)：真实协议/升级/崩溃测试、CI 与候选产物
-6. [升级与回退](docs/upgrades.md)：0.1.0 → 0.1.1 迁移演练与安全回退
+6. [升级与回退](docs/upgrades.md)：0.1.0 → 0.1.1 → 0.1.2 迁移与事务回退
 7. [安全策略](SECURITY.md)、[已知限制与支持](docs/support.md)、[依赖许可证](docs/licenses.md)
 8. [可复现 benchmark](docs/benchmark.md)：运行条件、原始结果与未验证项；不预填吞吐数字
 

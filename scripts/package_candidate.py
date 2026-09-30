@@ -11,6 +11,8 @@ import subprocess
 import tempfile
 import zipfile
 
+from extension_identity import candidate_version
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -26,6 +28,7 @@ def main():
         raise SystemExit("CMake build cache missing; cannot verify production build flags")
     if "ECHOO_ENABLE_TEST_HOOKS:BOOL=ON" in cache.read_text(encoding="utf-8", errors="replace"):
         raise SystemExit("Refusing to package a fault-injection-enabled build")
+    extension_version = candidate_version(ROOT)
     version = subprocess.check_output([args.pg_config, "--version"], text=True).strip()
     major = version.split()[1].split(".")[0]
     suffix = ".dll" if os.name == "nt" else ".so"
@@ -40,7 +43,7 @@ def main():
         raise SystemExit("installed module missing; run cmake --install before packaging")
     if b"echoo_pgmq.test_fail_settle_before_commit" in installed.read_bytes():
         raise SystemExit("Refusing installed module containing fault-injection hook; reinstall normal build")
-    artifact = f"echoo-pgmq-0.1.0-candidate-pg{major}-{platform.system().lower()}-{platform.machine().lower()}"
+    artifact = f"echoo-pgmq-{extension_version}-candidate-pg{major}-{platform.system().lower()}-{platform.machine().lower()}"
     args.output.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="echoo-package-") as temp:
         stage = Path(temp) / artifact
@@ -82,7 +85,7 @@ def main():
             encoding="utf-8")
         files = {str(p.relative_to(stage)).replace(os.sep, "/"): hashlib.sha256(p.read_bytes()).hexdigest()
                  for p in sorted(stage.rglob("*")) if p.is_file()}
-        manifest = {"status": "candidate-not-production-release", "version": "0.1.0", "commit": commit,
+        manifest = {"status": "candidate-not-production-release", "version": extension_version, "commit": commit,
                     "qualification_status": "blocked_security_review",
                     "postgres_build": version, "os": platform.platform(), "system": platform.system(), "architecture": platform.machine(),
                     "proton": "0.40.0",

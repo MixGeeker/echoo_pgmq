@@ -1,5 +1,5 @@
 comment = 'PostgreSQL-native durable AMQP 1.0 queues'
-default_version = '0.1.0'
+default_version = '0.1.2'
 module_pathname = '$libdir/echoo_pgmq'
 relocatable = false
 superuser = true

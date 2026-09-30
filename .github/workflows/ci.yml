@@ -107,10 +107,12 @@ jobs:
             ${{ runner.temp }}/evidence/postgres.log
             ${{ runner.temp }}/evidence/junit.xml
             ${{ runner.temp }}/evidence/environment.json
+            ${{ runner.temp }}/evidence/cleanup.json
             ${{ runner.temp }}/evidence/independent-client.jsonl
             ${{ runner.temp }}/candidate-evidence/postgres.log
             ${{ runner.temp }}/candidate-evidence/junit.xml
             ${{ runner.temp }}/candidate-evidence/environment.json
+            ${{ runner.temp }}/candidate-evidence/cleanup.json
             ${{ runner.temp }}/candidate-evidence/independent-client.jsonl
           if-no-files-found: warn
           retention-days: 14
@@ -246,10 +248,12 @@ jobs:
             ${{ runner.temp }}/evidence/postgres.log
             ${{ runner.temp }}/evidence/junit.xml
             ${{ runner.temp }}/evidence/environment.json
+            ${{ runner.temp }}/evidence/cleanup.json
             ${{ runner.temp }}/evidence/independent-client.jsonl
             ${{ runner.temp }}/candidate-evidence/postgres.log
             ${{ runner.temp }}/candidate-evidence/junit.xml
             ${{ runner.temp }}/candidate-evidence/environment.json
+            ${{ runner.temp }}/candidate-evidence/cleanup.json
             ${{ runner.temp }}/candidate-evidence/independent-client.jsonl
           if-no-files-found: warn
           retention-days: 14
