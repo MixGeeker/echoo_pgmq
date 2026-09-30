@@ -51,6 +51,12 @@ def main():
     p.add_argument("--repetitions", type=int, default=3)
     p.add_argument("--messages", type=int, default=5000)
     p.add_argument("--baseline-seconds", type=float, default=10)
+    p.add_argument("--duration-seconds", type=float, default=0,
+                   help="Optional new fixed-duration harness check; this local path has NO cgroup budget")
+    p.add_argument("--warmup-seconds", type=float, default=5)
+    p.add_argument("--producers", type=int, default=1)
+    p.add_argument("--consumers", type=int, default=1)
+    p.add_argument("--offered-rate", type=float, default=200)
     a = p.parse_args()
     if os.name == "nt":
         p.error("This orchestration is Linux-only; run.py supports externally prepared native Windows endpoints")
@@ -134,6 +140,16 @@ log.console.level = warning
            "echoo_poll_interval_ms": 2, "note": "Cloud Linux capacity probe; not Win11, physical power loss or real ERP qualification",
            "ordering": "Each repetition baseline, then alternating broker order; both receive same synthetic DB load"}, indent=2)+"\n")
         def execute(label, version, queue_type, url=None, address="bench", virtual_host="localhost", pids=None):
+            if a.duration_seconds:
+                cmd = [sys.executable, REPO / "bench" / "run_duration.py", "--label", label,
+                       "--dsn", dsn, "--output", a.output, "--duration-seconds", a.duration_seconds,
+                       "--warmup-seconds", a.warmup_seconds, "--offered-rate", a.offered_rate,
+                       "--producers", a.producers if url else 0, "--consumers", a.consumers if url else 0]
+                if url:
+                    cmd += ["--url", url, "--address", address, "--virtual-host", virtual_host,
+                            "--ca", certs / "ca.pem", "--cert", certs / "client.pem", "--key", certs / "client.key"]
+                run(cmd, env=env)
+                return
             cmd = [sys.executable, REPO / "bench" / "run.py", "--label", label, "--broker-version", version,
                    "--queue-type", queue_type, "--dsn", dsn, "--messages", a.messages,
                    "--output", a.output, "--server-pid", *(pids or [])]
@@ -173,6 +189,15 @@ log.console.level = warning
                         ready(rmqport)
                         execute(f"rabbitmq-{repetition+1}", a.rabbitmq_version, "classic-durable",
                                 f"amqps://localhost:{rmqport}", address="/queues/bench", virtual_host="vhost:/", pids=[pgpid, rabbit.pid])
+                        if a.duration_seconds:
+                            ctl = Path(a.rabbitmq_server).parent / "rabbitmqctl"
+                            cli_env = dict(rmqenv, RABBITMQ_CTL_ERL_ARGS="+S 1:1")
+                            snapshot = json.loads(subprocess.check_output([str(ctl), "--quiet", "list_queues", "name",
+                                "messages", "messages_ready", "messages_unacknowledged", "durable", "type", "--formatter=json"],
+                                env=cli_env, text=True, timeout=60))
+                            (a.output / f"rabbitmq-{repetition+1}" / "queue-after.json").write_text(json.dumps(snapshot, indent=2)+"\n")
+                            if any(row["messages"] != 0 for row in snapshot):
+                                raise RuntimeError("RabbitMQ retained messages after duration harness check")
                         rabbit.terminate()
                         rabbit.wait(30)
                         rabbit = None
