@@ -40,4 +40,6 @@ Windows PG18候选已核对外层/内层校验和、全部manifest文件散列�
 
 ## 基准来源
 
-更长固定预算基准在独立分支上锁定 `e2f71c985caadffe4307e37dd567587071ba3f25`。与上述候选相比，仅 `scripts/run_integration.py` 和 `tests/test_harness.py` 不同；原生代码、SQL、构建配置、依赖下载脚本和Dockerfile没有差异。基准自身仍应按固定源提交报告，不能混写成候选提交实测。详见 [性能方法与边界](benchmark.md)。
+固定预算首轮e2f71c9因采样器实现问题产生零测量样本，属于基础设施失败，不作为性能结论。修复后的实验固定提交为 `51ca71797859a5d09d16f573dde71795176fe240`；与普通候选152a73c相比，原生代码、SQL、CMake/控制文件、依赖下载脚本和Dockerfile没有差异，变化在测量流程和文档。基准应按自己的固定提交报告，不能混写成候选提交实测。
+
+[真实Docker smoke证据](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36663717022/artifacts/11075865839)已验证3单元完整时窗、实际HTTP资源样本与2CPU/4GiB/0swap预算。echoo/Rabbit各700条含暖机、无重复/缺失/发布失败、最终队列0。smoke只证明基础设施和计数路径，27单元完整测量仍运行中。详见 [性能方法与边界](benchmark.md)。

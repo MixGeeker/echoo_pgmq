@@ -1,6 +1,6 @@
 # 开发与验收进度
 
-最后核实：2026-09-30 03:06 UTC。草稿 PR 正在推进，尚未达到生产发布标准。
+最后核实：2026-09-30 03:25 UTC。草稿 PR 正在推进，尚未达到生产发布标准。
 
 ## 主目标
 
@@ -56,4 +56,4 @@ PostgreSQL **18** 是优先支持和验收版本，Linux 与原生 Windows 都�
 
 `152a73c` 六个Linux/原生Windows × PG18/17/16组合均完成两轮32项普通回归与显式core.sql；归档重装、移除构建依赖路径后再次通过。已逐份下载核对12组JUnit/environment证据。Windows PG16曾漏执行core.sql的harness问题已修复并重测。候选仍为blocked_security_review，详情与归档见 [验证记录](validation.md)。
 
-固定预算长时普通基准锁定独立提交e2f71c9，当前运行中；本阶段不会自动触发被暂停的安全/完整故障工作流。
+固定预算基准首轮e2f71c9因HTTP采样客户端实现问题在预热前停止，测量样本为0，失败数据已保留且不作性能结论。修复后锁定51ca717；真实Docker前置smoke已3/3通过：每单元5秒、10个HTTP资源样本、实际2CPU/4GiB/0swap；两代理各700条含暖机对账完整且最终队列为0。27单元完整固定时窗矩阵已启动，结果仍待终态。见[smoke证据](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36663717022/artifacts/11075865839)和[当前运行](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36663717022)。本阶段不会触发被暂停的安全/完整故障工作流。
