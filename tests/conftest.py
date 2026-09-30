@@ -66,7 +66,10 @@ def connect_amqp():
         domain = SSLDomain(SSLDomain.MODE_CLIENT)
         if identity:
             if os.name == "nt":  # The Python wheel bundles Proton's SChannel backend.
-                domain.set_credentials(str(certs / f"{identity}.p12"), identity, "")
+                # None is the unprotected-P12 password. Proton SChannel 0.40
+                # passes a non-null string through MultiByteToWideChar; an
+                # empty string has length zero and returns its error -6.
+                domain.set_credentials(str(certs / f"{identity}.p12"), identity, None)
             else:
                 domain.set_credentials(str(certs / f"{identity}.pem"), str(certs / f"{identity}.key"), None)
         domain.set_trusted_ca_db(str(certs / ("ca.p12" if os.name == "nt" else "ca.pem")))

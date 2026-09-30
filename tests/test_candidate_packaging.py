@@ -21,7 +21,11 @@ def archive(tmp_path, *, extra=None, digest=None):
         output.writestr("candidate/lib/echoo_pgmq.so", body)
         output.writestr("candidate/MANIFEST.json", json.dumps(manifest))
         if extra:
-            output.writestr(extra, b"unlisted")
+            # Force the same raw member bytes on every OS. ZipInfo's Windows
+            # constructor would otherwise normalize the tested backslash.
+            member = zipfile.ZipInfo("placeholder")
+            member.filename = extra
+            output.writestr(member, b"unlisted")
     path.with_suffix(".zip.sha256").write_text(hashlib.sha256(path.read_bytes()).hexdigest() + "  candidate.zip\n")
     return path
 

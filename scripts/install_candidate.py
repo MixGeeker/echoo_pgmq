@@ -32,7 +32,10 @@ def verified_members(archive):
         roots = set()
         for item in members:
             path = PurePosixPath(item.filename)
-            if (path.is_absolute() or ".." in path.parts or "\\" in item.filename
+            # ZipInfo keeps the original spelling but normalizes backslashes
+            # on Windows. Reject that raw input before trusting the manifest.
+            if (item.orig_filename != item.filename or "\\" in item.orig_filename
+                    or path.is_absolute() or ".." in path.parts or "\\" in item.filename
                     or ":" in item.filename or len(path.parts) < 2
                     or stat.S_ISLNK(item.external_attr >> 16) or item.is_dir()):
                 raise ValueError("unsafe archive member")
