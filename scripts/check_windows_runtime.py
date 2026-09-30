@@ -17,6 +17,13 @@ def main():
     ctypes.windll.kernel32.SetErrorMode(0x0001 | 0x8000)
     bindir = args.postgres.resolve() / "bin"
     os.environ["PATH"] = str(bindir) + os.pathsep + os.environ.get("PATH", "")
+    for command in (["whoami", "/user"], ["icacls", str(args.postgres.parent.resolve())],
+                    ["icacls", str(args.postgres.resolve())], ["icacls", str(bindir)],
+                    ["icacls", str(bindir / "initdb.exe")],
+                    ["icacls", str(bindir / "libintl-9.dll")],
+                    ["icacls", str(bindir / "api-ms-win-crt-private-l1-1-0.dll")]):
+        diagnostic = subprocess.run(command, capture_output=True, text=True)
+        print("Read-only access diagnostic:", command, diagnostic.stdout, diagnostic.stderr, flush=True)
     failed = []
     # Keep handles alive while testing dependency loading. No extension is loaded
     # into Python; extension execution belongs exclusively to PostgreSQL.
@@ -29,8 +36,11 @@ def main():
         if name.startswith("icu") and not path.exists():
             continue
         try:
-            handles.append(ctypes.WinDLL(str(path) if path.exists() else name, winmode=0))
-            print("DLL loaded:", name, flush=True)
+            handle = ctypes.WinDLL(str(path) if path.exists() else name, winmode=0)
+            handles.append(handle)
+            loaded_path = ctypes.create_unicode_buffer(32768)
+            ctypes.windll.kernel32.GetModuleFileNameW(ctypes.c_void_p(handle._handle), loaded_path, len(loaded_path))
+            print("DLL loaded:", name, "from", loaded_path.value, flush=True)
         except OSError as error:
             failed.append((name, str(error)))
             print("DLL diagnostic:", name, error, flush=True)
