@@ -6,7 +6,7 @@
 
 默认50ms和固定预算实验2ms参数均未修改；SQL、ACL、容量、WAL/同步提交、Accepted与ACK持久化顺序、候选10%门槛都不变。没有重写队列公平性、单消费者通知或批量提交。另做的deadline夹紧/组合方案没有一致独立收益，已撤回，不混入本补丁。
 
-**这是消息延迟与CPU的权衡，不是CPU优化结论，也没有证明ERP候选目标已达成。** 新候选的六平台普通CI及同预算云端复测尚待独立结果；上一份已核实兼容候选仍为a501852/9068d10。
+**这是消息延迟与CPU的权衡，不是CPU优化结论，也没有证明ERP候选目标已达成。** 候选472e626的[六平台普通CI](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36672854753)已完成416项、12个core.sql标记与全部归档散列验证，实际测试合并f1fa034和472e626树相同。PG18两轮各40项、PG16/17两轮各32项，见[兼容证据](validation.md)。同预算云端复测尚待终态，不用普通CI证明性能。
 
 ## 本地条件与全部结果
 
@@ -16,7 +16,7 @@
 - 共30单元全部正常对账/排空，含各阶段93,442条Accepted与唯一接收一致，无重复、缺失或发布/校验错误。被舍弃变体与抖动单元也保留
 - 函数调用次数包含setup/暖机/排空；延迟和进程CPU取测量窗口，CPU不是cgroup计费指标
 
-[全30单元JSON](../bench/results/native-wake-local-20260930/summary.json)与[CSV](../bench/results/native-wake-local-20260930/summary.csv)保留baseline、wake、deadline、combined四种方案，不筛选最快结果。
+[全30单元JSON](https://github.com/MixGeeker/echoo_pgmq/blob/472e62698137d0e1035d04775d443f1cbcc1ae33/bench/results/native-wake-local-20260930/summary.json)与[CSV](https://github.com/MixGeeker/echoo_pgmq/blob/472e62698137d0e1035d04775d443f1cbcc1ae33/bench/results/native-wake-local-20260930/summary.csv)保留baseline、wake、deadline、combined四种方案，不筛选最快结果。
 
 ### 最重要的配对观察
 
@@ -48,7 +48,7 @@ python scripts/check_normal_wake.py /tmp/new-normal-wake \
 
 ## 原始证据与下一步
 
-原始导出`native-wake-ab-evidence.tar.gz`，SHA256：`95a20d1b6cf607d60d673fadbf4b252b906f67779285d93231b1ca9fd154016a`；[原始逐文件清单](../bench/results/native-wake-local-20260930/SOURCE-MANIFEST.json)587项已核对。导出只含合成计数、日志、源码变体与复现脚本，不含证书、私钥、PGDATA或二进制。完整导出另行保留，仓库只存紧凑摘要。
+原始导出`native-wake-ab-evidence.tar.gz`，SHA256：`95a20d1b6cf607d60d673fadbf4b252b906f67779285d93231b1ca9fd154016a`；[原始逐文件清单](https://github.com/MixGeeker/echoo_pgmq/blob/472e62698137d0e1035d04775d443f1cbcc1ae33/bench/results/native-wake-local-20260930/SOURCE-MANIFEST.json)587项已核对。导出只含合成计数、日志、源码变体与复现脚本，不含证书、私钥、PGDATA或二进制。完整导出另行保留，仓库只存紧凑摘要。
 
 新固定预算运行使用独立分支`benchmarks/wake-pg18-20260930`；原始`benchmarks/controlled-pg18-20260930`仍固定51ca717。测量脚本、2CPU/4GiB/0swap、2ms轮询、三轮30秒暖机+120秒测量、到达率、持久性与目标保持一致。记录新固定提交与终态证据后再判断是否保留该权衡，不能把本地tmpfs结果当云端复测已通过。
 

@@ -1,11 +1,11 @@
 # 普通兼容验证记录
 
-## 当前已核实候选：独立rhea客户端
+## 当前已核实候选：提交后唤醒与独立客户端
 
-- PR头提交：`a501852e2137f3f46e710384a8ada9c4315f9939`
-- 实际checkout与候选MANIFEST提交：`9068d10feb2099cbe5f6a48aefcaeb453023b430`，为GitHub对PR#1生成的测试合并提交；没有合并到main
-- 两者Git tree均为`3c5fc289cb07c95a481a119776d0b572ebc1f460`，已用GitHub提交与compare API核实文件完全相同。候选manifest保留真实checkout身份，不改写为PR头
-- [普通CI运行](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36668952734)：Ubuntu24.04 Linux与原生Windows Server2022，每个平台PG18、17、16；PG18为主目标
+- PR头提交：`472e62698137d0e1035d04775d443f1cbcc1ae33`
+- 实际checkout与候选MANIFEST提交：`f1fa034b90a681ee0a750c20d8c57401d37602be`，为GitHub对PR#1生成的测试合并提交；没有合并到main
+- 两者Git tree均为`d3f18149c8c515ea31c94fdab48d5e147aea0579`，已用GitHub提交与compare API核实文件完全相同。候选manifest保留真实checkout身份，不改写为PR头
+- [普通CI运行](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36672854753)：Ubuntu24.04 Linux与原生Windows Server2022，每个平台PG18、17、16；PG18为主目标
 
 六个组合均执行两轮：第一次从构建结果安装，第二次从候选归档校验并重新安装。第二轮移除构建用Proton/OpenSSL库路径，使用归档和PostgreSQL发行版自身依赖。
 
@@ -22,16 +22,21 @@ PG18实际客户端为Node.js **24.21.0**、rhea **3.0.5**（debug4.4.3/ms2.1.3�
 
 ## PG18候选与证据
 
-- [原生Windows PG18候选](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36668952734/artifacts/11076714631)
-- [原生Windows PG18证据](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36668952734/artifacts/11077069221)
-- [Linux PG18候选](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36668952734/artifacts/11077152543)
-- [Linux PG18证据](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36668952734/artifacts/11076503170)
+- [原生Windows PG18候选](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36672854753/artifacts/11078872972)
+- [原生Windows PG18证据](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36672854753/artifacts/11078663710)
+- [Linux PG18候选](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36672854753/artifacts/11078427506)
+- [Linux PG18证据](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36672854753/artifacts/11078617366)
 
-全部12份归档的ID、GitHub外层SHA256、大小、到期时间，以及逐轮计数/客户端参数见[机器可读证据索引](evidence/ordinary-a501852-rhea-artifacts.json)。GitHub当前保留至2026-10-14；它们不是永久正式Release。下载Actions artifact可能需要登录拥有访问权的GitHub账号。
+全部12份归档的ID、GitHub外层SHA256、大小、到期时间，以及逐轮计数/客户端参数见[机器可读证据索引](evidence/ordinary-472e626-artifacts.json)。GitHub当前保留至2026-10-14；它们不是永久正式Release。下载Actions artifact可能需要登录拥有访问权的GitHub账号。
 
 Windows候选使用归档Proton DLL和PostgreSQL发行版提供的OpenSSL及标准Windows/VC运行库；服务没有Python/Node运行时依赖。Windows Server结果不能替代Win11门店硬件、服务身份与真实SSD验收。
 
+本次候选包含提交后唤醒匹配消费者的小改动；本页只证明普通兼容，性能代价与独立实验见[机制报告](worker-performance.md)。固定预算复测尚未完成。
+
 ## 保留的上一版普通证据
+
+`a501852`及相同树的测试合并`9068d10`在[此前普通CI](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36668952734)也完成416项及全部归档散列核对；[该次证据索引](evidence/ordinary-a501852-rhea-artifacts.json)保留，代表唤醒改动之前的兼容状态。
+
 
 `152a73c35ac9d2ae85e09686f33c81ba870a0d84`的[普通CI](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662296554)完成六组合两轮各32项与core.sql；原有[12份归档索引](evidence/ordinary-152a73c-artifacts.json)继续保留。这是新增独立rhea验证前的证据，不能用其32项计数描述当前PG18的40项。
 
@@ -57,3 +62,5 @@ Windows候选使用归档Proton DLL和PostgreSQL发行版提供的OpenSSL及标�
 固定预算首轮e2f71c9因采样器实现问题产生零测量样本，属于基础设施失败，不作为性能结论。修复后的实验固定提交为 `51ca71797859a5d09d16f573dde71795176fe240`；与普通候选152a73c相比，原生代码、SQL、CMake/控制文件、依赖下载脚本和Dockerfile没有差异，变化在测量流程和文档。基准应按自己的固定提交报告，不能混写成候选提交实测。
 
 [真实Docker smoke证据](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36663717022/artifacts/11075865839)已验证3单元完整时窗、实际HTTP资源样本与2CPU/4GiB/0swap预算。echoo/Rabbit各700条含暖机、无重复/缺失/发布失败、最终队列0。smoke只证明基础设施和计数路径；同次运行的27单元完整测量现已完成并从原始记录复算，见[固定预算实测报告](benchmark-results.md)。完整artifact为11077458716；没有把基准SHA改写成普通候选SHA，也没有以数据采集成功替代性能目标达成。详见[性能方法与边界](benchmark.md)。
+
+唤醒候选的另一次固定预算复测锁定`472e62698137d0e1035d04775d443f1cbcc1ae33`，[运行36672765081](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36672765081)仍在进行。旧51ca717基准、原始数据及其失败目标保留，不能把两次代码状态或不同runner混成同一次实测。
