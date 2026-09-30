@@ -2,6 +2,7 @@
 """Download pinned upstream build inputs and verify bytes before extraction."""
 import argparse
 import hashlib
+import os
 from pathlib import Path
 import shutil
 import tarfile
@@ -68,10 +69,19 @@ def main():
             with tarfile.open(archive) as source:
                 source.extractall(extracted, filter="data")
         roots = list(extracted.iterdir())
-        if len(roots) == 1 and roots[0].is_dir():
-            shutil.move(str(roots[0]), destination)
+        source_root = roots[0] if len(roots) == 1 and roots[0].is_dir() else extracted
+        if os.name == "nt":
+            # TemporaryDirectory intentionally has an elevation-only OWNER
+            # RIGHTS ACL on Windows. Renaming that private staging tree into
+            # the runtime installation retains the ACL and prevents native
+            # PostgreSQL's restricted-token children from loading its DLLs.
+            # Keep the verified staging private; create a normal destination
+            # tree inheriting its parent's deployment ACL. copy2/CopyFile2 do
+            # not copy Windows ownership or security descriptors. No ACL is
+            # granted and no process-token protection is changed here.
+            shutil.copytree(source_root, destination)
         else:
-            shutil.move(str(extracted), destination)
+            shutil.move(str(source_root), destination)
 
 
 if __name__ == "__main__":

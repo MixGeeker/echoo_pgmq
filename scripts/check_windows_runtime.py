@@ -5,7 +5,8 @@ import ctypes
 import os
 from pathlib import Path
 import subprocess
-import tempfile
+import shutil
+import uuid
 
 
 def main():
@@ -54,13 +55,20 @@ def main():
     # --version returns before initdb's restricted-token re-exec. A real
     # disposable initialization validates that loader path too, without changing
     # token protections, starting a server, or loading the Echoo extension.
-    with tempfile.TemporaryDirectory(prefix="echoo-native-prerequisite-", dir=args.postgres.parent) as temp:
-        result = subprocess.run([str(bindir / "initdb.exe"), "-D", str(Path(temp) / "data"),
+    # This contains only a throwaway empty database, never secrets. It must
+    # inherit the CI work directory's normal access policy: TemporaryDirectory
+    # mode0700 deliberately excludes the restricted child of an elevated user.
+    temp = args.postgres.parent.resolve() / ("echoo-native-prerequisite-" + uuid.uuid4().hex)
+    temp.mkdir()
+    try:
+        result = subprocess.run([str(bindir / "initdb.exe"), "-D", str(temp / "data"),
                                  "-U", "echoo_runtime_probe", "-A", "trust", "--no-locale", "--encoding=UTF8"],
                                 capture_output=True, text=True)
         print("initdb initialization exit", hex(result.returncode), result.stdout, result.stderr, flush=True)
         if result.returncode:
             raise SystemExit("Native PostgreSQL restricted-token initialization failed")
+    finally:
+        shutil.rmtree(temp)
     print("Native PostgreSQL runtime and initialization probes passed", flush=True)
 
 

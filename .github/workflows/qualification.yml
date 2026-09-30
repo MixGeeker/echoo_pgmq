@@ -139,25 +139,9 @@ jobs:
           if (!$ssl) { throw 'The runner must provide native OpenSSL headers/libraries; no silent TLS-free fallback' }
           "OPENSSL_ROOT_DIR=$ssl" >> $env:GITHUB_ENV
           "$ssl/bin" >> $env:GITHUB_PATH
-      - name: Check native PostgreSQL runtime and trusted Microsoft CRT
+      - name: Check native PostgreSQL runtime and restricted-token initialization
         run: |
           $ErrorActionPreference = 'Stop'
-          # EDB libiconv can import the private UCRT API-set forwarder. Use only
-          # the Microsoft SDK already installed on this runner, never DLL sites.
-          $redist = "${env:ProgramFiles(x86)}/Windows Kits/10/Redist"
-          $ucrt = Get-Item "$redist/*/ucrt/DLLs/x64", "$redist/ucrt/DLLs/x64" -ErrorAction SilentlyContinue |
-            Where-Object { Test-Path "$($_.FullName)/api-ms-win-crt-private-l1-1-0.dll" } |
-            Sort-Object FullName -Descending | Select-Object -First 1
-          if ($ucrt) {
-            # initdb re-executes under PostgreSQL's restricted token. Deploy
-            # Microsoft's redistributable app-locally in this disposable PG
-            # installation rather than rely on SDK PATH/ACL inheritance.
-            Get-ChildItem "$($ucrt.FullName)/*.dll" | ForEach-Object {
-              $target = "$env:RUNNER_TEMP/postgres/bin/$($_.Name)"
-              if (!(Test-Path $target)) { Copy-Item $_.FullName $target }
-            }
-            Write-Host "App-local Microsoft SDK UCRT: $($ucrt.FullName)"
-          }
           python scripts/check_windows_runtime.py "$env:RUNNER_TEMP/postgres"
           if ($LASTEXITCODE -ne 0) { throw 'Native PostgreSQL runtime prerequisite failed' }
       - name: Build verified native Proton with OpenSSL (not SChannel)
