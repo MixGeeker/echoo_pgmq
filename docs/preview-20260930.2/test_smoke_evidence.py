@@ -1,4 +1,7 @@
 """Offline normal harness correctness; no PG/network/messages are run."""
+import hashlib
+import json
+from pathlib import Path
 import copy
 import unittest
 from run_windows_smoke import PREVIEW_STAGES, verify_policy, verify_sql_bridge_record
@@ -14,6 +17,15 @@ class EvidenceChecks(unittest.TestCase):
                            queues=[dict(name=f'preview/q{i}', queue_max_message_bytes=65536,
                                         effective_sql_max_message_bytes=65536, queue_message_count=0,
                                         queue_total_bytes=0, retained_message_rows=0) for i in range(5)])
+    def test_exact_guide_bytes_match_delivery_pins(self):
+        here = Path(__file__).resolve().parent
+        pins = json.loads((here / 'fixed-inputs.json').read_text(encoding='utf-8'))['guide_sha256']
+        self.assertEqual(len(pins), 12)
+        for relative, expected in pins.items():
+            data = (here / 'guide' / relative).read_bytes()
+            self.assertNotIn(b'\r\n', data, relative)
+            self.assertEqual(hashlib.sha256(data).hexdigest(), expected, relative)
+
     def test_complete_bridge_and_policy_evidence(self):
         verify_sql_bridge_record(self.record)
         verify_policy(self.policy)
