@@ -1,6 +1,28 @@
 # 开发与验收进度
 
-最后核实：2026-09-30 15:03 UTC。草稿PR#1与隔离优化PR#2继续开发，尚未达到生产发布标准。
+最后核实：2026-09-30 19:00 UTC。草稿 PR#1–#4 继续保留，已有固定 PG18 隔离测试预览；尚未达到生产发布或合并 main 的条件。
+
+## 新增：固定预览空闲资源实测（19:00 UTC）
+
+[完整中文报告](performance-preview-idle.md)基于已发预览的原始 Linux 归档和 SQL 0.1.0，未重编译或改产品。六阶段 PG-only前基线→无连接listener→1/4/8个正常空闲连接→PG-only后基线，133.61秒完成；前后稳定性门禁通过，60个原始文件和各阶段正常清理均复核。
+
+0/1/4/8 个空闲连接时 worker CPU 为单核的 0.138%/0.483%/0.966%/1.242%，但最小值只有2个10ms计时tick，不能作精细优化收益。8连接全PG采样CPU为单核5.453%，较前后基线增加1.248/1.402个百分点（相对+29.7%/+34.6%）；PSS为56.45MiB，增加7.79/9.00MiB。各内部阶段合成DB保持200TPS，p95为0.698ms（前后0.725/0.788ms），p99为1.608ms（前后1.386/1.550ms）。不利结果与双方基线同时保留。
+
+这是一轮短时、顺序、空闲连接成本诊断，未发送MQ消息，不建立容量、长期内存、因果或真实ERP验收结论。暂定10%目标针对ERP/DB p95，不能套到p99或用本轮推翻既有未达结果。首轮控制器未关闭Node标准输入导致未完成清理；失败记录、定位控制管道的正常关闭探针及修正后的完整第二轮分别保留。产品二进制和门槛均未改，安全/故障资格继续暂停。
+
+## 固定 PG18 临时测试包已交付，并补齐 Windows 入门脚本实跑
+
+预览标识为 **preview-20260930.1**，扩展及内层候选包版本仍为 **0.1.0**（附0.1.1升级脚本），固定源码 **450681d71c2fefef0a92e57098643701dabcf4f5**，来自下述464项普通矩阵。临时测试选用七计划候选，不等于已合并main或已证明整体性能提升。已发Windows/Linux包的字节保持不变；后续实验SQL0.1.2未装入该预览。
+
+[中文入门与追加验证](https://github.com/MixGeeker/echoo_pgmq/blob/4b28f1c3e92830c1471bf1038bd375dad2393899/docs/preview-20260930.1/README.md)包括私有新PG前缀、新数据目录、loopback、临时mTLS配置、SQL及独立rhea示例、正常停止和清理边界。Linux PG18.6已实际完成；Windows Server2022 PG18.6的原始归档和12个原始入门文件经散列验证，[36754291541](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36754291541)与[36754039681](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36754039681)均完成6个阶段、3个rhea正常用例及正常停止。此前OpenSSL预检查失败和PIPE捕获超时的两次尝试也已归档，不计作通过。
+
+用户收到的是可丢弃隔离环境测试包，不用于生产库；GitHub Release尚未创建。Windows Server不是Win11实机。新验证只修CI控制器，没有替换用户已收到的.1包。
+
+## SQL 0.1.2 容量预留候选：普通正确性通过，原生性能未支持采用
+
+隔离[PR#3](https://github.com/MixGeeker/echoo_pgmq/pull/3)及[完整报告](https://github.com/MixGeeker/echoo_pgmq/blob/7eb7409a75a9b80a4d1460cd099c434c37bdddc1/docs/performance-sql-reservation.md)保留普通SQL内部预留候选。[CI36749616970](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36749616970)测试head67df046，Linux/Windows Server2022×PG18/17/16源码及归档重装12轮704项、0失败/错误/跳过；实际SQL身份、12个core结束标记和归档散列均核验。Windows16/17最初CRLF身份失败已修夹具并保留历史。
+
+单个外层SQL事务内批次backend CPU的局部下降不能当AMQP收益。原生3对的worker CPU/实际收件分别+8.62%/+3.65%/−0.76%，确认/投递尾延迟混合，DB p99三对均上升；41,975条全阶段ID完整对账、4gate/3drift通过，坏结果不删。本轮不把0.1.2推广进固定预览，不改对外契约或历史评分。
 
 ## 新增：早发送候选，漂移门禁后保留实验（15:03 UTC）
 
