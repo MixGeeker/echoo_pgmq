@@ -22,7 +22,21 @@
 | SQL 原子业务更新 | 支持同一 PostgreSQL 事务中的 SQL 入队 |
 | HA/复制 | 依赖部署方 PostgreSQL 配置；首版没有独立 broker HA 协议 |
 
-自动化互操作使用 Python Qpid Proton。其它客户端（Qpid JMS、.NET、JavaScript、Rust 等）必须按实际版本做互操作测试，不能仅凭“支持 AMQP 1.0”宣称完整兼容。RabbitMQ 自有路由地址、管理 API 与0-9-1客户端并不适用。
+### 具体客户端验证矩阵
+
+Python Qpid Proton 与服务端共用 Proton 引擎，不能单独作为跨引擎互操作证据。新增的 JavaScript rhea 有独立 AMQP 编解码实现，锁定 npm `rhea@3.0.5`；测试入口与精确参数见仓库的`tests/interop/README.md`。
+
+| 客户端 / 环境 | 地址 / 链路 | 消费确认 / 正常流程 | 验证边界 |
+|---|---|---|---|
+| Python Qpid Proton 0.40.0 | 已存在队列精确名称 | 二进制/metadata、提交后Accepted、重投、release | 已有六平台普通回归；共用Proton引擎 |
+| Node.js 24 + rhea 3.0.5 | 普通名称与`erp/orders.store-17_…`；默认mixed提议，协商unsettled生产 | 默认FIRST自动Accepted；或显式SECOND手动Accepted并等远端settled | PG18专用8项；Linux本地通过，Windows需相应提交CI证据 |
+| 同上，rhea手动消费 | 精确队列名、每次1 credit、新建非durable link | Released后重投；不确认消息，正常Close握手后新连接重投 | FIRST/SECOND各测一次；未测试自动网络恢复或link resumption |
+
+rhea roundtrip保持默认direct AMQP、默认sender、默认FIRST receiver的autoaccept/credit；SECOND设`autoaccept=false, credit_window=0, rcv_settle_mode=1`并显式发1 credit。release使用SASL ANONYMOUS；正常关闭重连使用SASL EXTERNAL；生产均在真实远端Accepted后逐字节核对数据库中的完整encoded message。所有连接都使用同一临时PKI的双向TLS、可信CA与`servername=localhost`验证，`rejectUnauthorized=true`，不降低证书或主机名检查。
+
+PG18普通CI在源码安装、候选归档重装两轮各执行32项既有普通测试＋8项rhea＝40项；PG16/17保持32项。客户端实际Node版本、锁文件散列、传递依赖写入`environment.json`，实际协商TLS/SASL与场景结果写入`independent-client.jsonl`。测试集存在不代表某次CI已通过；以上Linux本地记录也不代表Windows通过。未来恢复默认全量qualification时，所有平台/PG版本均需先安装并校验这组Node依赖，补齐全量路径的预检及两轮证据输出；具体要求见仓库的`tests/interop/README.md`。当前暂停中的手动工作流不随本次修改或执行。
+
+这些记录仅证明指定版本和参数下的小规模正常流量，不是任意AMQP客户端、真实ERP、性能或生产认证。Qpid JMS、.NET、其它JavaScript版本、Rust等仍需各自验证。RabbitMQ自有路由地址、管理API与0-9-1客户端并不适用。
 
 ## 地址与身份
 

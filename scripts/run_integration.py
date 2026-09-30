@@ -50,6 +50,13 @@ ORDINARY_TESTS = [
 ]
 
 
+INDEPENDENT_CLIENT_TESTS = [
+    "tests/test_independent_client.py::test_rhea_binary_metadata_roundtrip",
+    "tests/test_independent_client.py::test_rhea_release_redelivers",
+    "tests/test_independent_client.py::test_rhea_graceful_reconnect_redelivers",
+]
+
+
 def run(command, **kwargs):
     print("+", " ".join(map(str, command)), flush=True)
     return subprocess.run(list(map(str, command)), check=True, **kwargs)
@@ -89,13 +96,25 @@ def main():
     parser.add_argument("--work-dir", type=Path)
     parser.add_argument("--ordinary", action="store_true",
                         help="run the explicit ordinary regression allowlist, without security/fault/crash tests")
+    parser.add_argument("--independent-client", action="store_true",
+                        help="add reviewed rhea interoperability cases to --ordinary; requires locked npm dependencies")
     parser.add_argument("--keep", action="store_true", help="keep cluster files after shutdown; includes ephemeral private keys")
     parser.add_argument("pytest_args", nargs=argparse.REMAINDER)
     args = parser.parse_args()
+    if args.independent_client and not args.ordinary:
+        parser.error("--independent-client requires --ordinary")
     if args.ordinary and args.pytest_args:
         parser.error("--ordinary uses a fixed reviewed allowlist; pytest overrides are not accepted")
     if hasattr(os, "geteuid") and os.geteuid() == 0:
         parser.error("initdb must run as an unprivileged OS user")
+    independent_client = None
+    if args.independent_client:
+        node = shutil.which("node")
+        if not node:
+            parser.error("--independent-client requires Node.js and npm ci --prefix tests/interop --ignore-scripts")
+        independent_client = json.loads(subprocess.check_output(
+            [node, str(REPO / "tests" / "interop" / "verify_dependencies.js")], text=True))
+    ordinary_tests = ORDINARY_TESTS + (INDEPENDENT_CLIENT_TESTS if args.independent_client else [])
     version = subprocess.check_output([args.pg_config, "--version"], text=True).strip()
     major = int(version.split()[1].split(".")[0])
     bindir = Path(subprocess.check_output([args.pg_config, "--bindir"], text=True).strip())
@@ -174,7 +193,8 @@ def main():
                     "postgres_version": subprocess.check_output([binary("postgres"), "--version"], text=True).strip(),
                     "python": sys.version, "platform": sys.platform,
                     "test_scope": "ordinary-regression" if args.ordinary else "qualification-or-explicit-selection",
-                    "ordinary_test_allowlist": ORDINARY_TESTS if args.ordinary else None,
+                    "ordinary_test_allowlist": ordinary_tests if args.ordinary else None,
+                    "independent_client": independent_client,
                     "process_crash_tests_enabled": not args.ordinary,
                     "physical_power_loss_tested": False,
                     "qualification_status": "blocked_security_review",
@@ -184,7 +204,9 @@ def main():
                    ECHOO_TEST_AMQP_URL=f"amqps://localhost:{amqpport}",
                    ECHOO_TEST_CERT_DIR=str(certs), ECHOO_TEST_PGDATA=str(data),
                    ECHOO_TEST_PGCTL=str(binary("pg_ctl")), ECHOO_TEST_LOG=str(log))
-        pytest_args = ORDINARY_TESTS if args.ordinary else args.pytest_args
+        if args.independent_client:
+            env["ECHOO_TEST_INTEROP_REPORT"] = str(root / "independent-client.jsonl")
+        pytest_args = ordinary_tests if args.ordinary else args.pytest_args
         if pytest_args[:1] == ["--"]:
             pytest_args = pytest_args[1:]
         run([sys.executable, "-m", "pytest", *(pytest_args or ["tests"]),
