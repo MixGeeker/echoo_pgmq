@@ -6,8 +6,8 @@
 
 | 验证对象 | 说明 |
 |---|---|
-| Linux PG18（主要目标）及16/17 x86-64 | 配置了真实原生编译、安装和协议/存储/恢复测试；实际结果以对应提交日志为准 |
-| 原生 Windows Server 2022 PG18（主要目标）及16/17 x64 | GitHub Windows runner 原生进程，不经过 WSL/Docker；实际结果以对应提交日志为准 |
+| Linux PG18（主要目标）及16/17 x86-64 | 152a73c普通两轮各32项+core.sql通过，包括候选归档重装；完整资格未通过 |
+| 原生 Windows Server 2022 PG18（主要目标）及16/17 x64 | 原生进程，不经过WSL/Docker；152a73c普通两轮各32项+core.sql通过；不等于Win11验收 |
 | Windows 11 实机 | 尚需独立验收；Server2022结果不能替代 |
 | PostgreSQL其它主版本/ARM/macOS | 未纳入支持矩阵 |
 | 物理断电/电源拔除 | 未验证；SIGKILL/taskkill/immediate shutdown 是进程级故障 |
@@ -31,3 +31,5 @@
 提交 SHA、artifact SHA-256、OS/架构、PostgreSQL/Proton/OpenSSL/客户端版本、所用配置（去掉私钥路径等敏感细节）、最小复现步骤、具体协议 outcome/SQLSTATE、已脱敏日志和测试命令。说明是否原生 Windows、是否涉及真实断电。性能问题另附硬件、磁盘/WAL配置、并发/消息大小、持续时长、错误率与p50/p95/p99。
 
 不要上传整个 PGDATA、测试 certs 目录、客户资料或真实 ERP 消息。敏感漏洞请走 [私密报告](../SECURITY.md) 路径。
+
+六组合证据与候选下载见[验证记录](validation.md)。所有候选仍为blocked_security_review，不提供生产支持承诺。

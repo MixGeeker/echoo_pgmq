@@ -55,3 +55,7 @@ LD_LIBRARY_PATH=/tmp/echoo-proton/lib python scripts/run_integration.py --ordina
 CI 上传带 SHA-256 清单的 candidate ZIP，不创建 tag 或最终 Release，不宣称代码签名或生产认证。每个 PostgreSQL 主版本、操作系统与架构必须分别构建。请勿跨 PG 主版本复制扩展二进制。
 
 项目尚未选定许可证，因此没有授予通用开源再分发许可。依赖自身许可证与归属说明见 [docs/licenses.md](docs/licenses.md)。本项目为独立实现，不包含 Kafgres/PGMQ 代码的直接复制。
+
+## 已验证候选
+
+提交 `152a73c` 的Linux/原生Windows × PG18/17/16六个普通矩阵，均通过两轮32项测试及显式core.sql执行，包括候选归档重装。见 [完整普通验证记录与下载](docs/validation.md)。完整安全/故障资格仍未完成，不能用于生产发布。

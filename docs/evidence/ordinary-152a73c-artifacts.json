@@ -1,0 +1,107 @@
+{
+  "tested_commit": "152a73c35ac9d2ae85e09686f33c81ba870a0d84",
+  "run_url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662296554",
+  "scope": "ordinary, not full qualification",
+  "cases_per_round": 32,
+  "rounds_per_job": 2,
+  "jobs": 6,
+  "core_sql_explicitly_completed": 12,
+  "artifacts": [
+    {
+      "id": 11075200235,
+      "name": "native-windows-server2022-pg17-evidence",
+      "digest": "sha256:680082f6e8089a008af8f3681bab72f1aedbd4b05b8f4819dce3677e7933831c",
+      "size_in_bytes": 8194,
+      "expires_at": "2026-10-14T03:01:36Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662296554/artifacts/11075200235"
+    },
+    {
+      "id": 11075200022,
+      "name": "linux-pg18-candidate",
+      "digest": "sha256:cd3dffc4cceb4907953964b2ff2eaab8fc71e51ffa961290e447bfdefc11dac0",
+      "size_in_bytes": 5602156,
+      "expires_at": "2026-10-14T03:00:06Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662296554/artifacts/11075200022"
+    },
+    {
+      "id": 11075175056,
+      "name": "linux-pg16-evidence",
+      "digest": "sha256:87f0faf53cc02416b466473758878f997dc76e0fe5a14eb8d1387c49b7059c4c",
+      "size_in_bytes": 8068,
+      "expires_at": "2026-10-14T03:00:05Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662296554/artifacts/11075175056"
+    },
+    {
+      "id": 11075065541,
+      "name": "linux-pg16-candidate",
+      "digest": "sha256:beab060d755489dfa448af2f195f13a39a283495d32e01d87cc90987ffb30983",
+      "size_in_bytes": 5603255,
+      "expires_at": "2026-10-14T03:00:06Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662296554/artifacts/11075065541"
+    },
+    {
+      "id": 11075041845,
+      "name": "native-windows-server2022-pg18-evidence",
+      "digest": "sha256:9c4ebe43a6cf6081f86515dfeced1bf79638a46e8faeae4411cb6c0b4d499118",
+      "size_in_bytes": 8185,
+      "expires_at": "2026-10-14T03:01:20Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662296554/artifacts/11075041845"
+    },
+    {
+      "id": 11075011882,
+      "name": "linux-pg18-evidence",
+      "digest": "sha256:b026289b3eede2c54fa23e6a9309ab5ade7e1dfca1447051a0f9127417f70c74",
+      "size_in_bytes": 8114,
+      "expires_at": "2026-10-14T03:00:05Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662296554/artifacts/11075011882"
+    },
+    {
+      "id": 11074957155,
+      "name": "native-windows-server2022-pg18-candidate",
+      "digest": "sha256:7e51472e25a33a349b1bcc2a2a076e4de00fd750f2bd98850638eecc2a813ae4",
+      "size_in_bytes": 402476,
+      "expires_at": "2026-10-14T03:01:21Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662296554/artifacts/11074957155"
+    },
+    {
+      "id": 11074912326,
+      "name": "native-windows-server2022-pg17-candidate",
+      "digest": "sha256:36634f06b2f466aa30669b830d64ae1b29441489c0264bb7383d95c9031a45b1",
+      "size_in_bytes": 402489,
+      "expires_at": "2026-10-14T03:01:36Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662296554/artifacts/11074912326"
+    },
+    {
+      "id": 11074867410,
+      "name": "native-windows-server2022-pg16-candidate",
+      "digest": "sha256:314c7a5581169f847b664734d650ef949e25489082c33d345a7713eef33afa0c",
+      "size_in_bytes": 402605,
+      "expires_at": "2026-10-14T03:01:38Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662296554/artifacts/11074867410"
+    },
+    {
+      "id": 11074782613,
+      "name": "native-windows-server2022-pg16-evidence",
+      "digest": "sha256:88c983fa647087c5835c8b9d3f8899df0e1d5cbcf5b67ce48a79df9d72585d4e",
+      "size_in_bytes": 8144,
+      "expires_at": "2026-10-14T03:01:38Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662296554/artifacts/11074782613"
+    },
+    {
+      "id": 11074298929,
+      "name": "linux-pg17-evidence",
+      "digest": "sha256:6ac346707f5e429b501104db1a6efbc768f7859417be95bb3c25514a558f2a0b",
+      "size_in_bytes": 8078,
+      "expires_at": "2026-10-14T03:00:15Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662296554/artifacts/11074298929"
+    },
+    {
+      "id": 11074124249,
+      "name": "linux-pg17-candidate",
+      "digest": "sha256:ba3fdc9c641da42e496215a5d706f065e7a4027ee641b00aa8bc5e158714b214",
+      "size_in_bytes": 5601815,
+      "expires_at": "2026-10-14T03:00:16Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662296554/artifacts/11074124249"
+    }
+  ]
+}

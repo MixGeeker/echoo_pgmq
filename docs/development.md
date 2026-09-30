@@ -63,3 +63,5 @@ ZIP含扩展、版本SQL/control、Proton运行库、中文文档、第三方许
 Linux 从候选复制扩展、SQL 与 Proton 库，随后去掉 `LD_LIBRARY_PATH` 和 `PROTON_ROOT`。Windows 将候选 Proton DLL 放到测试 PostgreSQL 的 bin，去掉构建 Proton/OpenSSL bin 路径，保留 PostgreSQL 发行版自带的 OpenSSL。之后从新的数据目录重新执行同一普通回归清单，包括正常启停、SQL、AMQP 和升级，不执行进程故障测试。两轮日志与 JUnit 都保存为证据。该步骤旨在避免构建机 PATH/RPATH 或已安装旧文件掩盖不完整归档；Windows 服务身份与实机环境仍需单独验收。
 
 SHA256 用于发现文件损坏和清单不一致，不代表签名认证；不可信来源能够同时替换 ZIP 与散列。正式发布仍需独立可信分发与签名流程。
+
+当前已知良好普通候选为152a73c：六组合两轮各32项，core.sql显式完成记录齐全，见[验证记录](validation.md)。文档后续变更不自动变更该被测提交或完整安全资格状态。
