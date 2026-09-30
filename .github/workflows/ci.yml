@@ -1,0 +1,189 @@
+name: Native PostgreSQL and AMQP validation
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    name: Linux PG${{ matrix.pg }} / native AMQP 1.0
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        pg: ['16', '17']
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.12'
+      - name: Install signed PostgreSQL packages and build prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y postgresql-common ca-certificates
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get update
+          sudo apt-get install -y postgresql-${{ matrix.pg }} postgresql-server-dev-${{ matrix.pg }} build-essential cmake pkg-config libssl-dev
+          echo "PG_CONFIG=/usr/lib/postgresql/${{ matrix.pg }}/bin/pg_config" >> "$GITHUB_ENV"
+          echo "PROTON_ROOT=$RUNNER_TEMP/proton" >> "$GITHUB_ENV"
+      - name: Build verified Apache Proton with OpenSSL
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/fetch_dependency.py proton "$RUNNER_TEMP/proton-src"
+          cmake -S "$RUNNER_TEMP/proton-src" -B "$RUNNER_TEMP/proton-build" \
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX="$PROTON_ROOT" \
+            -DSSL_IMPL=openssl -DSASL_IMPL=none -DBUILD_CPP=OFF -DBUILD_PYTHON=OFF \
+            -DBUILD_RUBY=OFF -DBUILD_GO=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TOOLS=OFF
+          cmake --build "$RUNNER_TEMP/proton-build" --parallel 2
+          cmake --install "$RUNNER_TEMP/proton-build"
+          mkdir -p "$PROTON_ROOT/share/licenses/proton"
+          cp "$RUNNER_TEMP/proton-src/LICENSE" "$RUNNER_TEMP/proton-src/NOTICE" "$PROTON_ROOT/share/licenses/proton/"
+          echo "LD_LIBRARY_PATH=$PROTON_ROOT/lib:$PROTON_ROOT/lib64" >> "$GITHUB_ENV"
+      - name: Compile and install extension
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPG_CONFIG="$PG_CONFIG" -DPROTON_ROOT="$PROTON_ROOT"
+          cmake --build build --parallel 2
+          sudo cmake --install build
+          # Installed module has $ORIGIN rpath. System OpenSSL remains distribution-managed.
+          sudo cp -L "$PROTON_ROOT"/lib/libqpid-proton*.so* "$($PG_CONFIG --pkglibdir)/"
+          python -m pip install -r requirements-dev.txt
+          python -m compileall -q scripts tests
+      - name: Exercise installed extension, real protocol, upgrade, quota and process crashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/run_integration.py --pg-config "$PG_CONFIG" --work-dir "$RUNNER_TEMP/evidence" --keep
+      - name: Package candidate only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/package_candidate.py --pg-config "$PG_CONFIG" --build-dir build --proton-root "$PROTON_ROOT"
+          python -m pip freeze > dist/python-build-inputs.txt
+          "$PG_CONFIG" --configure > dist/postgres-build-options.txt
+          ldd build/echoo_pgmq.so > dist/native-link-dependencies.txt
+      - name: Preserve test evidence without data or private keys
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: linux-pg${{ matrix.pg }}-evidence
+          path: |
+            ${{ runner.temp }}/evidence/postgres.log
+            ${{ runner.temp }}/evidence/junit.xml
+            ${{ runner.temp }}/evidence/environment.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Upload candidate, never publish a release
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: linux-pg${{ matrix.pg }}-candidate
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
+
+  windows:
+    name: Native Windows Server 2022 PG${{ matrix.pg }} (not Windows 11 certification)
+    runs-on: windows-2022
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        pg: ['16', '17']
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - name: Install checksum-pinned native PostgreSQL binaries
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python scripts/fetch_dependency.py postgres-windows-${{ matrix.pg }} "$env:RUNNER_TEMP/postgres"
+          if ($LASTEXITCODE -ne 0) { throw 'PostgreSQL download/verification failed' }
+          "PG_CONFIG=$env:RUNNER_TEMP/postgres/bin/pg_config.exe" >> $env:GITHUB_ENV
+          "PROTON_ROOT=$env:RUNNER_TEMP/proton" >> $env:GITHUB_ENV
+          "$env:RUNNER_TEMP/postgres/bin" >> $env:GITHUB_PATH
+          $sslRoots = @('C:/Program Files/OpenSSL', 'C:/Program Files/OpenSSL-Win64')
+          $ssl = $sslRoots | Where-Object { Test-Path "$_/include/openssl/ssl.h" } | Select-Object -First 1
+          if (!$ssl) { throw 'The runner must provide native OpenSSL headers/libraries; no silent TLS-free fallback' }
+          "OPENSSL_ROOT_DIR=$ssl" >> $env:GITHUB_ENV
+          "$ssl/bin" >> $env:GITHUB_PATH
+      - name: Build verified native Proton with OpenSSL (not SChannel)
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python scripts/fetch_dependency.py proton "$env:RUNNER_TEMP/proton-src"
+          if ($LASTEXITCODE -ne 0) { throw 'Proton verification failed' }
+          cmake -S "$env:RUNNER_TEMP/proton-src" -B "$env:RUNNER_TEMP/proton-build" -A x64 `
+            "-DCMAKE_INSTALL_PREFIX=$env:PROTON_ROOT" "-DOPENSSL_ROOT_DIR=$env:OPENSSL_ROOT_DIR" `
+            -DSSL_IMPL=openssl -DSASL_IMPL=none -DBUILD_CPP=OFF -DBUILD_PYTHON=OFF `
+            -DBUILD_RUBY=OFF -DBUILD_GO=OFF -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TOOLS=OFF
+          if ($LASTEXITCODE -ne 0) { throw 'Proton configure failed' }
+          cmake --build "$env:RUNNER_TEMP/proton-build" --config RelWithDebInfo --parallel 2
+          if ($LASTEXITCODE -ne 0) { throw 'Proton build failed' }
+          cmake --install "$env:RUNNER_TEMP/proton-build" --config RelWithDebInfo
+          if ($LASTEXITCODE -ne 0) { throw 'Proton install failed' }
+          New-Item -Type Directory -Force "$env:PROTON_ROOT/share/licenses/proton" | Out-Null
+          Copy-Item "$env:RUNNER_TEMP/proton-src/LICENSE", "$env:RUNNER_TEMP/proton-src/NOTICE" "$env:PROTON_ROOT/share/licenses/proton/"
+          "$env:PROTON_ROOT/bin" >> $env:GITHUB_PATH
+      - name: Compile and install native PostgreSQL DLL
+        run: |
+          $ErrorActionPreference = 'Stop'
+          cmake -S . -B build -A x64 "-DPG_CONFIG=$env:PG_CONFIG" "-DPROTON_ROOT=$env:PROTON_ROOT"
+          if ($LASTEXITCODE -ne 0) { throw 'Extension configure failed' }
+          cmake --build build --config RelWithDebInfo --parallel 2
+          if ($LASTEXITCODE -ne 0) { throw 'Extension build failed' }
+          cmake --install build --config RelWithDebInfo
+          if ($LASTEXITCODE -ne 0) { throw 'Extension install failed' }
+          python -m pip install -r requirements-dev.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Python test dependencies failed' }
+          python -m compileall -q scripts tests
+          if ($LASTEXITCODE -ne 0) { throw 'Python syntax check failed' }
+      - name: Test native Windows processes, TLS AMQP, upgrade and abrupt restart
+        run: |
+          python scripts/run_integration.py --pg-config "$env:PG_CONFIG" --work-dir "$env:RUNNER_TEMP/evidence" --keep
+          if ($LASTEXITCODE -ne 0) { throw 'Integration tests failed' }
+      - name: Package candidate only
+        run: |
+          python scripts/package_candidate.py --pg-config "$env:PG_CONFIG" --build-dir build --proton-root "$env:PROTON_ROOT"
+          if ($LASTEXITCODE -ne 0) { throw 'Candidate packaging failed' }
+          python -m pip freeze | Out-File -Encoding utf8 dist/python-build-inputs.txt
+          & $env:PG_CONFIG --configure | Out-File -Encoding utf8 dist/postgres-build-options.txt
+          openssl version -a | Out-File -Encoding utf8 dist/openssl-build-version.txt
+      - name: Preserve test evidence without data or private keys
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: native-windows-server2022-pg${{ matrix.pg }}-evidence
+          path: |
+            ${{ runner.temp }}/evidence/postgres.log
+            ${{ runner.temp }}/evidence/junit.xml
+            ${{ runner.temp }}/evidence/environment.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Upload candidate, never publish a release
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: native-windows-server2022-pg${{ matrix.pg }}-candidate
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
