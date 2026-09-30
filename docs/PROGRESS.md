@@ -1,6 +1,6 @@
 # 开发与验收进度
 
-最后核实：2026-09-30 04:42 UTC。草稿 PR 正在推进，尚未达到生产发布标准。
+最后核实：2026-09-30 05:14 UTC。草稿 PR 正在推进，尚未达到生产发布标准。
 
 ## 主目标
 
@@ -57,3 +57,7 @@ PostgreSQL **18** 是优先支持和验收版本，Linux 与原生 Windows 都�
 `a501852` 的六个Linux/原生Windows × PG18/17/16组合完成普通回归与显式core.sql：PG18每轮40项（既有32项+独立JavaScript rhea 8项），PG16/17每轮32项；源码安装和候选归档重装各一轮。已逐份下载核对12组JUnit/environment、全部core.sql完成标记与归档散列。PG18客户端为实际Node24.21.0/rhea3.0.5，涵盖正常二进制/metadata、FIRST/SECOND确认、释放与正常关闭后重连，不代表任意AMQP客户端或真实ERP。Windows参数数组拼装问题在a501852修复后重测通过；此前152a73c六组合32项记录保留。候选仍为blocked_security_review，真实checkout提交与归档见 [验证记录](validation.md)。
 
 固定预算基准首轮e2f71c9因HTTP采样客户端实现问题在预热前停止，测量样本为0，失败数据已保留且不作性能结论。修复后锁定51ca717；真实Docker前置smoke已3/3通过：每单元5秒、10个HTTP资源样本、实际2CPU/4GiB/0swap；两代理各700条含暖机对账完整且最终队列为0。27单元完整固定时窗矩阵已完成：每单元30秒暖机+120秒测量，三个基线和24个代理单元全部有真实资源样本。共1,077,932条含暖机消息Accepted与唯一接收完整对账，无丢失/重复，最终队列0；这不代表时窗内从无瞬时积压。原始artifact外层及728文件清单散列均已核对，逐条复算结果见[报告](benchmark-results.md)。echoo12/12、Rabbit10/12消息单元未达暂定合成DB p95增幅≤10%，不能用绿灯掩盖目标失败。见[smoke证据](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36663717022/artifacts/11075865839)和[完整运行](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36663717022)。本阶段不会触发被暂停的安全/完整故障工作流。
+
+## 正在复测的小性能改动
+
+提交后唤醒匹配消费者的窄改动已通过本地PG18 40项+core.sql和5项独立正常检查；30单元本地A/B保留全部噪声及未选方案。消息尾延迟有改善，但部分CPU增加，尤其2ms/4×4/400约+10–11%；不宣称ERP10%门槛或资源优势。尚待新提交的Linux/Windows普通CI及同条件固定预算复测。代码范围、完整条件与代价见[本地机制报告](worker-performance.md)。历史51ca717基准及a501852/9068d10普通证据不被覆盖。

@@ -4,7 +4,7 @@
 
 ## 新增：同一总预算的普通负载实验
 
-`.github/workflows/benchmark.yml` 只允许手动执行，以及已明确授权的专用分支 `benchmarks/controlled-pg18-20260930` push。普通 PR/main push 不触发，不调用 security/qualification、异常输入、模糊测试、故障注入或崩溃测试。使用标准公共 `ubuntu-24.04` runner，不申请付费大规格 runner。
+`.github/workflows/benchmark.yml` 只允许手动执行，以及已明确授权的专用分支 `benchmarks/controlled-pg18-20260930`（首次固定预算）与 `benchmarks/wake-pg18-20260930`（提交后唤醒候选复测）push。普通 PR/main push 不触发，不调用 security/qualification、异常输入、模糊测试、故障注入或崩溃测试。使用标准公共 `ubuntu-24.04` runner，不申请付费大规格 runner。
 
 这是**固定到达率、有限时窗的普通负载实验**，不是最大容量搜索、24小时长稳、真实ERP或门店硬件验收。固定提交51ca717的27单元实验现已完成，并逐条复算。结果与原始证据见[2026-09-30固定预算报告](benchmark-results.md)：正常流量与对账通过，但echoo12/12、RabbitMQ10/12消息单元未满足暂定合成DB p95增幅≤10%，不把工作流绿灯当作性能目标通过。
 

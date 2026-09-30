@@ -81,6 +81,7 @@ static volatile sig_atomic_t stop_requested = false;
 static volatile sig_atomic_t reload_requested = false;
 static size_t inbound_bytes = 0;
 static pn_ssl_domain_t *tls_domain = NULL;
+static bool sender_wakeup_pending = false;
 
 #define ECHOO_MAX_SESSIONS 8
 #define ECHOO_FRAME_BYTES 65536
@@ -282,6 +283,35 @@ total_buffered_bytes(void)
     return size;
 }
 
+static bool
+sender_can_claim(EchooConnection *connection, EchooLink *link)
+{
+    return !connection->closing_at && !link->closed &&
+        pn_link_is_sender(link->link) && pn_link_credit(link->link) > 0 &&
+        link->inflight < max_inflight &&
+        outgoing_bytes(connection) < (size_t) echoo_max_message_bytes &&
+        total_buffered_bytes() <= (size_t) max_buffer_bytes - echoo_max_message_bytes;
+}
+
+/* A hint only: claims still check authorization and visibility in their own
+ * durable transactions. SQL-originated messages retain polling. */
+static void
+wake_queue_senders(const char *queue)
+{
+    EchooConnection *connection;
+    for (connection = connections; connection; connection = connection->next)
+    {
+        EchooLink *link;
+        for (link = connection->links; link; link = link->next)
+            if (strcmp(link->queue, queue) == 0 && sender_can_claim(connection, link))
+            {
+                link->next_poll = 0;
+                /* Also covers a consumer already visited earlier this turn. */
+                sender_wakeup_pending = true;
+            }
+    }
+}
+
 static void
 receive_message(EchooConnection *connection, EchooLink *link, pn_delivery_t *delivery)
 {
@@ -352,6 +382,7 @@ receive_message(EchooConnection *connection, EchooLink *link, pn_delivery_t *del
     {
         /* The SQL bridge has returned only after CommitTransactionCommand. */
         pn_delivery_update(delivery, PN_ACCEPTED);
+        wake_queue_senders(link->queue);
     }
     else
     {
@@ -572,10 +603,7 @@ pump_sender(EchooConnection *connection, EchooLink *link, int64 now)
             link_error(link, "amqp:resource-limit-exceeded", "Delivery lease expired; reconnect to receive again");
             return;
         }
-    if (now < link->next_poll || pn_link_credit(link->link) <= 0 ||
-        link->inflight >= max_inflight ||
-        outgoing_bytes(connection) >= (size_t) echoo_max_message_bytes ||
-        total_buffered_bytes() > (size_t) max_buffer_bytes - echoo_max_message_bytes)
+    if (now < link->next_poll || !sender_can_claim(connection, link))
         return;
     result = echoo_db_claim(link->queue, connection->identity, &link->owner,
                             visibility_seconds, &message);
@@ -807,6 +835,7 @@ echoo_pgmq_main(Datum main_arg)
         int64 now = now_ms();
         long timeout = poll_interval_ms;
         int count, i;
+        sender_wakeup_pending = false;
         ResetLatch(MyLatch);
         CHECK_FOR_INTERRUPTS();
         if (reload_requested)
@@ -839,15 +868,13 @@ echoo_pgmq_main(Datum main_arg)
                 for (link = connection->links; link; link = link->next)
                 {
                     pump_sender(connection, link, now);
-                    if (!link->closed && pn_link_is_sender(link->link) &&
-                        link->next_poll == 0 && pn_link_credit(link->link) > 0 &&
-                        link->inflight < max_inflight &&
-                        outgoing_bytes(connection) < (size_t) echoo_max_message_bytes &&
-                        total_buffered_bytes() <= (size_t) max_buffer_bytes - echoo_max_message_bytes)
+                    if (link->next_poll == 0 && sender_can_claim(connection, link))
                         timeout = 0;
                 }
             cursor = &connection->next;
         }
+        if (sender_wakeup_pending)
+            timeout = 0;
 #if PG_VERSION_NUM >= 170000
         waitset = CreateWaitEventSet(NULL, max_connections + 3);
 #else

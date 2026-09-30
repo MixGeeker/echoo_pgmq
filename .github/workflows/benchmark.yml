@@ -2,9 +2,9 @@ name: Ordinary fixed-load benchmark (controlled, not capacity qualification)
 
 on:
   workflow_dispatch:
-  # Single explicitly authorized disposable branch; never run on ordinary PRs.
+  # Explicitly authorized experiment branches; never run on ordinary PRs.
   push:
-    branches: [benchmarks/controlled-pg18-20260930]
+    branches: [benchmarks/controlled-pg18-20260930, benchmarks/wake-pg18-20260930]
 
 permissions:
   contents: read
