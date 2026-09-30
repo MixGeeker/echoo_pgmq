@@ -19,6 +19,11 @@ REPO = Path(__file__).resolve().parents[1]
 # Explicit allowlist: adding a new test does not silently expand automatic CI
 # into adversarial-input, resource-exhaustion, fault-injection or crash testing.
 ORDINARY_TESTS = [
+    "tests/test_extension_identity.py::test_sql_checkout_uses_lf_with_autocrlf",
+    "tests/test_extension_identity.py::test_source_body_preserves_exact_utf8_text",
+    "tests/test_extension_identity.py::test_source_body_rejects_crlf",
+    "tests/test_extension_identity.py::test_installed_identity_matches_exact_source",
+    "tests/test_extension_identity.py::test_installed_body_mutation_fails_with_diagnostics",
     "tests/test_sql_reservation.py::test_current_install_and_source_identity",
     "tests/test_sql_reservation.py::test_upgrade_preserves_contract_and_retained_state",
     "tests/test_sql_reservation.py::test_explicit_upgrade_rollback_then_retry",

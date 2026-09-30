@@ -17,12 +17,22 @@ def candidate_version(root=ROOT):
 
 def source_enqueue_body(version, root=ROOT, migration=False):
     name = f"echoo_pgmq--{'0.1.1--' if migration else ''}{version}.sql"
-    text = (root / "sql" / name).read_text(encoding="utf-8")
+    source = (root / "sql" / name).read_bytes()
+    if b"\r\n" in source:
+        raise ValueError(f"{name} contains CRLF; expected canonical LF line endings")
+    # Do not let universal-newline decoding conceal differing installed bytes.
+    text = source.decode("utf-8")
     matches = re.findall(r"CREATE (?:OR REPLACE )?FUNCTION echoo_pgmq\._enqueue\(.*?"
                          r"AS \$\$(.*?)\$\$;", text, re.S)
     if len(matches) != 1:
         raise ValueError(f"expected one _enqueue body in {name}")
     return matches[0]
+
+
+def _body_diagnostic(body):
+    data = body.encode("utf-8")
+    crlf = data.count(b"\r\n")
+    return f"sha256={hashlib.sha256(data).hexdigest()}, utf8_bytes={len(data)}, crlf={crlf}"
 
 
 def installed_identity(conn, version=None):
@@ -34,7 +44,9 @@ def installed_identity(conn, version=None):
     body, = conn.execute("SELECT prosrc FROM pg_proc WHERE oid=%s::regprocedure", (ENQUEUE,)).fetchone()
     expected_body = source_enqueue_body(expected_version)
     if body != expected_body:
-        raise AssertionError(f"installed {ENQUEUE} body differs from source version {expected_version}")
+        raise AssertionError(
+            f"installed {ENQUEUE} body differs from source version {expected_version}; "
+            f"actual: {_body_diagnostic(body)}; expected: {_body_diagnostic(expected_body)}")
     return {"extversion": actual_version, "function": ENQUEUE,
             "enqueue_prosrc_sha256": hashlib.sha256(body.encode("utf-8")).hexdigest(),
             "source_sql_sha256": hashlib.sha256(
