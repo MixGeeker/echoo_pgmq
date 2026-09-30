@@ -38,6 +38,10 @@ ORDINARY_TESTS = [
     "tests/test_candidate_packaging.py::test_candidate_manifest_tampering_fails",
     "tests/test_candidate_packaging.py::test_candidate_unsafe_members_fail",
     "tests/test_candidate_packaging.py::test_candidate_unlisted_member_fails",
+    "tests/test_harness.py::test_sql_script_uses_explicit_options_and_dsn",
+    "tests/test_harness.py::test_sql_script_rejects_ignored_argument_warning",
+    "tests/test_harness.py::test_sql_script_requires_completion_marker",
+    "tests/test_harness.py::test_sql_script_propagates_nonzero_exit",
     "tests/test_amqp_integration.py::test_binary_and_metadata_roundtrip_preserves_encoded_wire",
     "tests/test_amqp_integration.py::test_sender_accepted_is_not_sent_before_commit",
     "tests/test_amqp_integration.py::test_abandoned_delivery_is_redelivered",
@@ -49,6 +53,24 @@ ORDINARY_TESTS = [
 def run(command, **kwargs):
     print("+", " ".join(map(str, command)), flush=True)
     return subprocess.run(list(map(str, command)), check=True, **kwargs)
+
+
+def run_sql_script(psql, dsn, sql, env, required_marker=None):
+    """Run the actual SQL file; successful process exit alone is insufficient."""
+    # Some Windows psql versions stop parsing at a positional DSN. All
+    # arguments here are explicit options, with no positional connection value.
+    command = [str(psql), "-X", "-v", "ON_ERROR_STOP=1", "--dbname", dsn, "--file", str(sql)]
+    print("+", " ".join(command), flush=True)
+    result = subprocess.run(command, env=env, stdin=subprocess.DEVNULL,
+                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                            text=True, encoding="utf-8", errors="replace")
+    print(result.stdout, flush=True)
+    result.check_returncode()
+    if "extra command-line argument" in result.stdout.lower():
+        raise RuntimeError("psql ignored command-line arguments; SQL test configuration is invalid")
+    if required_marker and required_marker not in result.stdout:
+        raise RuntimeError(f"{Path(sql).name} did not emit its completion marker")
+    return result.stdout
 
 
 def port():
@@ -155,7 +177,8 @@ def main():
                     "ordinary_test_allowlist": ORDINARY_TESTS if args.ordinary else None,
                     "process_crash_tests_enabled": not args.ordinary,
                     "physical_power_loss_tested": False,
-                    "qualification_status": "blocked_security_review"}
+                    "qualification_status": "blocked_security_review",
+                    "sql_scripts_passed": []}
         (root / "environment.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
         env = dict(base_env, ECHOO_TEST_DSN=dsn,
                    ECHOO_TEST_AMQP_URL=f"amqps://localhost:{amqpport}",
@@ -169,7 +192,10 @@ def main():
         # Independently execute the SQL agent's contract assertions if provided.
         sql_tests = [REPO / "tests" / "sql" / "core.sql"] if args.ordinary else sorted((REPO / "tests" / "sql").glob("*.sql"))
         for sql in sql_tests:
-            run([binary("psql"), dsn, "-X", "-v", "ON_ERROR_STOP=1", "-f", sql], env=base_env)
+            run_sql_script(binary("psql"), dsn, sql, base_env,
+                           required_marker="core SQL tests passed" if sql.name == "core.sql" else None)
+            manifest["sql_scripts_passed"].append(sql.name)
+            (root / "environment.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     finally:
         if started:
             subprocess.run([str(binary("pg_ctl")), "-D", str(data), "-m", "fast" if args.ordinary else "immediate", "-w", "stop"], env=base_env)
