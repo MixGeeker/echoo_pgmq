@@ -41,6 +41,8 @@ class Smoke:
         # which native PostgreSQL's restricted-token children need to read.
         self.root = temp / ("echoo-preview-20260930.1-" + uuid.uuid4().hex)
         self.downloads = temp / ("echoo-preview-download-" + uuid.uuid4().hex)
+        self.captures = temp / ("echoo-preview-capture-" + uuid.uuid4().hex)
+        self.captures.mkdir(mode=0o700)
         self.evidence = temp / "echoo-preview-evidence"
         self.evidence.mkdir(exist_ok=False)
         self.logs = []
@@ -78,21 +80,28 @@ class Smoke:
         record = {"name": stage, "argv": args, "exit_code": None}
         self.result["stages"].append(record)
         env = os.environ.copy() if github else self.env
+        self.logs.append(f"=== {stage} (started) ===\n")
+        self.save()
         print(f"Running {stage}", flush=True)
-        if download is None:
-            process = subprocess.run(args, env=env, stdout=subprocess.PIPE,
-                                     stderr=subprocess.STDOUT)
-            output = process.stdout.decode("utf-8", errors="replace")
-        else:
-            with download.open("xb") as stream:
-                process = subprocess.run(args, env=env, stdout=stream,
-                                         stderr=subprocess.PIPE)
-            output = process.stderr.decode("utf-8", errors="replace")
+        capture = self.captures / f"{len(self.result['stages']):02d}-{stage}.log"
+        # pg_ctl on Windows launches a long-lived CMD process that may retain
+        # inherited output handles. Regular files let run() wait for the direct
+        # child without waiting for every descendant to close a PIPE writer.
+        # Raw captures stay private and outside the four-file upload allowlist.
+        with capture.open("xb") as log:
+            if download is None:
+                process = subprocess.run(args, env=env, stdout=log,
+                                         stderr=subprocess.STDOUT)
+            else:
+                with download.open("xb") as stream:
+                    process = subprocess.run(args, env=env, stdout=stream, stderr=log)
+        output = capture.read_bytes().decode("utf-8", errors="replace")
         record.update(exit_code=process.returncode,
                       elapsed_seconds=round(time.monotonic() - started, 3))
         if stage in PREVIEW_STAGES:
             self.result["preview_exit_codes"][stage] = process.returncode
         self.logs.append(f"=== {stage} (exit {process.returncode}) ===\n{output}\n")
+        self.save()
         print(f"{stage}: exit {process.returncode}", flush=True)
         require(expected is None or process.returncode == expected,
                 f"{stage}: expected exit {expected}, got {process.returncode}")
@@ -248,8 +257,15 @@ class Smoke:
         (self.evidence / "stages.log").write_text(scrub("\n".join(self.logs)), encoding="utf-8")
         postgres = self.root / "postgres.log"
         if postgres.is_file():
-            (self.evidence / "postgres.log").write_text(
-                scrub(postgres.read_text(encoding="utf-8", errors="replace")), encoding="utf-8")
+            try:
+                snapshot = postgres.read_text(encoding="utf-8", errors="replace")
+            except OSError as error:
+                # Windows may deny a read while CMD/PostgreSQL owns the live
+                # log. Preserve the previous snapshot and retry at next stage.
+                self.result["postgres_log_snapshot_error"] = f"{type(error).__name__}: {error}"
+            else:
+                (self.evidence / "postgres.log").write_text(scrub(snapshot), encoding="utf-8")
+                self.result.pop("postgres_log_snapshot_error", None)
         (self.evidence / "result.json").write_text(
             scrub(json.dumps(self.result, indent=2) + "\n"), encoding="utf-8")
 
