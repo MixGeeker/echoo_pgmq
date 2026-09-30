@@ -31,6 +31,6 @@ NULL 键路径用带容量条件的 `UPDATE ... RETURNING` 预留全局、队列
 - 成功的全局预留使用 UPDATE取得的 NO KEY UPDATE；原路径全局 FOR UPDATE更强，表级锁取得时点也变化。直接管理锁、自定义索引和任意外部事务调度不在等价结论内
 - 全局预留后因队列满而拒绝，会产生最终回滚的UPDATE及潜在WAL/清理开销；fallback可能增加工作，不能据此声称普遍提速或减少WAL
 - 当前本地普通验证基于默认 READ COMMITTED。更强隔离级别的重试/序列化行为没有专门验证
-- 先前原型36项SQL检查仅为独立原型证据；批量SQL CPU机制实验不是MQ产品收益。本候选的原生性能对比另行进行
+- 先前原型36项SQL检查仅为独立原型证据；批量SQL CPU机制实验不是MQ产品收益。本候选的原生性能对比已完成，未显示稳定净收益，见[完整报告](performance-sql-reservation.md)
 
-支持范围仍按PG18主要目标、PG16/17兼容目标及现有AMQP协议边界声明；本次只运行Linux PG18.6，未运行该候选的Windows或远端CI。完整安全/长时资格、Win11 SSD实机和真实ERP联调仍开放，`blocked_security_review` 状态不变。
+支持范围仍按PG18主要目标、PG16/17兼容目标及现有AMQP协议边界声明；最终head67df046已通过Linux/Windows Server2022×PG18/17/16普通CI与归档重装，共704项；详见[复核报告](performance-sql-reservation.md)。完整安全/长时资格、Win11 SSD实机和真实ERP联调仍开放，`blocked_security_review` 状态不变。
