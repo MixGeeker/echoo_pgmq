@@ -17,7 +17,7 @@ permissions:
   actions: read
 
 concurrency:
-  group: preview-smoke-${{ github.ref }}
+  group: preview-smoke-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: false
 
 jobs:
