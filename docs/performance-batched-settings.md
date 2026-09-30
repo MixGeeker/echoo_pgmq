@@ -61,7 +61,7 @@ P3 DB max64.809→25.035ms，改善61.37%，与同对DB p99变差16.79%同时保
 
 ## 数据完整性与普通正确性
 
-六cell共41,890个全阶段消息，35,903条测量发送cohort。逐条ID唯一并全量对齐、accepted/valid标记一致，无观测到missing/duplicate/unexpected；前后队列与测量终点已确认未收件为0。P3-A有1条跨窗完成，cohort保留完整时延、吞吐按真实完成另计。E2E至收件校验，不代表消费者ACK已提交；此次短时正常一致性不是exactly-once或恢复可靠性证明。
+六cell共41,890个全阶段消息，35,903条测量发送cohort。逐条ID唯一并全量对齐、accepted/valid标记一致，无观测到missing/duplicate/unexpected；前后队列与测量终点已确认未收件为0。P3-A有1条跨窗完成，cohort保留完整时延、吞吐按真实完成另计。E2E至收到消息后的时间采样，随后才校验；不代表消费者ACK已提交；此次短时正常一致性不是exactly-once或恢复可靠性证明。
 
 233原始文件全集/散列、18原生输入、2库身份、4gate/3drift及正常清理均独立核验。原始全包echoo-batched-settings-evidence.zip为5,709,200字节，301成员，SHA256 **41a6ba7b22817c6e4b5baee99d1ef52f9dba532ae1eb8334b96627ebae4771ab**；已保存交付，非声称全部原始数据已进入Git。复算脚本保留本轮目录/Git依赖，恢复对应输入才能做完整来源审计。
 
