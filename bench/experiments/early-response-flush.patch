@@ -1,0 +1,111 @@
+diff --git a/scripts/run_integration.py b/scripts/run_integration.py
+index f0459ae..6f92887 100644
+--- a/scripts/run_integration.py
++++ b/scripts/run_integration.py
+@@ -43,6 +43,7 @@ ORDINARY_TESTS = [
+     "tests/test_harness.py::test_sql_script_requires_completion_marker",
+     "tests/test_harness.py::test_sql_script_propagates_nonzero_exit",
+     "tests/test_amqp_integration.py::test_binary_and_metadata_roundtrip_preserves_encoded_wire",
++    "tests/test_amqp_integration.py::test_duplex_connection_binary_roundtrips",
+     "tests/test_amqp_integration.py::test_sender_accepted_is_not_sent_before_commit",
+     "tests/test_amqp_integration.py::test_abandoned_delivery_is_redelivered",
+     "tests/test_amqp_integration.py::test_late_ack_does_not_delete_new_delivery",
+diff --git a/src/echoo_pgmq.c b/src/echoo_pgmq.c
+index 84d5f1e..9486d25 100644
+--- a/src/echoo_pgmq.c
++++ b/src/echoo_pgmq.c
+@@ -121,6 +121,7 @@ typedef struct EchooConnection
+     bool failed;
+     int link_count;
+     int session_count;
++    size_t written_in_turn;
+     int64 created_at;
+     int64 closing_at;
+     EchooLink *links;
+@@ -658,10 +659,17 @@ service_io(EchooConnection *connection, uint32 events)
+     if (events & WL_SOCKET_WRITEABLE)
+     {
+         pn_bytes_t buffer = pn_connection_driver_write_buffer(&connection->driver);
++        size_t remaining = connection->written_in_turn < ECHOO_IO_PER_TURN
++            ? ECHOO_IO_PER_TURN - connection->written_in_turn : 0;
++        buffer.size = Min(buffer.size, remaining);
+         if (buffer.size)
+         {
+             size = send(connection->socket, buffer.start, (int) Min(buffer.size, (size_t) ECHOO_IO_PER_TURN), 0);
+-            if (size > 0) pn_connection_driver_write_done(&connection->driver, size);
++            if (size > 0)
++            {
++                connection->written_in_turn += (size_t) size;
++                pn_connection_driver_write_done(&connection->driver, size);
++            }
+             else if (size < 0 && !would_block()) connection->failed = true;
+         }
+     }
+@@ -820,6 +828,7 @@ echoo_pgmq_main(Datum main_arg)
+             pn_event_t *event;
+             EchooLink *link;
+             int handled = 0;
++            connection->written_in_turn = 0;
+             while (handled++ < ECHOO_EVENTS_PER_TURN &&
+                    (event = pn_connection_driver_next_event(&connection->driver)) != NULL)
+                 process_event(connection, event);
+@@ -829,6 +838,15 @@ echoo_pgmq_main(Datum main_arg)
+                 connection->failed = true;
+             if (connection->closing_at && now - connection->closing_at >= ECHOO_CLOSE_GRACE_MS)
+                 connection->failed = true;
++            /* Try already-queued responses before consumer SQL can delay them.
++             * Sockets are nonblocking (including the Win32 emulation flag).
++             * Share one write budget with the later readiness-driven attempt. */
++            if (!connection->failed)
++            {
++                service_io(connection, WL_SOCKET_WRITEABLE);
++                if (pn_connection_driver_has_event(&connection->driver))
++                    timeout = 0;
++            }
+             if (connection->failed || pn_connection_driver_finished(&connection->driver))
+             {
+                 *cursor = connection->next;
+@@ -864,7 +882,12 @@ echoo_pgmq_main(Datum main_arg)
+                 pn_connection_driver_read_buffer(&connection->driver).size)
+                 flags |= WL_SOCKET_READABLE;
+             if (pn_connection_driver_write_buffer(&connection->driver).size)
+-                flags |= WL_SOCKET_WRITEABLE;
++            {
++                if (connection->written_in_turn < ECHOO_IO_PER_TURN)
++                    flags |= WL_SOCKET_WRITEABLE;
++                else
++                    timeout = 0; /* Renew the budget without stalling output. */
++            }
+             if (flags)
+                 AddWaitEventToSet(waitset, flags, connection->socket, NULL, connection);
+         }
+diff --git a/tests/test_amqp_integration.py b/tests/test_amqp_integration.py
+index 22d3738..9a5120e 100644
+--- a/tests/test_amqp_integration.py
++++ b/tests/test_amqp_integration.py
+@@ -294,3 +294,25 @@ def test_presettled_publisher_is_refused(admin, queue, connect_amqp):
+     with pytest.raises(ProtonException):
+         connection.create_sender(queue, options=AtMostOnce())
+     assert count(admin, queue) == 0
++
++
++def test_duplex_connection_binary_roundtrips(admin, queue, connect_amqp):
++    """Normal 32 KiB duplex traffic; this does not prove socket backpressure."""
++    connection = connect_amqp()
++    sender = connection.create_sender(queue)
++    for i in range(3):
++        receiver = connection.create_receiver(queue, credit=1)
++        body = bytes([i]) * 32768
++        message = Message(body=body, id=f"duplex-{i}", durable=True)
++        assert sender.send(message, timeout=5).remote_state == Delivery.ACCEPTED
++        received = receiver.receive(timeout=5)
++        assert received.body == body
++        assert received.id == f"duplex-{i}"
++        receiver.accept()
++        # Link close is a protocol barrier which flushes this ACK. A database
++        # predicate is not a network event and can leave BlockingConnection.wait
++        # asleep until its full timeout even after durable deletion succeeds.
++        receiver.close()
++        eventually(lambda: count(admin, queue) == 0)
++    sender.close()
++    eventually(lambda: count(admin, queue) == 0)

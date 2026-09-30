@@ -1,0 +1,266 @@
+{
+  "method": {
+    "quantile": "sorted[floor((n-1)*p)]",
+    "client_cohort": "producer start in [measurement_start, measurement_start+30s); late confirmations and receipts retained",
+    "db_cohort": "DB start in fixed measured window; late completions retained",
+    "throughput": "events with timestamps in [start,end), counted separately for starts, confirms and receipts",
+    "cpu": "PID+creation-time matched endpoint deltas of the 12 persistent owned processes and worker inside sampled window; observed transient identities are disclosed separately and not included in these endpoint CPU deltas; not whole-stack/cgroup/exited-process accounting",
+    "rss": "sum of sampled RSS double-counts shared pages, not unique physical memory",
+    "native": "uncollected by design; no native operation joins/counts/timings/decomposition",
+    "checksum": "client valid flags and exact run IDs verified; payload bytes are not retained, so audit cannot independently rehash transmitted payload",
+    "comparisons": "only A versus B within this session; report eligibility per predeclared pair, retain invalid-pair observations descriptively; no absolute comparison to prior sessions"
+  },
+  "identities": {
+    "baseline_commit": "470767e60d618a14beb2d69cdedb1e1ac9704ae3",
+    "candidate_commit": "2d5c8dffab90db2b2dc01f37306848bb26e89921",
+    "candidate_network_sha256": "99307c546fbf2135f968f0e0f7ebb9aafc79a173eb664c650479573f43aecfbb"
+  },
+  "gate_drift": {
+    "G1": {
+      "passed": true,
+      "throughput_relative_change": 0.0007511266900350811,
+      "p99_absolute_change_ms": 0.939991,
+      "p99_allowed_change_ms": 1.118021
+    },
+    "G2": {
+      "passed": false,
+      "throughput_relative_change": 0.0007505629221916722,
+      "p99_absolute_change_ms": 1.6633129999999998,
+      "p99_allowed_change_ms": 1.5880165
+    }
+  },
+  "terminal": {
+    "terminal_status": "environment_insufficient",
+    "reason": "G2 failed PG stability or drift gate",
+    "pairs": {
+      "1": {
+        "status": "valid_fixed_load_pair",
+        "cells": [
+          {
+            "label": "P1-B",
+            "fixed_load_eligible": true
+          },
+          {
+            "label": "P1-A",
+            "fixed_load_eligible": true
+          }
+        ]
+      },
+      "2": {
+        "status": "invalid_gate_or_drift",
+        "cells": [
+          {
+            "label": "P2-B",
+            "fixed_load_eligible": true
+          },
+          {
+            "label": "P2-A",
+            "fixed_load_eligible": true
+          }
+        ]
+      },
+      "3": {
+        "status": "unrun",
+        "cells": []
+      }
+    },
+    "unrun_units": [
+      {
+        "label": "P3-A",
+        "kind": "cell",
+        "arm": "A",
+        "pair": 3
+      },
+      {
+        "label": "P3-B",
+        "kind": "cell",
+        "arm": "B",
+        "pair": 3
+      },
+      {
+        "label": "G3",
+        "kind": "gate",
+        "arm": "A",
+        "pair": 3
+      }
+    ],
+    "automatic_retries": 0,
+    "scope": "Uninstrumented-native client-side confirmation only; native stages/traces uncollected by design. Client timing, ID/checksum accounting, psutil resource sampling and PostgreSQL I/O timing remain enabled. Volatile storage: /tmp tmpfs and workspace overlay fsync=volatile. Not SSD, durability, capacity, ERP, reliability or product performance qualification. CPU affinity only; no enforceable cgroup CPU quota, memory ceiling or swap limit. RSS sums double-count shared pages; CPU sums cover currently live owned processes.",
+    "cleanup_may_be_incomplete": false,
+    "private_session_state_removed": true,
+    "controller_elapsed_seconds": 245.9813674850011,
+    "hard_budget_seconds": 600,
+    "work_cutoff_seconds": 550,
+    "interpretation": "Uninstrumented-native client-side confirmation only; native stages/traces uncollected by design. Client timing, ID/checksum accounting, psutil resource sampling and PostgreSQL I/O timing remain enabled. Volatile storage: /tmp tmpfs and workspace overlay fsync=volatile. Not SSD, durability, capacity, ERP, reliability or product performance qualification. CPU affinity only; no enforceable cgroup CPU quota, memory ceiling or swap limit. RSS sums double-count shared pages; CPU sums cover currently live owned processes.",
+    "native_stage_timing_collected": false,
+    "native_traces_collected": false
+  },
+  "mechanism_scope": {
+    "A": "Existing seven-plan baseline 470767e",
+    "B": "Early bounded nonblocking write attempt before consumer SQL; shares per-turn write budget with the later readiness-driven attempt",
+    "unchanged": "storage.c, SQL, seven cached plans, workload, policy and native trace scope",
+    "not_measured": "Wire-level Accepted timing, native stage time, internal execution counts, exact send timing and mechanism causality are not measured"
+  },
+  "interpretation": {
+    "eligible_pairs": [
+      "1"
+    ],
+    "invalid_or_unrun_pairs": {
+      "2": "invalid_gate_or_drift",
+      "3": "unrun"
+    },
+    "native_mechanism_attribution": "Not measured. No native traces or wire evidence; do not infer an Accepted frame was sent early or an internal timing saving occurred.",
+    "qualification": "Only bounded volatile-cloud, affinity-only observations; no SSD, ERP, durability, reliability, capacity, resource-ceiling or adoption qualification.",
+    "decision": "No adoption decision is made by this raw-results audit. Keep gate failures, unfavorable tails and CPU per observed delivery visible."
+  },
+  "verification": {
+    "checks_passed": 274274,
+    "manifest_entries_rehashed": 164,
+    "manifest_exact_file_coverage": true,
+    "native_source_files_rehashed": 18,
+    "actual_binary_hashes": {
+      "A": "4812d3c13f9fc1d8d0e6123d0d9576468425eedf50eac51dcc32f2da8d0f3548",
+      "B": "18d2b204457b4ee155188fd8e9c7f2de912fee4cc7e14a06bad7c9592797ebec"
+    },
+    "only_differing_native_source_files": [
+      "src/echoo_pgmq.c"
+    ]
+  },
+  "pairs": {
+    "1": {
+      "order": "BA",
+      "status": "valid_fixed_load_pair",
+      "eligible_for_paired_effect_conclusion": true
+    },
+    "2": {
+      "order": "BA",
+      "status": "invalid_gate_or_drift",
+      "eligible_for_paired_effect_conclusion": false
+    },
+    "3": {
+      "order": "AB",
+      "status": "unrun"
+    }
+  },
+  "cells": {
+    "P1-B": {
+      "all_phase_ids": 6996,
+      "cohort_count": 5997,
+      "confirmed_per_s": 199.9,
+      "completed_per_s": 199.86666666666667,
+      "db_complete_per_s": 199.56666666666666,
+      "measurement_end_confirmed_not_received": 1,
+      "boundary_queue_depths": [
+        0,
+        0
+      ],
+      "resources": {
+        "worker_cpu_ms_per_delivered_in_sample_span": 1.1163575042158516,
+        "owned_cpu_ms_per_delivered_in_sample_span": 1.3743676222596963,
+        "cpu_scope": "Matched CPU endpoints of persistent owned identities only; transient CPU omitted from these deltas",
+        "transient_process_caveat": "Observed transient identities listed separately; their entire CPU is not accounted by endpoint deltas. Processes existing only between samples and CPU after last observation can also be missed; not total cgroup CPU",
+        "transient_observations": [
+          {
+            "pid": 196,
+            "created": 1790780111.18,
+            "observed_samples": 1,
+            "first_observed_ns": 18001201356396,
+            "last_observed_ns": 18001201356396,
+            "first_observed_seconds_from_measurement_start": 23.963914075,
+            "last_observed_seconds_from_measurement_start": 23.963914075,
+            "included_in_first_endpoint": false,
+            "included_in_last_endpoint": false,
+            "included_in_matched_endpoint_cpu": false,
+            "observed_cpu_delta_seconds": 0.0,
+            "unobserved_cpu_limit": null,
+            "observed_cpu_seconds": [
+              0.0
+            ],
+            "observed_rss_bytes": [
+              16740352
+            ]
+          }
+        ]
+      }
+    },
+    "P1-A": {
+      "all_phase_ids": 6978,
+      "cohort_count": 5992,
+      "confirmed_per_s": 199.73333333333332,
+      "completed_per_s": 199.73333333333332,
+      "db_complete_per_s": 199.86666666666667,
+      "measurement_end_confirmed_not_received": 0,
+      "boundary_queue_depths": [
+        0,
+        0
+      ],
+      "resources": {
+        "worker_cpu_ms_per_delivered_in_sample_span": 1.132852729145211,
+        "owned_cpu_ms_per_delivered_in_sample_span": 1.4057672502574667,
+        "cpu_scope": "Matched CPU endpoints of persistent owned identities only; transient CPU omitted from these deltas",
+        "transient_process_caveat": "Observed transient identities listed separately; their entire CPU is not accounted by endpoint deltas. Processes existing only between samples and CPU after last observation can also be missed; not total cgroup CPU",
+        "transient_observations": []
+      }
+    },
+    "P2-B": {
+      "all_phase_ids": 6989,
+      "cohort_count": 5989,
+      "confirmed_per_s": 199.63333333333333,
+      "completed_per_s": 199.63333333333333,
+      "db_complete_per_s": 199.63333333333333,
+      "measurement_end_confirmed_not_received": 0,
+      "boundary_queue_depths": [
+        0,
+        0
+      ],
+      "resources": {
+        "worker_cpu_ms_per_delivered_in_sample_span": 1.1471749957066804,
+        "owned_cpu_ms_per_delivered_in_sample_span": 1.409926154902971,
+        "cpu_scope": "Matched CPU endpoints of persistent owned identities only; transient CPU omitted from these deltas",
+        "transient_process_caveat": "Observed transient identities listed separately; their entire CPU is not accounted by endpoint deltas. Processes existing only between samples and CPU after last observation can also be missed; not total cgroup CPU",
+        "transient_observations": [
+          {
+            "pid": 487,
+            "created": 1790780219.13,
+            "observed_samples": 1,
+            "first_observed_ns": 18109185499499,
+            "last_observed_ns": 18109185499499,
+            "first_observed_seconds_from_measurement_start": 23.966404351,
+            "last_observed_seconds_from_measurement_start": 23.966404351,
+            "included_in_first_endpoint": false,
+            "included_in_last_endpoint": false,
+            "included_in_matched_endpoint_cpu": false,
+            "observed_cpu_delta_seconds": 0.0,
+            "unobserved_cpu_limit": null,
+            "observed_cpu_seconds": [
+              0.01
+            ],
+            "observed_rss_bytes": [
+              18833408
+            ]
+          }
+        ]
+      }
+    },
+    "P2-A": {
+      "all_phase_ids": 6993,
+      "cohort_count": 5993,
+      "confirmed_per_s": 199.76666666666668,
+      "completed_per_s": 199.76666666666668,
+      "db_complete_per_s": 199.8,
+      "measurement_end_confirmed_not_received": 0,
+      "boundary_queue_depths": [
+        0,
+        0
+      ],
+      "resources": {
+        "worker_cpu_ms_per_delivered_in_sample_span": 1.1154235572055349,
+        "owned_cpu_ms_per_delivered_in_sample_span": 1.3634829564630442,
+        "cpu_scope": "Matched CPU endpoints of persistent owned identities only; transient CPU omitted from these deltas",
+        "transient_process_caveat": "Observed transient identities listed separately; their entire CPU is not accounted by endpoint deltas. Processes existing only between samples and CPU after last observation can also be missed; not total cgroup CPU",
+        "transient_observations": []
+      }
+    }
+  },
+  "full_evidence": "Full mapped-library witnesses, per-process rows, all distributions and unchanged raw manifest are in the delivered evidence archive. All comparative metrics including invalid-pair observations are preserved in the sibling CSV."
+}
