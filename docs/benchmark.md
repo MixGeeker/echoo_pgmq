@@ -8,6 +8,10 @@
 
 这是**固定到达率、有限时窗的普通负载实验**，不是最大容量搜索、24小时长稳、真实ERP或门店硬件验收。文件存在不等于实验已通过；在获得并审阅 GitHub artifacts 前，不填写新的性能结论。本机短时验证只证明新客户端能正常工作。
 
+完整矩阵前必须先通过**真实Docker基础设施冒烟**：同一image ID/预算，baseline、echoo、RabbitMQ各一个单元，2秒预热+5秒测量，消息单元为1×1、100条/秒。它实际覆盖HTTP资源采样、cgroup读回、两侧mTLS/发布/消费、数据库采样与正常清理；任何失败立刻停止，不进入27单元。冒烟证据立即单独上传，明确标记`infrastructure_smoke`，不参与性能比较。
+
+首次容器尝试[run 36662006820](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662006820)已完成镜像构建和27次实际预算读回，但HTTP采样客户端误用Python上下文管理器，全部在预热前停止、测量样本为0。[原失败artifact](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36662006820/artifacts/11074643223)保留；它不能说明任何代理性能或ERP目标。代码已改为显式关闭连接并加回归测试，待新的真实Docker冒烟和完整矩阵验证。
+
 ### 资源与持久化
 
 - 每单元新建一个容器和磁盘数据卷；**整个服务器栈共用2个逻辑CPU、4GiB内存、0 swap**，PID上限512。echoo一侧是PG+原生worker；RabbitMQ一侧是PG+RabbitMQ/Erlang。不能给每个服务各配一份预算，或排除额外代理的资源
@@ -32,16 +36,19 @@
 
 ### 原始证据、目标与限制
 
-每次输出环境、每单元`summary.json`、每客户端`*.jsonl.gz`、`resources.jsonl.gz`、ID对账、`backlog.json`、前后容器/数据库/队列快照、普通服务器日志、`summary.csv`和SHA-256`MANIFEST.json`。WAL LSN增长和数据库大小增量涵盖整个单元（含预热/排空），不是物理SSD写入量。失败单元仍保留并继续其余单元；job超时也通过`if: always()`上传已有完整/部分数据。证书、私钥、数据库目录不上传。
+每次输出环境、每单元`summary.json`、每客户端`*.jsonl.gz`、`resources.jsonl.gz`、ID对账、`backlog.json`、前后容器/数据库/队列快照、普通服务器日志、`summary.csv`和SHA-256`MANIFEST.json`。WAL LSN增长和数据库大小增量涵盖整个单元（含预热/排空），不是物理SSD写入量。完整比较也对基础设施/setup/零样本失败立即停止，在`matrix-status.json`列出已记录和未运行单元；保留出错单元的全部已有证据。真实有数据的未达目标速率、≤10%候选目标false结果不被改成通过或删掉，继续比较。摘要另有实际观察时长、窗口是否完整、资源样本数与失败类别。job超时仍通过`if: always()`上传已有完整/部分数据。证书、私钥、数据库目录不上传。
 
 GitHub artifact保留**30天**；重要实验应在到期前归档完整证据，不能只保存最快数字。数据库p95增幅相对同轮基线计算，`provisional_db_p95_le_10_percent`如实输出true/false/null。工作流绿灯表示普通流量/收集/对账成功，**不代表≤10%候选性能目标通过**。必须同时看目标字段、实际到达率、重复/失败、积压、基线噪声、原始样本和时窗；不通过降低durability、改变基线或丢弃不利单元粉饰结果。
 
 复现（仅新的合成环境；Docker是CI预算约束工具，用户安装产品不需要Docker）：
 
 ```bash
+set -euo pipefail
 python -m pip install -r bench/requirements.txt
 python -m pytest -q bench/test_measurement.py
 docker build --pull -f bench/Dockerfile -t echoo-benchmark:local .
+python bench/compare_ci.py --image echoo-benchmark:local \
+  --output /tmp/echoo-budget-smoke-new --smoke
 python bench/compare_ci.py --image echoo-benchmark:local \
   --output /tmp/echoo-budget-run-new \
   --repetitions 3 --warmup-seconds 30 --duration-seconds 120 --rates 200 400

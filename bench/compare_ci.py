@@ -82,6 +82,7 @@ def run_cell(a, image, label, mode, profile, rate, server_cpus):
     metadata = a.output / f"{label}.stack"
     metadata.mkdir()
     error = None
+    failure_kind = None
     launched = False
     try:
         command(["docker", "run", "-d", "--name", name, "--cpus=2", "--memory=4g", "--memory-swap=4g",
@@ -152,7 +153,9 @@ def run_cell(a, image, label, mode, profile, rate, server_cpus):
         events = dict(line.split() for line in after["cgroup_v2"]["memory.events"].splitlines())
         if after["queue_depth"] or int(events.get("oom_kill", 0)):
             error = f"final queue depth={after['queue_depth']}; cgroup oom_kill={events.get('oom_kill')}"
+            failure_kind = "infrastructure" if int(events.get("oom_kill", 0)) else "accounting"
     except BaseException:
+        failure_kind = "infrastructure"
         error = traceback.format_exc()
     finally:
         if launched:
@@ -169,8 +172,10 @@ def run_cell(a, image, label, mode, profile, rate, server_cpus):
                 write_json(metadata / "container-final.json", details)
                 if details["State"]["OOMKilled"] or details["State"]["ExitCode"]:
                     error = (error or "") + f"\nStack exited abnormally: {details['State']}"
+                    failure_kind = "infrastructure"
                 subprocess.run(["docker", "rm", "-v", name], check=True, stdout=subprocess.DEVNULL, timeout=30)
             except Exception:
+                failure_kind = "infrastructure"
                 error = (error or "") + "\nCleanup/evidence error: " + traceback.format_exc()
         write_json(metadata / "status.json", {"error": error})
         path = a.output / label / "summary.json"
@@ -179,18 +184,46 @@ def run_cell(a, image, label, mode, profile, rate, server_cpus):
             if error:
                 summary["status"] = "failed"
                 summary["errors"].append(error)
+            if failure_kind:
+                summary["failure_kind"] = failure_kind
             summary.update(broker=mode, profile=f"{profile[0]}x{profile[1]}", requested_rate=rate if mode != "baseline" else 0,
-                           server_stack_metadata=metadata.name)
+                           server_stack_metadata=metadata.name,
+                           evidence_kind="infrastructure_smoke" if a.smoke else "fixed_load_measurement")
             write_json(path, summary)
         else:
-            summary = {"label": label, "broker": mode, "status": "failed", "errors": [error or "no client summary"]}
+            summary = {"label": label, "broker": mode, "status": "failed", "failure_kind": "infrastructure",
+                       "evidence_kind": "infrastructure_smoke" if a.smoke else "fixed_load_measurement",
+                       "measurement_window_complete": False, "observed_measurement_seconds": 0,
+                       "errors": [error or "no client summary"]}
             (a.output / label).mkdir(exist_ok=True)
             write_json(path, summary)
     return summary
 
 
+def should_abort(row, smoke=False):
+    """Stop invalid setup/zero-sample runs; never erase genuine slow results."""
+    if smoke and row["status"] != "passed":
+        return True
+    if row.get("failure_kind") in {"infrastructure", "setup", "zero_samples"}:
+        return True
+    if not row.get("measured_resource_sample_count"):
+        return True
+    if not row.get("synthetic_db", {}).get("count"):
+        return True
+    if row.get("broker") != "baseline" and not row.get("publish", {}).get("count"):
+        return True
+    return False
+
+
+def record_abort(output, rows, expected_cells):
+    write_json(output / "matrix-status.json", {"status": "aborted", "recorded_cells": len(rows),
+               "expected_cells": expected_cells, "remaining_cells_not_run": expected_cells - len(rows),
+               "stopped_after": rows[-1]["label"], "reason": "setup, infrastructure, zero-sample or smoke failure; inspect retained cell evidence"})
+
+
 def final_report(output, rows):
-    fields = ["label", "broker", "profile", "rate", "status", "confirmed_publish_per_s", "completed_per_s",
+    fields = ["label", "broker", "profile", "rate", "status", "failure_kind", "observed_measurement_seconds",
+              "measurement_window_complete", "measured_resource_sample_count", "confirmed_publish_per_s", "completed_per_s",
               "publish_p95_ms", "end_to_end_p95_ms", "db_p95_ms", "baseline_db_p95_ms", "db_p95_increase_percent",
               "provisional_db_p95_le_10_percent", "offered_load_achieved_fraction", "duplicates", "missing_confirmed",
               "publish_failures", "backlog_max_client_outstanding", "backlog_max_confirmed_not_received",
@@ -205,7 +238,7 @@ def final_report(output, rows):
             writer.writerow(flat)
     brokers = [row for row in rows if row.get("broker") != "baseline"]
     missed = [row["label"] for row in brokers if row.get("provisional_db_p95_le_10_percent") is False]
-    under = [row["label"] for row in brokers if row.get("offered_load_achieved_fraction") is not None
+    under = [row["label"] for row in brokers if row["status"] == "passed" and row.get("offered_load_achieved_fraction") is not None
              and row["offered_load_achieved_fraction"] < .95]
     failed = [row["label"] for row in rows if row["status"] != "passed"]
     (output / "report.txt").write_text(
@@ -230,7 +263,10 @@ def main():
     p.add_argument("--warmup-seconds", type=float, default=30)
     p.add_argument("--duration-seconds", type=float, default=120)
     p.add_argument("--rates", type=float, nargs="+", default=[200, 400])
+    p.add_argument("--smoke", action="store_true", help="Fail-fast real Docker baseline/echoo/Rabbit check, 2 s warmup + 5 s measured at 100 msg/s; never performance evidence")
     a = p.parse_args()
+    if a.smoke:
+        a.repetitions, a.warmup_seconds, a.duration_seconds, a.rates = 1, 2., 5., [100.]
     if a.repetitions < 1 or a.warmup_seconds < 0 or a.duration_seconds <= 0 or min(a.rates) <= 0:
         p.error("invalid repetitions, durations or rates")
     if a.output.exists():
@@ -241,7 +277,9 @@ def main():
     server_cpus, client_cpus = available[:2], available[2:4]
     a.output.mkdir(parents=True)
     image = command(["docker", "image", "inspect", a.image, "--format={{.Id}}"])
-    environment = {"evidence_level": "clean GitHub Linux VM; not dedicated physical hardware or Win11 qualification",
+    expected_cells = 3 if a.smoke else a.repetitions * (1 + 4 * len(a.rates))
+    environment = {"evidence_level": "infrastructure smoke only; exclude from performance comparisons" if a.smoke else "clean GitHub Linux VM; not dedicated physical hardware or Win11 qualification",
+                   "run_kind": "smoke" if a.smoke else "measurement", "expected_cells": expected_cells,
                    "platform": platform.platform(), "logical_cpus": os.cpu_count(), "host_affinity": available,
                    "memory_bytes": psutil.virtual_memory().total, "server_cpu_ids": server_cpus,
                    "client_cpu_ids": client_cpus, "server_total_cpu_quota": 2, "server_total_memory_bytes": MEMORY_BYTES,
@@ -253,7 +291,7 @@ def main():
                    "postgresql": "18.6", "rabbitmq": "4.0.5", "python_proton": "0.40.0",
                    "python_version": platform.python_version(),
                    "repetitions": a.repetitions, "warmup_seconds": a.warmup_seconds,
-                   "duration_seconds": a.duration_seconds, "offered_rates": a.rates, "profiles": ["1x1", "4x4"],
+                   "duration_seconds": a.duration_seconds, "offered_rates": a.rates, "profiles": ["1x1"] if a.smoke else ["1x1", "4x4"],
                    "ordering": "fresh baseline per repetition; broker and profile order alternates; new server data per cell",
                    "storage": "fresh Docker named/anonymous volume on same runner; no physical SSD guarantee; host caches not cleared"}
     write_json(a.output / "environment.json", environment)
@@ -264,9 +302,15 @@ def main():
         for repetition in range(1, a.repetitions + 1):
             baseline = run_cell(a, image, f"r{repetition}-baseline", "baseline", (0, 0), 200, server_cpus)
             rows.append(baseline)
+            print(f"{baseline['label']}: {baseline['status']}; {baseline.get('failure_kind')}", flush=True)
+            if should_abort(baseline, a.smoke):
+                record_abort(a.output, rows, expected_cells)
+                return 1
             final_report(a.output, rows)
             base_p95 = baseline.get("synthetic_db", {}).get("p95_ms")
             profiles = [(1, 1), (4, 4)] if repetition % 2 else [(4, 4), (1, 1)]
+            if a.smoke:
+                profiles = [(1, 1)]
             brokers = ["echoo", "rabbitmq"] if repetition % 2 else ["rabbitmq", "echoo"]
             rates = a.rates if repetition % 2 else list(reversed(a.rates))
             for profile in profiles:
@@ -277,13 +321,20 @@ def main():
                         row["baseline_label"] = baseline["label"]
                         row["baseline_db_p95_ms"] = base_p95
                         p95 = row.get("synthetic_db", {}).get("p95_ms")
-                        increase = 100 * (p95 / base_p95 - 1) if p95 is not None and base_p95 and baseline["status"] == "passed" else None
+                        valid_measurement = not a.smoke and row["status"] == "passed" and row.get("measurement_window_complete")
+                        increase = 100 * (p95 / base_p95 - 1) if valid_measurement and p95 is not None and base_p95 and baseline["status"] == "passed" else None
                         row["db_p95_increase_percent"] = increase
                         row["provisional_db_p95_le_10_percent"] = increase <= 10 if increase is not None else None
                         write_json(a.output / label / "summary.json", row)
                         rows.append(row)
+                        if should_abort(row, a.smoke):
+                            record_abort(a.output, rows, expected_cells)
+                            print(f"{label}: fail-fast {row.get('failure_kind')}; remaining cells not run", flush=True)
+                            return 1
                         final_report(a.output, rows)
                         print(f"{label}: {row['status']}; synthetic DB p95 change={increase}", flush=True)
+        write_json(a.output / "matrix-status.json", {"status": "completed", "recorded_cells": len(rows),
+                   "expected_cells": expected_cells, "remaining_cells_not_run": 0})
     finally:
         final_report(a.output, rows)
         os.sched_setaffinity(0, available)

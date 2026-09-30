@@ -184,12 +184,17 @@ class DockerConnection(http.client.HTTPConnection):
 
 
 def container_stats(name):
-    with DockerConnection("localhost", timeout=5) as conn:
+    # HTTPConnection has close(), but unlike HTTPResponse it is not a context
+    # manager. Keep this explicit so the Docker-only path is tested offline too.
+    with closing(DockerConnection("localhost", timeout=5)) as conn:
         conn.request("GET", f"/containers/{name}/stats?stream=false&one-shot=true")
         response = conn.getresponse()
         if response.status != 200:
             raise RuntimeError(f"Docker stats returned HTTP {response.status}")
-        return json.loads(response.read())
+        result = json.loads(response.read())
+        if "cpu_stats" not in result or "memory_stats" not in result:
+            raise RuntimeError("Docker stats did not contain CPU and memory accounting")
+        return result
 
 
 def summarize(directory, a, epoch_ns, errors, samples):
@@ -288,6 +293,7 @@ def run(a):
     ready, begin, stop = context.Queue(), context.Event(), context.Event()
     epoch, counters = context.Value("q", 0), context.Array("q", [0, 0, 0, 0])
     processes, errors, samples = [], [], []
+    phase, failure_kind = "setup", None
     try:
         with psycopg.connect(a.dsn, autocommit=True) as db:
             db.execute("CREATE SCHEMA IF NOT EXISTS echoo_benchmark")
@@ -310,6 +316,8 @@ def run(a):
         with gzip.open(directory / "resources.jsonl.gz", "wt") as evidence:
             while not stop.is_set():
                 now = time.perf_counter_ns()
+                phase = ("warmup" if now < epoch.value + int(a.warmup_seconds * 1e9)
+                         else "measurement" if now < finish_ns else "drain")
                 with counters.get_lock():
                     attempted, accepted, delivered, done = counters[:]
                 sample = {"at_ns": now, "elapsed_s": (now - epoch.value) / 1e9,
@@ -326,7 +334,11 @@ def run(a):
                         pass
                 sample.update(client_cpu_seconds_sum=cpu, client_rss_bytes_sum=rss)
                 if a.container:
-                    sample["server_container"] = container_stats(a.container)
+                    try:
+                        sample["server_container"] = container_stats(a.container)
+                    except Exception:
+                        failure_kind = "infrastructure"
+                        raise
                 samples.append({k: v for k, v in sample.items() if k != "server_container"})
                 evidence.write(json.dumps(sample, separators=(",", ":")) + "\n")
                 evidence.flush()
@@ -342,8 +354,10 @@ def run(a):
                     raise RuntimeError("drain deadline exceeded; preserve and report backlog")
                 stop.wait(.5)
     except BaseException:
+        failure_kind = failure_kind or ("setup" if phase == "setup" else "client")
         errors.append(traceback.format_exc())
     finally:
+        ended_at_ns = time.perf_counter_ns()
         stop.set()
         begin.set()
         for process in processes:
@@ -364,6 +378,25 @@ def run(a):
         except Exception:
             summary = {"format_version": 2, "label": a.label, "status": "failed",
                        "errors": errors + [traceback.format_exc()]}
+            failure_kind = "infrastructure"
+        measurement_start = epoch.value + int(a.warmup_seconds * 1e9)
+        observed = max(0., min(a.duration_seconds, (ended_at_ns - measurement_start) / 1e9)) if epoch.value else 0.
+        summary.update(observed_measurement_seconds=observed,
+                       measurement_window_complete=observed >= a.duration_seconds,
+                       resource_sample_count=len(samples),
+                       measured_resource_sample_count=sum(in_window(s["at_ns"], measurement_start, a.duration_seconds) for s in samples))
+        if not summary["measurement_window_complete"] and summary["status"] == "passed":
+            summary["status"] = "failed"
+            summary["errors"].append("configured measurement window did not complete")
+        if a.container and not summary["measured_resource_sample_count"]:
+            summary["status"] = "failed"
+            summary["errors"].append("no Docker resource samples in the measured window")
+            failure_kind = failure_kind or "infrastructure"
+        if summary["status"] != "passed":
+            zero_samples = (not summary.get("synthetic_db", {}).get("count") or
+                            (a.producers and not summary.get("publish", {}).get("count")))
+            failure_kind = failure_kind or ("setup" if phase == "setup" else "zero_samples" if zero_samples else "client")
+        summary.update(failure_kind=failure_kind, failure_phase=phase if summary["status"] != "passed" else None)
         summary["client_host"] = {"platform": platform.platform(), "cpu_count": os.cpu_count(),
                                   "affinity": psutil.Process().cpu_affinity() if hasattr(psutil.Process(), "cpu_affinity") else None,
                                   "memory_bytes": psutil.virtual_memory().total}
