@@ -1,0 +1,103 @@
+{
+  "repository": "MixGeeker/echoo_pgmq",
+  "repository_id": 1396779236,
+  "tag": "v0.1.1",
+  "source_sha": "fabcde92afe6e93ea19f14a35c5722a31eff212f",
+  "source_tree": "8804db9ef20fd6fcbc60e1023e00b7f8e267cd4d",
+  "ci_run_id": 36920309638,
+  "ci_run_attempt": 2,
+  "distribution_version": "0.1.1",
+  "native_build_version": "0.1.1",
+  "sql_default_version": "0.1.0",
+  "sql_available_versions": [
+    "0.1.0",
+    "0.1.1"
+  ],
+  "extensionVersion": "0.1.0",
+  "sql_upgrade_policy": "explicit-only; installing native binaries does not run ALTER EXTENSION",
+  "proton_notices_sha256": {
+    "proton-LICENSE.txt": "52310e65489d30afeefc8589479fc02862a875349c19edd165658a915009da82",
+    "proton-NOTICE.txt": "e8a5271d59b904ebaf29f61fe6fdf5c8a38046f3c57d893fd460c33e15606d8a"
+  },
+  "expected_tests_per_phase": {
+    "16": 47,
+    "17": 47,
+    "18": 55
+  },
+  "user_reported_testing": "not yet performed for v0.1.1",
+  "ci_retry_note": "Attempt1 LinuxPG17 timed out downloading Ubuntu LLVM dependencies before compilation/tests. Attempt2 reran only that job at the identical source; five successful matrix results were retained.",
+  "artifacts": [
+    {
+      "id": 11191850768,
+      "name": "linux-pg16-candidate",
+      "size_in_bytes": 5953695,
+      "digest": "sha256:d9994d28c25b099bb46746cd4687ef30a694ac7edf18f93e67d8b2b09c12231e"
+    },
+    {
+      "id": 11191676003,
+      "name": "linux-pg16-evidence",
+      "size_in_bytes": 9363,
+      "digest": "sha256:d908e10ceebc973a1be8f91e4dfd321a4315944fa8ad74c1a764d5d7d9b99729"
+    },
+    {
+      "id": 11193910834,
+      "name": "linux-pg17-candidate",
+      "size_in_bytes": 5953724,
+      "digest": "sha256:f79bb50bde34c3f0acc5e25d8845cfa9848d4aa59d0618381106486183c94f48"
+    },
+    {
+      "id": 11194120528,
+      "name": "linux-pg17-evidence",
+      "size_in_bytes": 9363,
+      "digest": "sha256:cf9a8eb1f628aac80f735d222bde445e342b33394bf39806cbc3c8bfd33dd32c"
+    },
+    {
+      "id": 11191770899,
+      "name": "linux-pg18-candidate",
+      "size_in_bytes": 5953515,
+      "digest": "sha256:774e51d65fcb4511cdf7e4c640b9be3fb1368311a0726ac99f74ac950f3e27d5"
+    },
+    {
+      "id": 11191875811,
+      "name": "linux-pg18-evidence",
+      "size_in_bytes": 12480,
+      "digest": "sha256:55132cdfb1303dffe51d850f1156ca768442c8b36f50c8d0d74bfa073c1380e3"
+    },
+    {
+      "id": 11191558523,
+      "name": "native-windows-server2022-pg16-candidate",
+      "size_in_bytes": 751953,
+      "digest": "sha256:baf32adea92a9d21ab6911b1a9952d0c292747650dd62abe31285ebb4d09bbd7"
+    },
+    {
+      "id": 11190784439,
+      "name": "native-windows-server2022-pg16-evidence",
+      "size_in_bytes": 9465,
+      "digest": "sha256:1b4ac18b72ec9ce48373450ad23334244a97e4d84b44ab1e06d6b4ca13cca87c"
+    },
+    {
+      "id": 11190819854,
+      "name": "native-windows-server2022-pg17-candidate",
+      "size_in_bytes": 751837,
+      "digest": "sha256:1d4d1f6fac183cdefaf53baa4565db89a6d147d9ab92f119dfb01877180a0177"
+    },
+    {
+      "id": 11191224426,
+      "name": "native-windows-server2022-pg17-evidence",
+      "size_in_bytes": 9503,
+      "digest": "sha256:1cd23078defdd0c7277bdd56600e7ed5df7a16a6359bd6149a64ed338eaa5f6b"
+    },
+    {
+      "id": 11192185018,
+      "name": "native-windows-server2022-pg18-candidate",
+      "size_in_bytes": 751841,
+      "digest": "sha256:3a1beb2aa404644c029742d31cdc547680da49bb4f66cb05d699d5e569c05a29"
+    },
+    {
+      "id": 11192165205,
+      "name": "native-windows-server2022-pg18-evidence",
+      "size_in_bytes": 12562,
+      "digest": "sha256:0768c48af95d4857d5759b2fa9e7aecf7c9f6de1bbfc36b0a607cec3e336279b"
+    }
+  ]
+}
