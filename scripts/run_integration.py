@@ -34,6 +34,7 @@ ORDINARY_TESTS = [
     "tests/test_storage_integration.py::test_ordinary_role_cannot_call_private_worker_api",
     "tests/test_storage_integration.py::test_upgrade_failure_rolls_back_and_retry_preserves_data",
     "tests/test_candidate_packaging.py::test_candidate_manifest_and_archive_checksums",
+    "tests/test_candidate_packaging.py::test_candidate_preserves_project_and_dependency_notices",
     "tests/test_candidate_packaging.py::test_candidate_archive_tampering_fails",
     "tests/test_candidate_packaging.py::test_candidate_manifest_tampering_fails",
     "tests/test_candidate_packaging.py::test_candidate_unsafe_members_fail",

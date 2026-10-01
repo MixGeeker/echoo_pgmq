@@ -58,7 +58,9 @@ def main():
         for path in dep_files:
             if path.is_file():
                 shutil.copy2(path, runtime / path.name, follow_symlinks=True)
-        for filename in ("README.md", "SECURITY.md"):
+        # Project attribution is separate from bundled dependencies' notices.
+        # Missing project legal files must fail packaging rather than omit them.
+        for filename in ("README.md", "SECURITY.md", "LICENSE", "NOTICE"):
             shutil.copy2(ROOT / filename, stage / filename)
         shutil.copytree(ROOT / "docs", stage / "docs")
         (stage / "third-party").mkdir()
@@ -68,6 +70,8 @@ def main():
                 shutil.copy2(path, stage / "third-party" / ("proton-" + path.name))
         if not list((stage / "third-party").glob("proton-LICENSE*")) or not list((stage / "third-party").glob("proton-NOTICE*")):
             raise SystemExit("Proton license/NOTICE absent; install or copy upstream notices before packaging")
+        if os.name == "nt" and not (stage / "third-party" / "proton-ECHOO_WINDOWS_OPENSSL_PATCH.txt").is_file():
+            raise SystemExit("Windows Proton modification notice absent; preserve the pinned build's patch notice")
         try:
             commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
         except subprocess.CalledProcessError:
@@ -88,7 +92,7 @@ def main():
                     "proton": "0.40.0",
                     "proton_windows_openssl_patch": bool(list(args.proton_root.rglob("ECHOO_WINDOWS_OPENSSL_PATCH.txt"))),
                     "cmake_cache_sha256": hashlib.sha256(cache.read_bytes()).hexdigest(),
-                    "project_license": "pending-owner-decision",
+                    "project_license": "Apache-2.0",
                     "runtime_dependencies": {
                         "bundled": "Apache Qpid Proton 0.40.0",
                         "external": ["matching PostgreSQL major and architecture", "OpenSSL 3.x from trusted PostgreSQL/system distribution", "platform C runtime (Microsoft Visual C++/UCRT on Windows)"],

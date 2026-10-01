@@ -2,7 +2,7 @@
 
 面向本地/门店 ERP 的 PostgreSQL 原生持久队列候选实现。扩展在 PostgreSQL 管理的 background worker 内直接监听 AMQP 1.0，协议编解码使用 Apache Qpid Proton；消息与领取状态存放在普通 WAL-logged PostgreSQL 表中。
 
-**当前版本：0.1.0 预发布候选，尚非生产发布。** main代码整合与生产资格分别核验，blocked_security_review仍保留。 仓库包含可执行实现、自动化验证与候选打包流程。通过某个平台 CI 仅证明该次提交在该环境中的测试结果。Windows Server CI 不等于 Windows 11 实机验收；进程强杀不等于物理断电试验；真实 ERP 联调另行进行。项目许可证仍待所有者决定。
+**当前版本：0.1.0 预发布候选，尚非生产发布。** main代码整合与生产资格分别核验，blocked_security_review仍保留。 仓库包含可执行实现、自动化验证与候选打包流程。通过某个平台 CI 仅证明该次提交在该环境中的测试结果。Windows Server CI 不等于 Windows 11 实机验收；进程强杀不等于物理断电试验；真实 ERP 联调另行进行。项目采用标准Apache-2.0，署名与第三方范围见下方许可说明。
 
 ## 设计边界
 
@@ -60,7 +60,11 @@ LD_LIBRARY_PATH=/tmp/echoo-proton/lib python scripts/run_integration.py --ordina
 
 CI 上传带 SHA-256 清单的 candidate ZIP，不创建 tag 或最终 Release，不宣称代码签名或生产认证。每个 PostgreSQL 主版本、操作系统与架构必须分别构建。请勿跨 PG 主版本复制扩展二进制。
 
-项目尚未选定许可证，因此没有授予通用开源再分发许可。依赖自身许可证与归属说明见 [docs/licenses.md](docs/licenses.md)。本项目为独立实现，不包含 Kafgres/PGMQ 代码的直接复制。
+本项目自行提供、未另行标注的代码与文档采用标准 [Apache License 2.0](LICENSE)，项目署名见 [NOTICE](NOTICE)：Copyright 2026 MixGeeker。第三方组件保留各自许可证、版权及NOTICE；本项目许可不替它们重新授权，详情见 [docs/licenses.md](docs/licenses.md)。
+
+建议集成方在“关于”或“第三方声明”页展示“使用 Echoo PGMQ（MixGeeker），Apache-2.0”，并附项目链接；这是可选致谢，不是额外许可条件，也不替代适用的许可证/通知保留义务。Apache-2.0不强制使用某个关于页或展示位置。
+
+新候选包携带项目LICENSE/NOTICE及依赖原始通知。已交付的preview-20260930.1/.2 ZIP、内层manifest及guide全部冻结；本次不悄悄重打同号包，历史包中pending-owner-decision是构建时记录。许可证选择不解除非生产或blocked_security_review状态。
 
 ## 验证与当前候选状态
 
