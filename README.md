@@ -1,8 +1,8 @@
 # Echoo PGMQ
 
-面向本地/门店 ERP 的 PostgreSQL 原生持久队列候选实现。扩展在 PostgreSQL 管理的 background worker 内直接监听 AMQP 1.0，协议编解码使用 Apache Qpid Proton；消息与领取状态存放在普通 WAL-logged PostgreSQL 表中。
+面向本地/门店 ERP 的 PostgreSQL 原生持久队列实现。扩展在 PostgreSQL 管理的 background worker 内直接监听 AMQP 1.0，协议编解码使用 Apache Qpid Proton；消息与领取状态存放在普通 WAL-logged PostgreSQL 表中。
 
-**当前版本：0.1.0 预发布候选，尚非生产发布。** main代码整合与生产资格分别核验，blocked_security_review仍保留。 仓库包含可执行实现、自动化验证与候选打包流程。通过某个平台 CI 仅证明该次提交在该环境中的测试结果。Windows Server CI 不等于 Windows 11 实机验收；进程强杀不等于物理断电试验；真实 ERP 联调另行进行。项目采用标准Apache-2.0，署名与第三方范围见下方许可说明。
+**当前公开版本：v0.1.0，正式 Release；完整生产资格尚未完成。** [发布说明与隔离安装指南](docs/releases/v0.1.0.md)固定二进制源码ef12d354及普通CI36854708200，原始候选归档与blocked_security_review记录保留。本次为未签名分发。仓库包含可执行实现、自动化验证与候选打包流程。通过某个平台 CI 仅证明该次提交在该环境中的测试结果。Windows Server CI 不等于 Windows 11 实机验收；进程强杀不等于物理断电试验；真实 ERP 联调另行进行。项目采用标准Apache-2.0，署名与第三方范围见下方许可说明。
 
 ## 设计边界
 
@@ -18,6 +18,8 @@
 这不是 RabbitMQ 的通用替代品：不支持 AMQP 0-9-1、exchange/binding、topic 广播、AMQP 事务协调器、分布式 broker 集群和消息级 exactly-once 业务副作用。不要把 Kafka 协议、PGMQ JSONB 接口或 RabbitMQ 管理 API 套用到本扩展。
 
 ## 固定预览试用入口
+
+以下是冻结的历史预览；新发行请使用[v0.1.0安装指南](docs/releases/v0.1.0.md)。.2包装器安装器固定旧450681d散列，不能安装本次ef12d354二进制，不要修改固定散列或覆盖旧ROOT。
 
 PG18隔离测试修订包已到`preview-20260930.2`，扩展SQL仍0.1.0、原450681d二进制不变。[.2入门与双平台普通验证](docs/preview-20260930.2/README.md)修复新ROOT的SQL/AMQP完整编码限额错位，统一为65,536字节；原.1字节保留，使用全新目录试.2。TTL/priority/group仅透传，不执行对应broker语义；其它固定运行时边界见[版本化外部契约](docs/preview-20260930.1-contract.md)及.2变更说明。
 
@@ -58,18 +60,18 @@ LD_LIBRARY_PATH=/tmp/echoo-proton/lib python scripts/run_integration.py --ordina
 
 ## 交付状态与许可
 
-CI 上传带 SHA-256 清单的 candidate ZIP，不创建 tag 或最终 Release，不宣称代码签名或生产认证。每个 PostgreSQL 主版本、操作系统与架构必须分别构建。请勿跨 PG 主版本复制扩展二进制。
+普通CI上传带SHA-256清单的candidate ZIP，不自动创建tag或Release。v0.1.0正式公开发行原样使用指定CI的六份ZIP，并附源码、原始证据、校验与来源记录；不宣称代码签名或生产认证。每个 PostgreSQL 主版本、操作系统与架构必须分别构建。请勿跨 PG 主版本复制扩展二进制。
 
 本项目自行提供、未另行标注的代码与文档采用标准 [Apache License 2.0](LICENSE)，项目署名见 [NOTICE](NOTICE)：Copyright 2026 MixGeeker。第三方组件保留各自许可证、版权及NOTICE；本项目许可不替它们重新授权，详情见 [docs/licenses.md](docs/licenses.md)。
 
 建议集成方在“关于”或“第三方声明”页展示“使用 Echoo PGMQ（MixGeeker），Apache-2.0”，并附项目链接；这是可选致谢，不是额外许可条件，也不替代适用的许可证/通知保留义务。Apache-2.0不强制使用某个关于页或展示位置。
 
-新候选包携带项目LICENSE/NOTICE及依赖原始通知。已交付的preview-20260930.1/.2 ZIP、内层manifest及guide全部冻结；本次不悄悄重打同号包，历史包中pending-owner-decision是构建时记录。许可证选择不解除非生产或blocked_security_review状态。
+新候选包携带项目LICENSE/NOTICE及依赖原始通知。已交付的preview-20260930.1/.2 ZIP、内层manifest及guide全部冻结；本次不悄悄重打同号包，历史包中pending-owner-decision是构建时记录。许可证选择和正式公开发行都不解除blocked_security_review资格状态。
 
-## 验证与当前候选状态
+## 验证与当前发布状态
 
-2026-10-01整合包含原生扩展、七项SPI计划复用及.2包装器，排除SQL0.1.2实验。固定450预览与后续ad589825重建各有独立的464次普通执行证据，不能混算或代替最终整合树的CI。[验证记录](docs/validation.md)区分被测提交、实际checkout、归档和包装器来源；最终整合的检查见[PR1](https://github.com/MixGeeker/echoo_pgmq/pull/1/checks)。
+v0.1.0二进制来自ef12d35447c7783f75ca123467208eb100533311，[普通CI36854708200](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36854708200)覆盖Ubuntu24.04/原生WindowsServer2022×PG18/17/16：源码与归档两轮共476次普通测试通过、12个core.sql完成标记。完整来源与未验证范围见[发布说明](docs/releases/v0.1.0.md)。整合包含原生扩展、七项SPI计划复用及.2包装器源码，排除SQL0.1.2实验；冻结包装器不能直接安装新二进制。固定450预览与后续ad589825重建各自的464次普通执行是独立历史证据，不混算。[验证记录](docs/validation.md)保留各次被测提交、checkout、归档和包装器来源。
 
 历史恢复基线`37fc015`完成Linux/原生Windows × PG18/17/16六组合普通CI：416项、12个core.sql标记及全部归档散列通过；PG18每轮40项，PG16/17每轮32项。见[验证记录与候选下载](docs/validation.md)。
 
-唤醒试验472e626因尚无稳定收益证据已撤回，完整[不利结果](docs/benchmark-wake-results.md)保留；其中PG-only自身不稳，不能把跨runner差异直接归因为代码。性能目标及完整安全/故障资格尚未通过，当前不是生产发布。
+唤醒试验472e626因尚无稳定收益证据已撤回，完整[不利结果](docs/benchmark-wake-results.md)保留；其中PG-only自身不稳，不能把跨runner差异直接归因为代码。性能目标及完整安全/故障资格尚未通过；正式公开发行不表示已获得生产资格。

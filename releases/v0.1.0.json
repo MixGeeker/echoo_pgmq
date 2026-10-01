@@ -1,0 +1,87 @@
+{
+  "repository": "MixGeeker/echoo_pgmq",
+  "repository_id": 1396779236,
+  "tag": "v0.1.0",
+  "source_sha": "ef12d35447c7783f75ca123467208eb100533311",
+  "source_tree": "ef5d44c9a7f78a94a3800a7d06090f498843149e",
+  "ci_run_id": 36854708200,
+  "ci_run_attempt": 1,
+  "artifacts": [
+    {
+      "id": 11159150132,
+      "name": "linux-pg18-candidate",
+      "size_in_bytes": 5901538,
+      "digest": "sha256:797b5e7810649a2b026e9f174fd166f4b1d28377999b1703c12c3b1251018f3c"
+    },
+    {
+      "id": 11159015155,
+      "name": "linux-pg16-candidate",
+      "size_in_bytes": 5901392,
+      "digest": "sha256:c71fd461de9aae2aef9e1acc7970d0336df0f6df6b2a0862b6a9621d25b8ab7b"
+    },
+    {
+      "id": 11158970464,
+      "name": "native-windows-server2022-pg17-evidence",
+      "size_in_bytes": 8929,
+      "digest": "sha256:17c67e01f4a215641666975e7ef497f66012920006831f82f37cfd503b734bb1"
+    },
+    {
+      "id": 11158950188,
+      "name": "linux-pg17-evidence",
+      "size_in_bytes": 8749,
+      "digest": "sha256:d5e621878ca7f9ed42d4c7b1866cdce4c96bb7577cc116531fed5f4f30a004d9"
+    },
+    {
+      "id": 11158915270,
+      "name": "linux-pg18-evidence",
+      "size_in_bytes": 11777,
+      "digest": "sha256:5ba91bce941143d286923dfe135d1144954cc67c66151ffd88cf1885526893ed"
+    },
+    {
+      "id": 11158780612,
+      "name": "native-windows-server2022-pg17-candidate",
+      "size_in_bytes": 700311,
+      "digest": "sha256:21028366b56d887c7ae2be2375e170760c938f0c64a4262d7a0a832a333f96bb"
+    },
+    {
+      "id": 11158635352,
+      "name": "linux-pg16-evidence",
+      "size_in_bytes": 8689,
+      "digest": "sha256:68f1a1316b9d713f9b8c1d82162ba896f6e88bc3f82d34d695374b8c95934e7c"
+    },
+    {
+      "id": 11158555368,
+      "name": "linux-pg17-candidate",
+      "size_in_bytes": 5901510,
+      "digest": "sha256:90be34ca5de4aa1859d717085e5a3630dec9696701f0ab9dda3be78cdf633273"
+    },
+    {
+      "id": 11158171616,
+      "name": "native-windows-server2022-pg16-evidence",
+      "size_in_bytes": 8787,
+      "digest": "sha256:661b3430d9e2a1f30154c7aa9b8e01cc7f087b312dfcfceaa745f1a26b3789a8"
+    },
+    {
+      "id": 11157861789,
+      "name": "native-windows-server2022-pg16-candidate",
+      "size_in_bytes": 700469,
+      "digest": "sha256:6c8f451297162a7afdde9f13d67a932c3698badd8eac0e187624bd1ff4ad9c56"
+    },
+    {
+      "id": 11157812013,
+      "name": "native-windows-server2022-pg18-evidence",
+      "size_in_bytes": 11913,
+      "digest": "sha256:6ae1cd17df0b05b0b3edfc2cef85c6fa22777d628cb51d8903aecafd33a25f7a"
+    },
+    {
+      "id": 11157682099,
+      "name": "native-windows-server2022-pg18-candidate",
+      "size_in_bytes": 700338,
+      "digest": "sha256:eb9c656f6c97b18148ea31b122e0f09d451f47f45553aee11da99643427d21af"
+    }
+  ],
+  "proton_notices_sha256": {
+    "proton-LICENSE.txt": "52310e65489d30afeefc8589479fc02862a875349c19edd165658a915009da82",
+    "proton-NOTICE.txt": "e8a5271d59b904ebaf29f61fe6fdf5c8a38046f3c57d893fd460c33e15606d8a"
+  }
+}
