@@ -18,6 +18,8 @@ REPO = Path(__file__).resolve().parents[1]
 # Explicit allowlist: adding a new test does not silently expand automatic CI
 # into adversarial-input, resource-exhaustion, fault-injection or crash testing.
 ORDINARY_TESTS = [
+    "tests/test_consumer_wakeup_unit.py",
+    "tests/test_consumer_wakeup.py::test_empty_consumer_separate_connection_orders",
     "tests/sql/test_bounded_storage.py::test_concurrent_same_key_creates_one_message",
     "tests/sql/test_bounded_storage.py::test_concurrent_key_quota_cannot_overbook",
     "tests/sql/test_bounded_storage.py::test_rollback_releases_message_bytes_and_key_budget",
@@ -103,9 +105,13 @@ def main():
                         help="run the explicit ordinary regression allowlist, without security/fault/crash tests")
     parser.add_argument("--independent-client", action="store_true",
                         help="add reviewed rhea interoperability cases to --ordinary; requires locked npm dependencies")
+    parser.add_argument("--wakeup-benchmark", action="store_true",
+                        help="run only bounded synthetic wakeup cohorts in a fresh disposable cluster")
     parser.add_argument("--keep", action="store_true", help="keep cluster files after shutdown; includes ephemeral private keys")
     parser.add_argument("pytest_args", nargs=argparse.REMAINDER)
     args = parser.parse_args()
+    if args.wakeup_benchmark and (args.ordinary or args.independent_client or args.pytest_args):
+        parser.error("--wakeup-benchmark is a separate fixed ordinary measurement scope")
     if args.independent_client and not args.ordinary:
         parser.error("--independent-client requires --ordinary")
     if args.ordinary and args.pytest_args:
@@ -182,6 +188,10 @@ def main():
                 "echoo_pgmq.max_message_bytes": 65536, "echoo_pgmq.max_connections": 8,
                 "echoo_pgmq.max_links_per_connection": 4, "echoo_pgmq.max_inflight_per_link": 4,
             }
+            if args.wakeup_benchmark:
+                settings.update({"echoo_pgmq.visibility_seconds": 60, "echoo_pgmq.poll_interval_ms": 50,
+                                 "echoo_pgmq.max_inflight_per_link": 32, "track_io_timing": "on",
+                                 "track_wal_io_timing": "on"})
             for key, value in settings.items():
                 stream.write(f"{key}={quote(value)}\n")
         run([binary("pg_ctl"), "-D", data, "-m", "fast", "-w", "restart", "-l", log], env=base_env)
@@ -197,10 +207,10 @@ def main():
         manifest = {"pg_config": str(Path(args.pg_config).resolve()) if Path(args.pg_config).exists() else args.pg_config,
                     "postgres_version": subprocess.check_output([binary("postgres"), "--version"], text=True).strip(),
                     "python": sys.version, "platform": sys.platform,
-                    "test_scope": "ordinary-regression" if args.ordinary else "qualification-or-explicit-selection",
+                    "test_scope": "wakeup-synthetic-measurement" if args.wakeup_benchmark else "ordinary-regression" if args.ordinary else "qualification-or-explicit-selection",
                     "ordinary_test_allowlist": ordinary_tests if args.ordinary else None,
                     "independent_client": independent_client,
-                    "process_crash_tests_enabled": not args.ordinary,
+                    "process_crash_tests_enabled": not (args.ordinary or args.wakeup_benchmark),
                     "physical_power_loss_tested": False,
                     "qualification_status": "blocked_security_review",
                     "sql_scripts_passed": []}
@@ -211,6 +221,10 @@ def main():
                    ECHOO_TEST_PGCTL=str(binary("pg_ctl")), ECHOO_TEST_LOG=str(log))
         if args.independent_client:
             env["ECHOO_TEST_INTEROP_REPORT"] = str(root / "independent-client.jsonl")
+        if args.wakeup_benchmark:
+            env["ECHOO_WAKEUP_OUTPUT"] = str(root / "wakeup")
+            run([sys.executable, str(REPO / "bench" / "wakeup_measure.py")], cwd=REPO, env=env)
+            return
         pytest_args = ordinary_tests if args.ordinary else args.pytest_args
         if pytest_args[:1] == ["--"]:
             pytest_args = pytest_args[1:]
@@ -225,7 +239,7 @@ def main():
             (root / "environment.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     finally:
         if started:
-            subprocess.run([str(binary("pg_ctl")), "-D", str(data), "-m", "fast" if args.ordinary else "immediate", "-w", "stop"], env=base_env)
+            subprocess.run([str(binary("pg_ctl")), "-D", str(data), "-m", "fast" if (args.ordinary or args.wakeup_benchmark) else "immediate", "-w", "stop"], env=base_env)
         if log.exists():
             print("\n--- PostgreSQL log ---\n" + log.read_text(encoding="utf-8", errors="replace"), flush=True)
         print(f"Test evidence: {root}", flush=True)

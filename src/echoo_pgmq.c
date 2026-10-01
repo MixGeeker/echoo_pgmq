@@ -282,6 +282,38 @@ total_buffered_bytes(void)
     return size;
 }
 
+/* Only the AMQP worker calls this, after its enqueue transaction committed.
+ * An empty claim is a negative cache entry, not a reason to defer new work.
+ * Do not claim here: normal pump_sender preserves credit, memory, in-flight
+ * and lease checks, and the existing one-message-per-link scheduling turn.
+ * SQL publishes in other backends still use the ordinary polling path.
+ */
+static void
+invalidate_empty_consumers(const char *queue)
+{
+    EchooConnection *connection;
+    bool invalidated = false;
+    for (connection = connections; connection; connection = connection->next)
+    {
+        EchooLink *consumer;
+        if (connection->failed || connection->closing_at)
+            continue;
+        for (consumer = connection->links; consumer; consumer = consumer->next)
+            if (!consumer->closed && pn_link_is_sender(consumer->link) &&
+                consumer->next_poll != 0 && strcmp(consumer->queue, queue) == 0)
+            {
+                consumer->next_poll = 0;
+                invalidated = true;
+            }
+    }
+    /* A matching connection may already have had its turn this iteration.
+     * The latch makes the upcoming wait return, independent of list order.
+     * Coalesce notifications; idle queues produce no extra wakeups.
+     */
+    if (invalidated)
+        SetLatch(MyLatch);
+}
+
 static void
 receive_message(EchooConnection *connection, EchooLink *link, pn_delivery_t *delivery)
 {
@@ -351,6 +383,7 @@ receive_message(EchooConnection *connection, EchooLink *link, pn_delivery_t *del
                               link->incoming, link->incoming_size))
     {
         /* The SQL bridge has returned only after CommitTransactionCommand. */
+        invalidate_empty_consumers(link->queue);
         pn_delivery_update(delivery, PN_ACCEPTED);
     }
     else
