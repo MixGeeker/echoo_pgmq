@@ -57,7 +57,10 @@ def test_candidate_preserves_project_and_dependency_notices(tmp_path, monkeypatc
                           "echoo_pgmq.control": b"default_version = '0.1.0'"}.items():
         (source / name).write_bytes(content)
     (source / "sql/echoo_pgmq--0.1.0.sql").write_text("-- inert packaging fixture\n")
-    (build / "CMakeCache.txt").write_text("ECHOO_ENABLE_TEST_HOOKS:BOOL=OFF\n")
+    (source / "sql/echoo_pgmq--0.1.1.sql").write_text("-- inert optional SQL fixture\n")
+    (source / "package_versions.json").write_bytes((repo / "package_versions.json").read_bytes())
+    (source / "CMakeLists.txt").write_text("project(echoo_pgmq VERSION 0.1.1 LANGUAGES C)\n")
+    (build / "CMakeCache.txt").write_text("ECHOO_ENABLE_TEST_HOOKS:BOOL=OFF\nCMAKE_PROJECT_VERSION:STATIC=0.1.1\n")
     suffix = ".dll" if os.name == "nt" else ".so"
     for folder in (build, installed):
         (folder / ("echoo_pgmq" + suffix)).write_bytes(b"inert module fixture; never executed")
@@ -88,6 +91,11 @@ def test_candidate_preserves_project_and_dependency_notices(tmp_path, monkeypatc
     packager.main()
     [candidate] = output.glob("*.zip")
     manifest, members = installer.verified_members(candidate)
+    assert manifest["version"] == manifest["distribution_version"] == manifest["native_build_version"] == "0.1.1"
+    assert manifest["extensionVersion"] == manifest["sql_default_version"] == "0.1.0"
+    assert manifest["sql_available_versions"] == ["0.1.0", "0.1.1"]
+    assert candidate.name.startswith("echoo-pgmq-0.1.1-candidate-")
+    assert members["share/extension/echoo_pgmq.control"] == b"default_version = '0.1.0'"
     assert manifest["project_license"] == "Apache-2.0"
     assert manifest["qualification_status"] == "blocked_security_review"
     assert manifest["status"] == "candidate-not-production-release"

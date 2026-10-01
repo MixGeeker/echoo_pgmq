@@ -11,6 +11,7 @@ import json
 import os
 from pathlib import Path, PurePosixPath
 import platform
+import re
 import stat
 import subprocess
 import zipfile
@@ -51,6 +52,18 @@ def verified_members(archive):
             raise ValueError("manifest file list or SHA256 mismatch")
         if manifest.get("status") != "candidate-not-production-release":
             raise ValueError("unexpected candidate status")
+        if 'distribution_version' in manifest:
+            if manifest.get('version') != manifest['distribution_version'] or manifest.get('native_build_version') != manifest['distribution_version']:
+                raise ValueError('distribution/native identity mismatch')
+            control = source.read(prefix + 'share/extension/echoo_pgmq.control').decode('utf-8')
+            match = re.search(r"default_version\s*=\s*'([^']+)'", control)
+            if not match or match.group(1) != manifest.get('sql_default_version') or manifest.get('extensionVersion') != manifest.get('sql_default_version'):
+                raise ValueError('SQL default identity mismatch')
+            for version in manifest.get('sql_available_versions', []):
+                if not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', version) or prefix + f'share/extension/echoo_pgmq--{version}.sql' not in names:
+                    raise ValueError('SQL version file missing')
+            if manifest.get('sql_default_version') not in manifest.get('sql_available_versions', []):
+                raise ValueError('SQL default not available')
         return manifest, {name[len(prefix):]: source.read(name) for name in names}
 
 

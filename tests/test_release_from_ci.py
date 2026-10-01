@@ -30,6 +30,22 @@ class ReleaseTests(unittest.TestCase):
         for a in config['artifacts']:
             self.assertRegex(a['digest'], r'^sha256:[0-9a-f]{64}$')
 
+    def test_new_release_separates_distribution_and_sql(self):
+        config = {'repository':'MixGeeker/echoo_pgmq','tag':'v0.1.1',
+                  'distribution_version':'0.1.1','native_build_version':'0.1.1',
+                  'sql_default_version':'0.1.0','extensionVersion':'0.1.0',
+                  'sql_available_versions':['0.1.0','0.1.1'],
+                  'expected_tests_per_phase':{'16':47,'17':47,'18':55},
+                  'user_reported_testing':'not yet performed for v0.1.1',
+                  'artifacts':[{'id':i,'name':str(i)} for i in range(12)]}
+        r.validate_config(config)
+        for field,value in [('distribution_version','0.1.2'),('native_build_version','0.1.0'),
+                            ('sql_default_version','0.1.1'),('extensionVersion','0.1.1'),
+                            ('sql_available_versions',['0.1.1']),('user_reported_testing','passed')]:
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                r.validate_config(dict(config, **{field:value}))
+        self.assertEqual(4*sum(config['expected_tests_per_phase'].values()),596)
+
     def test_unsafe_zip_paths_rejected(self):
         for name in ('../x', '/x', 'a/../../x', 'a\\b', 'C:/x'):
             with self.subTest(name=name), self.assertRaises(ValueError):
