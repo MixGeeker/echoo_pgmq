@@ -2,7 +2,7 @@
 
 面向本地/门店 ERP 的 PostgreSQL 原生持久队列候选实现。扩展在 PostgreSQL 管理的 background worker 内直接监听 AMQP 1.0，协议编解码使用 Apache Qpid Proton；消息与领取状态存放在普通 WAL-logged PostgreSQL 表中。
 
-**当前版本：0.1.0 开发候选，尚非生产发布。** 仓库包含可执行实现、自动化验证与候选打包流程。通过某个平台 CI 仅证明该次提交在该环境中的测试结果。Windows Server CI 不等于 Windows 11 实机验收；进程强杀不等于物理断电试验；真实 ERP 联调另行进行。项目许可证仍待所有者决定。
+**当前版本：0.1.0 预发布候选，尚非生产发布。** main代码整合与生产资格分别核验，blocked_security_review仍保留。 仓库包含可执行实现、自动化验证与候选打包流程。通过某个平台 CI 仅证明该次提交在该环境中的测试结果。Windows Server CI 不等于 Windows 11 实机验收；进程强杀不等于物理断电试验；真实 ERP 联调另行进行。项目许可证仍待所有者决定。
 
 ## 设计边界
 
@@ -19,7 +19,7 @@
 
 ## 固定预览试用入口
 
-PG18隔离测试修订包已到`preview-20260930.2`，扩展SQL仍0.1.0、原450681d二进制不变。[.2入门与双平台普通验证](https://github.com/MixGeeker/echoo_pgmq/blob/bce8ff98d7a6bc7d6820d8646a03a304c28c029e/docs/preview-20260930.2/README.md)修复新ROOT的SQL/AMQP完整编码限额错位，统一为65,536字节；原.1字节保留，使用全新目录试.2。TTL/priority/group仅透传，不执行对应broker语义；其它固定运行时边界见[版本化外部契约](docs/preview-20260930.1-contract.md)及.2变更说明。
+PG18隔离测试修订包已到`preview-20260930.2`，扩展SQL仍0.1.0、原450681d二进制不变。[.2入门与双平台普通验证](docs/preview-20260930.2/README.md)修复新ROOT的SQL/AMQP完整编码限额错位，统一为65,536字节；原.1字节保留，使用全新目录试.2。TTL/priority/group仅透传，不执行对应broker语义；其它固定运行时边界见[版本化外部契约](docs/preview-20260930.1-contract.md)及.2变更说明。
 
 本轮优化结论及后续优先级见[阶段总结](docs/performance-round-conclusion.md)，最新证据见[PROGRESS](docs/PROGRESS.md)。
 
@@ -64,8 +64,8 @@ CI 上传带 SHA-256 清单的 candidate ZIP，不创建 tag 或最终 Release�
 
 ## 验证与当前候选状态
 
-以下为历史基线证据，固定450预览的464项普通矩阵见[版本化清单](docs/preview-20260930.1-contract.md)。
+2026-10-01整合包含原生扩展、七项SPI计划复用及.2包装器，排除SQL0.1.2实验。固定450预览与后续ad589825重建各有独立的464次普通执行证据，不能混算或代替最终整合树的CI。[验证记录](docs/validation.md)区分被测提交、实际checkout、归档和包装器来源；最终整合的检查见[PR1](https://github.com/MixGeeker/echoo_pgmq/pull/1/checks)。
 
-恢复基线后的`37fc015`完成Linux/原生Windows × PG18/17/16六组合普通CI：416项、12个core.sql标记及全部归档散列通过；PG18每轮40项，PG16/17每轮32项。见[验证记录与候选下载](docs/validation.md)。
+历史恢复基线`37fc015`完成Linux/原生Windows × PG18/17/16六组合普通CI：416项、12个core.sql标记及全部归档散列通过；PG18每轮40项，PG16/17每轮32项。见[验证记录与候选下载](docs/validation.md)。
 
 唤醒试验472e626因尚无稳定收益证据已撤回，完整[不利结果](docs/benchmark-wake-results.md)保留；其中PG-only自身不稳，不能把跨runner差异直接归因为代码。性能目标及完整安全/故障资格尚未通过，当前不是生产发布。

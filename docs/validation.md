@@ -1,6 +1,18 @@
 # 普通兼容验证记录
 
-## 当前已核实候选：恢复基线后的37fc015
+## 当前整合候选与证据来源（2026-10-01）
+
+本次将PR4的隔离预览包装器、PR2的七项SPI计划复用与PR1的原生扩展整合；不包含PR3的SQL0.1.2实验。默认扩展版本仍为0.1.0，附0.1.1加法迁移。只有最终整合树的普通CI核实通过后才合入main；执行状态和精确head见[PR1检查记录](https://github.com/MixGeeker/echoo_pgmq/pull/1/checks)。合并代码不解除blocked_security_review，也不宣布生产就绪。
+
+已有证据必须分别引用：
+
+- 固定450681d二进制：[CI36720731289](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36720731289)，实际checkout191d994与450同tree d0abc20，六组合源码/归档两轮共464次普通执行；[逐包索引](evidence/spi-plan-ci450681d.json)。已交付.2仍携带这批原始二进制
+- 后续包含预览文件的重建：[CI36776023129](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36776023129)，head fd30a1f，实际checkout ad589825/tree8d8832，另一次464次普通执行；[逐包索引](evidence/preview2-ordinary-36776023129.json)。这批新归档没有替换已发.2
+- .2包装器：[Windows CI36776023123](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36776023123)和Linux PG18.6本地七阶段普通烟测；[完整版本记录](preview-20260930.2/README.md)含12项离线检查、合法SQL→AMQP示例、实际编码限额与正常停止证据
+
+两次464都为0失败/错误/跳过、12个core.sql完成标记；每个平台PG18每轮44项，PG16/17每轮36项。它们是不同固定提交的历史证据，不能相加冒充一次最终候选验证，也不能仅凭旧job绿色认定新整合head通过。Windows Server仍不等于Win11；普通回归仍不包含暂停的完整安全/故障资格。
+
+## 历史基线：恢复唤醒试验前代码的37fc015
 
 - PR头：`37fc0153e1cf84a5a0c1fd84caec06342270b1fb`
 - 实际checkout与候选MANIFEST：`537d2f042a334516bd34872fe39895843f70af88`，GitHub为草稿PR#1创建的测试合并提交；没有合并到main
@@ -23,7 +35,7 @@
 
 12个GitHub外层artifact、6个内层候选ZIP旁文件和每份MANIFEST的完整文件SHA256均核对一致。源码/归档两轮均保留记录，不仅根据job绿色状态判断。
 
-## PG18候选与证据
+## 历史37fc015的PG18候选与证据
 
 - [Windows PG18候选](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11080837919) · [Windows PG18证据](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11081805822)
 - [Linux PG18候选](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11080927974) · [Linux PG18证据](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11080863418)
