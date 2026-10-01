@@ -40,7 +40,7 @@ class GitHub:
         host = 'https://uploads.github.com/repos/' if upload else None
         url = (host + self.base.split('/repos/')[1] + path) if host else self.base + path
         headers = {'Authorization': 'Bearer ' + self.token,
-                   'Accept': 'application/octet-stream' if binary else 'application/vnd.github+json',
+                   'Accept': 'application/octet-stream' if binary and path.startswith('/releases/assets/') else 'application/vnd.github+json',
                    'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'echoo-release-ci'}
         if data is not None:
             headers['Content-Type'] = 'application/octet-stream' if upload else 'application/json'

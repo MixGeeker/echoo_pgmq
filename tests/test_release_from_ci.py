@@ -135,6 +135,24 @@ class ReleaseTests(unittest.TestCase):
                     r.publish({'tag': 'v0.1.0', 'source_sha': 'fixed'}, API(), {'RELEASE-v0.1.0.zh-CN.md': b'notes'})
                     self.assertEqual(sum(m == 'PATCH' for _, m in calls), 1)
 
+    def test_download_media_types_and_redirect_token_isolation(self):
+        import urllib.error
+        from unittest.mock import MagicMock
+        for endpoint, accept in (('/actions/artifacts/123/zip', 'application/vnd.github+json'),
+                                 ('/releases/assets/123', 'application/octet-stream')):
+            captured = []
+            class Opener:
+                def open(self, request, timeout):
+                    captured.append(request)
+                    raise urllib.error.HTTPError(request.full_url, 302, 'redirect', {'Location': 'https://example.invalid/signed'}, None)
+            response = MagicMock()
+            response.read.return_value = b'zip-bytes'
+            with patch.object(r.urllib.request, 'build_opener', return_value=Opener()), patch.object(r.urllib.request, 'urlopen', return_value=response) as redirected:
+                result = r.GitHub('MixGeeker/echoo_pgmq', 'test-only-token').request(endpoint, binary=True)
+            self.assertEqual(result, b'zip-bytes')
+            self.assertEqual(captured[0].get_header('Accept'), accept)
+            redirected.assert_called_once_with('https://example.invalid/signed', timeout=60)
+
     def test_workflow_permissions_and_checkout(self):
         text = (r.ROOT / '.github/workflows/release.yml').read_text()
         self.assertEqual(text.count('contents: write'), 1)
