@@ -6,12 +6,33 @@ import json
 import os
 from pathlib import Path
 import platform
+import re
 import shutil
 import subprocess
 import tempfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def version_identity(root, cache):
+    identity = json.loads((root / 'package_versions.json').read_text())
+    distribution = identity['distribution_version']
+    native = identity['native_build_version']
+    if not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', distribution) or native != distribution:
+        raise ValueError('distribution/native version mismatch')
+    cmake = re.search(r'project\(echoo_pgmq VERSION ([0-9.]+) LANGUAGES C\)', (root / 'CMakeLists.txt').read_text())
+    built = re.search(r'^CMAKE_PROJECT_VERSION:STATIC=(.+)$', cache.read_text(), re.M)
+    if not cmake or not built or cmake.group(1) != native or built.group(1) != native:
+        raise ValueError('native build version does not match source/cache')
+    control = re.search(r"default_version\s*=\s*'([^']+)'", (root / 'echoo_pgmq.control').read_text())
+    available = sorted(p.name.removeprefix('echoo_pgmq--').removesuffix('.sql') for p in (root / 'sql').glob('echoo_pgmq--*.sql')
+                       if re.fullmatch(r'echoo_pgmq--[0-9]+\.[0-9]+\.[0-9]+\.sql', p.name))
+    if not control or control.group(1) != identity['sql_default_version'] or identity['extensionVersion'] != identity['sql_default_version']:
+        raise ValueError('SQL default identity mismatch')
+    if available != identity['sql_available_versions'] or identity['sql_default_version'] not in available:
+        raise ValueError('available SQL versions mismatch')
+    return identity
 
 
 def main():
@@ -26,6 +47,8 @@ def main():
         raise SystemExit("CMake build cache missing; cannot verify production build flags")
     if "ECHOO_ENABLE_TEST_HOOKS:BOOL=ON" in cache.read_text(encoding="utf-8", errors="replace"):
         raise SystemExit("Refusing to package a fault-injection-enabled build")
+    identity = version_identity(ROOT, cache)
+    distribution_version = identity["distribution_version"]
     version = subprocess.check_output([args.pg_config, "--version"], text=True).strip()
     major = version.split()[1].split(".")[0]
     suffix = ".dll" if os.name == "nt" else ".so"
@@ -40,7 +63,7 @@ def main():
         raise SystemExit("installed module missing; run cmake --install before packaging")
     if b"echoo_pgmq.test_fail_settle_before_commit" in installed.read_bytes():
         raise SystemExit("Refusing installed module containing fault-injection hook; reinstall normal build")
-    artifact = f"echoo-pgmq-0.1.0-candidate-pg{major}-{platform.system().lower()}-{platform.machine().lower()}"
+    artifact = f"echoo-pgmq-{distribution_version}-candidate-pg{major}-{platform.system().lower()}-{platform.machine().lower()}"
     args.output.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="echoo-package-") as temp:
         stage = Path(temp) / artifact
@@ -78,6 +101,7 @@ def main():
             commit = "uncommitted"
         (stage / "INSTALL-CANDIDATE.txt").write_text(
             "候选构建，禁止直接覆盖生产安装。按 docs/quickstart.md 与 docs/admin.md 验证并安装。\n"
+            f"分发版本/原生构建 {distribution_version}；SQL 默认 {identity['sql_default_version']}，其他 SQL 版本仅显式升级。版本号不得混用。\n"
             "lib/ 扩展复制到相同 PostgreSQL 主版本的 pkglibdir；share/extension/ 复制到 sharedir/extension。\n"
             "Windows runtime-bin/ 中 Proton DLL 需要由 postgres.exe 找到；先核对依赖、ABI、路径与 ACL。\n"
             "OpenSSL 动态运行库由受信任的系统/PG 发行版提供，包不覆盖现有 OpenSSL DLL。\n"
@@ -86,7 +110,7 @@ def main():
             encoding="utf-8")
         files = {str(p.relative_to(stage)).replace(os.sep, "/"): hashlib.sha256(p.read_bytes()).hexdigest()
                  for p in sorted(stage.rglob("*")) if p.is_file()}
-        manifest = {"status": "candidate-not-production-release", "version": "0.1.0", "commit": commit,
+        manifest = {"status": "candidate-not-production-release", "version": distribution_version, **identity, "commit": commit,
                     "qualification_status": "blocked_security_review",
                     "postgres_build": version, "os": platform.platform(), "system": platform.system(), "architecture": platform.machine(),
                     "proton": "0.40.0",

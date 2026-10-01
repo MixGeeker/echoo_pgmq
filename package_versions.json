@@ -1,0 +1,8 @@
+{
+  "distribution_version": "0.1.1",
+  "native_build_version": "0.1.1",
+  "sql_default_version": "0.1.0",
+  "sql_available_versions": ["0.1.0", "0.1.1"],
+  "extensionVersion": "0.1.0",
+  "sql_upgrade_policy": "explicit-only; installing native binaries does not run ALTER EXTENSION"
+}

@@ -1,21 +1,17 @@
-name: Publish reviewed v0.1.0 CI artifacts
+name: Publish reviewed immutable CI release
 
 on:
   push:
     branches: [main]
     paths:
-      - '.github/workflows/release.yml'
-      - 'releases/v0.1.0.json'
-      - 'scripts/release_from_ci.py'
-      - 'tests/test_release_from_ci.py'
-      - 'docs/releases/v0.1.0.md'
+      - 'releases/v0.1.1.json'
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: publish-v0.1.0
+  group: publish-v0.1.1
   cancel-in-progress: false
 
 jobs:
@@ -37,7 +33,7 @@ jobs:
       - name: Verify fixed trusted CI source and byte-identical assets
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python scripts/release_from_ci.py --output "$RUNNER_TEMP/release-validate"
+        run: python scripts/release_from_ci.py --config releases/v0.1.1.json --output "$RUNNER_TEMP/release-validate"
 
   publish:
     needs: validate
@@ -58,4 +54,4 @@ jobs:
       - name: Verify, create non-overwriting tag, upload draft and publish
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python scripts/release_from_ci.py --output "$RUNNER_TEMP/release-publish" --publish
+        run: python scripts/release_from_ci.py --config releases/v0.1.1.json --output "$RUNNER_TEMP/release-publish" --publish

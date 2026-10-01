@@ -2,7 +2,7 @@
 
 面向本地/门店 ERP 的 PostgreSQL 原生持久队列实现。扩展在 PostgreSQL 管理的 background worker 内直接监听 AMQP 1.0，协议编解码使用 Apache Qpid Proton；消息与领取状态存放在普通 WAL-logged PostgreSQL 表中。
 
-**当前公开版本：v0.1.0，正式 Release；完整生产资格尚未完成。** [发布说明与隔离安装指南](docs/releases/v0.1.0.md)固定二进制源码ef12d354及普通CI36854708200，原始候选归档与blocked_security_review记录保留。本次为未签名分发。仓库包含可执行实现、自动化验证与候选打包流程。通过某个平台 CI 仅证明该次提交在该环境中的测试结果。Windows Server CI 不等于 Windows 11 实机验收；进程强杀不等于物理断电试验；真实 ERP 联调另行进行。项目采用标准Apache-2.0，署名与第三方范围见下方许可说明。
+**公开发行以 [GitHub Releases](https://github.com/MixGeeker/echoo_pgmq/releases) 为准；完整生产资格尚未完成。** [v0.1.1发布说明](docs/releases/v0.1.1.md)区分分发/原生构建0.1.1与SQL默认0.1.0，保留可选SQL0.1.1显式升级。[v0.1.0历史发布说明](docs/releases/v0.1.0.md)及其资源保持不变。Release流水线完成前，准备中的版本还不能下载。本项目为未签名分发；candidate及blocked_security_review记录保留。Windows Server CI不等于Windows11、实际ERP或店端容量验收；完整资格限制不因公开发行解除。项目采用标准Apache-2.0，署名与第三方范围见下方许可说明。
 
 ## 设计边界
 
@@ -19,7 +19,7 @@
 
 ## 固定预览试用入口
 
-以下是冻结的历史预览；新发行请使用[v0.1.0安装指南](docs/releases/v0.1.0.md)。.2包装器安装器固定旧450681d散列，不能安装本次ef12d354二进制，不要修改固定散列或覆盖旧ROOT。
+以下是冻结的历史预览；新发行请核对[当前发行列表](https://github.com/MixGeeker/echoo_pgmq/releases)与对应的[版本/安装边界](docs/releases/v0.1.1.md)。.2包装器安装器固定旧450681d散列，不能安装本次ef12d354二进制，不要修改固定散列或覆盖旧ROOT。
 
 PG18隔离测试修订包已到`preview-20260930.2`，扩展SQL仍0.1.0、原450681d二进制不变。[.2入门与双平台普通验证](docs/preview-20260930.2/README.md)修复新ROOT的SQL/AMQP完整编码限额错位，统一为65,536字节；原.1字节保留，使用全新目录试.2。TTL/priority/group仅透传，不执行对应broker语义；其它固定运行时边界见[版本化外部契约](docs/preview-20260930.1-contract.md)及.2变更说明。
 

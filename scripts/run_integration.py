@@ -18,6 +18,7 @@ REPO = Path(__file__).resolve().parents[1]
 # Explicit allowlist: adding a new test does not silently expand automatic CI
 # into adversarial-input, resource-exhaustion, fault-injection or crash testing.
 ORDINARY_TESTS = [
+    "tests/test_version_identity.py",
     "tests/test_consumer_wakeup_unit.py",
     "tests/test_socket_nodelay_unit.py",
     "tests/test_consumer_wakeup.py::test_empty_consumer_separate_connection_orders",

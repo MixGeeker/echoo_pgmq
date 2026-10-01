@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Publish the explicitly pinned, already tested v0.1.0 CI bytes; never rebuild."""
+"""Publish explicitly pinned, tested CI bytes without rebuilding or overwriting."""
 import argparse
 import hashlib
 import io
@@ -107,12 +107,16 @@ def validate_artifact(config, item, data):
         prefix = manifests[0][:-len('MANIFEST.json')]
         require(all(n.startswith(prefix) for n in inner.namelist()), 'multiple candidate roots')
         m = json.loads(inner.read(manifests[0]))
-        require(m['commit'] == config['source_sha'] and m['version'] == '0.1.0', 'source/version mismatch')
+        require(m['commit'] == config['source_sha'] and m['version'] == config.get('distribution_version', '0.1.0'), 'source/version mismatch')
+        if config['tag'] == 'v0.1.1':
+            for field in ('distribution_version', 'native_build_version', 'sql_default_version', 'sql_available_versions', 'extensionVersion'):
+                require(m.get(field) == config[field], 'version identity mismatch: ' + field)
         require(m['status'] == 'candidate-not-production-release' and m['qualification_status'] == 'blocked_security_review', 'qualification metadata changed')
         require(m['project_license'] == 'Apache-2.0', 'project license mismatch')
         system = 'Windows' if name.startswith('native-windows-') else 'Linux'
         require(m['system'] == system and m['postgres_build'].split()[1].split('.')[0] == pg, 'platform mismatch')
         require(m['architecture'].lower() in ('amd64', 'x86_64'), 'unexpected architecture')
+        require(archive == f"echoo-pgmq-{m['version']}-candidate-pg{pg}-{system.lower()}-{m['architecture'].lower()}.zip", 'candidate filename/version mismatch')
         actual = {n[len(prefix):]: sha(inner.read(n)) for n in inner.namelist() if n != manifests[0]}
         require(actual == m['files_sha256'], 'inner file set/hash mismatch')
         for filename in ('LICENSE', 'NOTICE'):
@@ -126,7 +130,7 @@ def validate_artifact(config, item, data):
         require(inner.read(prefix + 'share/extension/echoo_pgmq.control').replace(b'\r\n', b'\n') == source_bytes(config, 'echoo_pgmq.control'), 'SQL default mismatch')
         return {archive: raw, archive + '.sha256': z.read(archive + '.sha256')}, 0
     require(name.endswith('-evidence'), 'unexpected artifact class')
-    expected = 45 if pg == '18' else 37
+    expected = config.get('expected_tests_per_phase', {'16': 37, '17': 37, '18': 45})[pg]
     for phase in ('evidence', 'candidate-evidence'):
         xml = ET.fromstring(z.read(phase + '/junit.xml'))
         suites = xml.findall('testsuite')
@@ -146,13 +150,27 @@ def validate_artifact(config, item, data):
     return {name + '.zip': data}, expected * 2
 
 
+def validate_config(config):
+    require(config['repository'] == 'MixGeeker/echoo_pgmq' and config['tag'] in ('v0.1.0', 'v0.1.1'), 'release scope changed')
+    if config['tag'] == 'v0.1.1':
+        require(config['distribution_version'] == config['native_build_version'] == '0.1.1', 'distribution/native version mismatch')
+        require(config['extensionVersion'] == config['sql_default_version'] == '0.1.0' and config['sql_available_versions'] == ['0.1.0', '0.1.1'], 'SQL migration/default changed')
+        counts = config['expected_tests_per_phase']
+        require(set(counts) == {'16', '17', '18'} and all(isinstance(v, int) and v > 0 for v in counts.values()), 'exact test matrix required')
+        require(config['user_reported_testing'] == 'not yet performed for v0.1.1', 'unsupported user-testing claim')
+    require(len(config['artifacts']) == 12 and len({a['id'] for a in config['artifacts']}) == 12 and len({a['name'] for a in config['artifacts']}) == 12, 'artifact identities incomplete')
+
+
 def prepare(config, api, output):
-    require(config['tag'] == 'v0.1.0' and config['repository'] == 'MixGeeker/echoo_pgmq', 'release scope changed')
+    validate_config(config)
     head = os.environ['GITHUB_SHA']
     require(os.environ['GITHUB_REF'] == 'refs/heads/main' and os.environ['GITHUB_REPOSITORY'] == config['repository'], 'trusted main required')
     require(subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() == head, 'automation checkout mismatch')
     subprocess.run(['git', 'merge-base', '--is-ancestor', config['source_sha'], head], cwd=ROOT, check=True)
     require(subprocess.check_output(['git', 'rev-parse', config['source_sha'] + '^{tree}'], cwd=ROOT, text=True).strip() == config['source_tree'], 'source tree mismatch')
+    if config['tag'] == 'v0.1.1':
+        identity = json.loads(source_bytes(config, 'package_versions.json'))
+        require(all(identity[k] == config[k] for k in ('distribution_version', 'native_build_version', 'sql_default_version', 'sql_available_versions', 'extensionVersion')), 'source version identity mismatch')
     run = api.request('/actions/runs/' + str(config['ci_run_id']))
     require(run['head_sha'] == config['source_sha'] and run['head_branch'] == 'main' and run['event'] == 'push'
             and run['repository']['id'] == config['repository_id'] and run['head_repository']['id'] == config['repository_id']
@@ -176,8 +194,10 @@ def prepare(config, api, output):
         require(not (assets.keys() & verified.keys()), 'duplicate release asset')
         assets.update(verified)
         tests += count
-    require(tests == 476 and len(assets) == 18, 'release coverage changed')
-    assets['echoo-pgmq-v0.1.0-source.zip'] = subprocess.check_output(['git', 'archive', '--format=zip', '--prefix=echoo-pgmq-v0.1.0/', config['source_sha']], cwd=ROOT)
+    expected_total = 4 * sum(config.get('expected_tests_per_phase', {'16': 37, '17': 37, '18': 45}).values())
+    require(tests == expected_total and len(assets) == 18, 'release coverage changed')
+    tag = config['tag']
+    assets[f'echoo-pgmq-{tag}-source.zip'] = subprocess.check_output(['git', 'archive', '--format=zip', f'--prefix=echoo-pgmq-{tag}/', config['source_sha']], cwd=ROOT)
     binary_manifest = []
     for name, data in sorted(assets.items()):
         if name.endswith('.zip') and '-candidate-pg' in name:
@@ -186,18 +206,19 @@ def prepare(config, api, output):
             binary_manifest.append({'filename': name, 'sha256': sha(data),
                 'url': 'https://github.com/' + config['repository'] + '/releases/download/' + config['tag'] + '/' + name,
                 'original_manifest': json.loads(inner.read(manifest_path))})
-    assets['BINARY-MANIFEST-v0.1.0.json'] = (json.dumps(binary_manifest, indent=2) + '\n').encode()
+    assets[f'BINARY-MANIFEST-{tag}.json'] = (json.dumps(binary_manifest, indent=2) + '\n').encode()
     assets['install_candidate.py'] = source_bytes(config, 'scripts/install_candidate.py')
-    assets['RELEASE-v0.1.0.zh-CN.md'] = (ROOT / 'docs/releases/v0.1.0.md').read_bytes()
+    assets[f'RELEASE-{tag}.zh-CN.md'] = (ROOT / f'docs/releases/{tag}.md').read_bytes()
     provenance = {'release': config['tag'], 'source_commit': config['source_sha'], 'source_tree': config['source_tree'],
                   'release_automation_commit': head, 'release_workflow_run': os.environ['GITHUB_RUN_ID'],
                   'ci_run_id': config['ci_run_id'], 'ci_run_attempt': config['ci_run_attempt'],
                   'ci_url': run['html_url'], 'ordinary_test_executions': tests, 'core_sql_passes': 12,
-                  'qualification_status': 'blocked_security_review', 'user_reported_testing': 'passed; scope unspecified',
+                  'qualification_status': 'blocked_security_review', 'user_reported_testing': config.get('user_reported_testing', 'passed; scope unspecified'),
                   'signature': 'unsigned; checksums and CI provenance are not a signature or security certification',
                   'original_ci_artifacts': config['artifacts'],
                   'assets_sha256': {n: sha(d) for n, d in sorted(assets.items())}}
-    assets['PROVENANCE-v0.1.0.json'] = (json.dumps(provenance, indent=2) + '\n').encode()
+    provenance['version_identity'] = {k: config.get(k) for k in ('distribution_version', 'native_build_version', 'sql_default_version', 'sql_available_versions', 'extensionVersion')}
+    assets[f'PROVENANCE-{tag}.json'] = (json.dumps(provenance, indent=2) + '\n').encode()
     assets['SHA256SUMS'] = ''.join(f'{sha(d)}  {n}\n' for n, d in sorted(assets.items())).encode()
     output.mkdir(parents=True, exist_ok=False)
     for n, data in assets.items():
@@ -220,7 +241,7 @@ def publish(config, api, assets):
         page += 1
     api.request('/git/refs', 'POST', {'ref': 'refs/tags/' + tag, 'sha': config['source_sha']})
     release = api.request('/releases', 'POST', {'tag_name': tag, 'target_commitish': config['source_sha'],
-        'name': 'Echoo PGMQ v0.1.0', 'body': assets['RELEASE-v0.1.0.zh-CN.md'].decode(),
+        'name': 'Echoo PGMQ ' + tag, 'body': assets[f'RELEASE-{tag}.zh-CN.md'].decode(),
         'draft': True, 'prerelease': False, 'make_latest': 'false'})
     rid = release['id']
     uploaded = {}
@@ -247,8 +268,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--publish', action='store_true')
+    parser.add_argument('--config', choices=('releases/v0.1.0.json', 'releases/v0.1.1.json'), default='releases/v0.1.1.json')
     args = parser.parse_args()
-    config = json.loads((ROOT / 'releases/v0.1.0.json').read_text())
+    config = json.loads((ROOT / args.config).read_text())
     api = GitHub(config['repository'], os.environ['GH_TOKEN'])
     assets = prepare(config, api, args.output)
     if args.publish:
