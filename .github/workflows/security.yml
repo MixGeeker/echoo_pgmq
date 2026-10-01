@@ -65,7 +65,7 @@ jobs:
             -artifact_prefix=security-results/crashes/ 2>&1 | tee security-results/fuzz.txt
       - name: Keep reports and minimized failures
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: bounded-parser-static-evidence
           path: |
@@ -92,7 +92,7 @@ jobs:
           python -m pip_audit -r requirements-dev.txt --format json --output python-dependency-audit.json
       - name: Preserve dependency advisory results
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: python-dependency-advisories
           path: python-dependency-audit.json
