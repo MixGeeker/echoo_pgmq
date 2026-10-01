@@ -1,0 +1,5708 @@
+{
+  "audit_version": 1,
+  "source_commit": "472e62698137d0e1035d04775d443f1cbcc1ae33",
+  "manifest_file_count": 728,
+  "manifest_sha256": "c0fbd5937495b0a1c3e2ec465fd2f974913fce09ffbec0d6e656de7539a7758c",
+  "environment": {
+    "evidence_level": "clean GitHub Linux VM; not dedicated physical hardware or Win11 qualification",
+    "run_kind": "measurement",
+    "expected_cells": 27,
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "logical_cpus": 4,
+    "host_affinity": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "memory_bytes": 16766402560,
+    "server_cpu_ids": [
+      0,
+      1
+    ],
+    "client_cpu_ids": [
+      2,
+      3
+    ],
+    "server_total_cpu_quota": 2,
+    "server_total_memory_bytes": 4294967296,
+    "server_swap_bytes": 0,
+    "clients_outside_budget": true,
+    "image_id": "sha256:8b4f9daeefffeeb96fd9c092afcb6cdc1c4a9055dca2fe69d6308a029ecfdc1b",
+    "base_image": "rabbitmq:4.0.5@sha256:82ee1d53d63c646b2fbaacfe4c5fb0e01a447047df585d16836ae236637bb15a",
+    "commit": "472e62698137d0e1035d04775d443f1cbcc1ae33",
+    "dirty_worktree": "",
+    "docker_info": {
+      "ID": "96bc9d58-7015-4b4a-8357-8e592f0b19b5",
+      "Containers": 0,
+      "ContainersRunning": 0,
+      "ContainersPaused": 0,
+      "ContainersStopped": 0,
+      "Images": 7,
+      "Driver": "overlay2",
+      "DriverStatus": [
+        [
+          "Backing Filesystem",
+          "extfs"
+        ],
+        [
+          "Supports d_type",
+          "true"
+        ],
+        [
+          "Using metacopy",
+          "false"
+        ],
+        [
+          "Native Overlay Diff",
+          "false"
+        ],
+        [
+          "userxattr",
+          "false"
+        ]
+      ],
+      "Plugins": {
+        "Volume": [
+          "local"
+        ],
+        "Network": [
+          "bridge",
+          "host",
+          "ipvlan",
+          "macvlan",
+          "null",
+          "overlay"
+        ],
+        "Authorization": null,
+        "Log": [
+          "awslogs",
+          "fluentd",
+          "gcplogs",
+          "gelf",
+          "journald",
+          "json-file",
+          "local",
+          "splunk",
+          "syslog"
+        ]
+      },
+      "MemoryLimit": true,
+      "SwapLimit": true,
+      "CpuCfsPeriod": true,
+      "CpuCfsQuota": true,
+      "CPUShares": true,
+      "CPUSet": true,
+      "PidsLimit": true,
+      "IPv4Forwarding": true,
+      "BridgeNfIptables": false,
+      "BridgeNfIp6tables": false,
+      "Debug": false,
+      "NFd": 22,
+      "OomKillDisable": false,
+      "NGoroutines": 43,
+      "SystemTime": "2026-09-30T05:22:08.93852743Z",
+      "LoggingDriver": "json-file",
+      "CgroupDriver": "systemd",
+      "CgroupVersion": "2",
+      "NEventsListener": 0,
+      "KernelVersion": "6.17.0-1022-azure",
+      "OperatingSystem": "Ubuntu 24.04.5 LTS",
+      "OSVersion": "24.04",
+      "OSType": "linux",
+      "Architecture": "x86_64",
+      "IndexServerAddress": "https://index.docker.io/v1/",
+      "RegistryConfig": {
+        "IndexConfigs": {
+          "docker.io": {
+            "Name": "docker.io",
+            "Mirrors": [],
+            "Secure": true,
+            "Official": true
+          }
+        },
+        "InsecureRegistryCIDRs": [
+          "::1/128",
+          "127.0.0.0/8"
+        ],
+        "Mirrors": null
+      },
+      "NCPU": 4,
+      "MemTotal": 16766402560,
+      "GenericResources": null,
+      "DockerRootDir": "/var/lib/docker",
+      "HttpProxy": "",
+      "HttpsProxy": "",
+      "NoProxy": "",
+      "Name": "runnervm8df0l",
+      "Labels": [],
+      "ExperimentalBuild": false,
+      "ServerVersion": "28.0.4",
+      "Runtimes": {
+        "io.containerd.runc.v2": {
+          "path": "runc",
+          "status": {
+            "org.opencontainers.runtime-spec.features": "{\"ociVersionMin\":\"1.0.0\",\"ociVersionMax\":\"1.3.0\",\"hooks\":[\"prestart\",\"createRuntime\",\"createContainer\",\"startContainer\",\"poststart\",\"poststop\"],\"mountOptions\":[\"async\",\"atime\",\"bind\",\"defaults\",\"dev\",\"diratime\",\"dirsync\",\"exec\",\"iversion\",\"lazytime\",\"loud\",\"mand\",\"noatime\",\"nodev\",\"nodiratime\",\"noexec\",\"noiversion\",\"nolazytime\",\"nomand\",\"norelatime\",\"nostrictatime\",\"nosuid\",\"nosymfollow\",\"private\",\"ratime\",\"rbind\",\"rdev\",\"rdiratime\",\"relatime\",\"remount\",\"rexec\",\"rnoatime\",\"rnodev\",\"rnodiratime\",\"rnoexec\",\"rnorelatime\",\"rnostrictatime\",\"rnosuid\",\"rnosymfollow\",\"ro\",\"rprivate\",\"rrelatime\",\"rro\",\"rrw\",\"rshared\",\"rslave\",\"rstrictatime\",\"rsuid\",\"rsymfollow\",\"runbindable\",\"rw\",\"shared\",\"silent\",\"slave\",\"strictatime\",\"suid\",\"symfollow\",\"sync\",\"tmpcopyup\",\"unbindable\"],\"linux\":{\"namespaces\":[\"cgroup\",\"ipc\",\"mount\",\"network\",\"pid\",\"time\",\"user\",\"uts\"],\"capabilities\":[\"CAP_CHOWN\",\"CAP_DAC_OVERRIDE\",\"CAP_DAC_READ_SEARCH\",\"CAP_FOWNER\",\"CAP_FSETID\",\"CAP_KILL\",\"CAP_SETGID\",\"CAP_SETUID\",\"CAP_SETPCAP\",\"CAP_LINUX_IMMUTABLE\",\"CAP_NET_BIND_SERVICE\",\"CAP_NET_BROADCAST\",\"CAP_NET_ADMIN\",\"CAP_NET_RAW\",\"CAP_IPC_LOCK\",\"CAP_IPC_OWNER\",\"CAP_SYS_MODULE\",\"CAP_SYS_RAWIO\",\"CAP_SYS_CHROOT\",\"CAP_SYS_PTRACE\",\"CAP_SYS_PACCT\",\"CAP_SYS_ADMIN\",\"CAP_SYS_BOOT\",\"CAP_SYS_NICE\",\"CAP_SYS_RESOURCE\",\"CAP_SYS_TIME\",\"CAP_SYS_TTY_CONFIG\",\"CAP_MKNOD\",\"CAP_LEASE\",\"CAP_AUDIT_WRITE\",\"CAP_AUDIT_CONTROL\",\"CAP_SETFCAP\",\"CAP_MAC_OVERRIDE\",\"CAP_MAC_ADMIN\",\"CAP_SYSLOG\",\"CAP_WAKE_ALARM\",\"CAP_BLOCK_SUSPEND\",\"CAP_AUDIT_READ\",\"CAP_PERFMON\",\"CAP_BPF\",\"CAP_CHECKPOINT_RESTORE\"],\"cgroup\":{\"v1\":true,\"v2\":true,\"systemd\":true,\"systemdUser\":true,\"rdma\":true},\"seccomp\":{\"enabled\":true,\"actions\":[\"SCMP_ACT_ALLOW\",\"SCMP_ACT_ERRNO\",\"SCMP_ACT_KILL\",\"SCMP_ACT_KILL_PROCESS\",\"SCMP_ACT_KILL_THREAD\",\"SCMP_ACT_LOG\",\"SCMP_ACT_NOTIFY\",\"SCMP_ACT_TRACE\",\"SCMP_ACT_TRAP\"],\"operators\":[\"SCMP_CMP_EQ\",\"SCMP_CMP_GE\",\"SCMP_CMP_GT\",\"SCMP_CMP_LE\",\"SCMP_CMP_LT\",\"SCMP_CMP_MASKED_EQ\",\"SCMP_CMP_NE\"],\"archs\":[\"SCMP_ARCH_AARCH64\",\"SCMP_ARCH_ARM\",\"SCMP_ARCH_LOONGARCH64\",\"SCMP_ARCH_MIPS\",\"SCMP_ARCH_MIPS64\",\"SCMP_ARCH_MIPS64N32\",\"SCMP_ARCH_MIPSEL\",\"SCMP_ARCH_MIPSEL64\",\"SCMP_ARCH_MIPSEL64N32\",\"SCMP_ARCH_PPC\",\"SCMP_ARCH_PPC64\",\"SCMP_ARCH_PPC64LE\",\"SCMP_ARCH_RISCV64\",\"SCMP_ARCH_S390\",\"SCMP_ARCH_S390X\",\"SCMP_ARCH_X32\",\"SCMP_ARCH_X86\",\"SCMP_ARCH_X86_64\"],\"knownFlags\":[\"SECCOMP_FILTER_FLAG_TSYNC\",\"SECCOMP_FILTER_FLAG_SPEC_ALLOW\",\"SECCOMP_FILTER_FLAG_LOG\",\"SECCOMP_FILTER_FLAG_WAIT_KILLABLE_RECV\"],\"supportedFlags\":[\"SECCOMP_FILTER_FLAG_TSYNC\",\"SECCOMP_FILTER_FLAG_SPEC_ALLOW\",\"SECCOMP_FILTER_FLAG_LOG\"]},\"apparmor\":{\"enabled\":true},\"selinux\":{\"enabled\":true},\"intelRdt\":{\"enabled\":true},\"mountExtensions\":{\"idmap\":{\"enabled\":true}}},\"annotations\":{\"io.github.seccomp.libseccomp.version\":\"2.5.5\",\"org.opencontainers.runc.checkpoint.enabled\":\"true\",\"org.opencontainers.runc.commit\":\"v1.5.1-0-g8f2685a4\",\"org.opencontainers.runc.version\":\"1.5.1\"},\"potentiallyUnsafeConfigAnnotations\":[\"bundle\",\"org.systemd.property.\",\"org.criu.config\"]}"
+          }
+        },
+        "runc": {
+          "path": "runc",
+          "status": {
+            "org.opencontainers.runtime-spec.features": "{\"ociVersionMin\":\"1.0.0\",\"ociVersionMax\":\"1.3.0\",\"hooks\":[\"prestart\",\"createRuntime\",\"createContainer\",\"startContainer\",\"poststart\",\"poststop\"],\"mountOptions\":[\"async\",\"atime\",\"bind\",\"defaults\",\"dev\",\"diratime\",\"dirsync\",\"exec\",\"iversion\",\"lazytime\",\"loud\",\"mand\",\"noatime\",\"nodev\",\"nodiratime\",\"noexec\",\"noiversion\",\"nolazytime\",\"nomand\",\"norelatime\",\"nostrictatime\",\"nosuid\",\"nosymfollow\",\"private\",\"ratime\",\"rbind\",\"rdev\",\"rdiratime\",\"relatime\",\"remount\",\"rexec\",\"rnoatime\",\"rnodev\",\"rnodiratime\",\"rnoexec\",\"rnorelatime\",\"rnostrictatime\",\"rnosuid\",\"rnosymfollow\",\"ro\",\"rprivate\",\"rrelatime\",\"rro\",\"rrw\",\"rshared\",\"rslave\",\"rstrictatime\",\"rsuid\",\"rsymfollow\",\"runbindable\",\"rw\",\"shared\",\"silent\",\"slave\",\"strictatime\",\"suid\",\"symfollow\",\"sync\",\"tmpcopyup\",\"unbindable\"],\"linux\":{\"namespaces\":[\"cgroup\",\"ipc\",\"mount\",\"network\",\"pid\",\"time\",\"user\",\"uts\"],\"capabilities\":[\"CAP_CHOWN\",\"CAP_DAC_OVERRIDE\",\"CAP_DAC_READ_SEARCH\",\"CAP_FOWNER\",\"CAP_FSETID\",\"CAP_KILL\",\"CAP_SETGID\",\"CAP_SETUID\",\"CAP_SETPCAP\",\"CAP_LINUX_IMMUTABLE\",\"CAP_NET_BIND_SERVICE\",\"CAP_NET_BROADCAST\",\"CAP_NET_ADMIN\",\"CAP_NET_RAW\",\"CAP_IPC_LOCK\",\"CAP_IPC_OWNER\",\"CAP_SYS_MODULE\",\"CAP_SYS_RAWIO\",\"CAP_SYS_CHROOT\",\"CAP_SYS_PTRACE\",\"CAP_SYS_PACCT\",\"CAP_SYS_ADMIN\",\"CAP_SYS_BOOT\",\"CAP_SYS_NICE\",\"CAP_SYS_RESOURCE\",\"CAP_SYS_TIME\",\"CAP_SYS_TTY_CONFIG\",\"CAP_MKNOD\",\"CAP_LEASE\",\"CAP_AUDIT_WRITE\",\"CAP_AUDIT_CONTROL\",\"CAP_SETFCAP\",\"CAP_MAC_OVERRIDE\",\"CAP_MAC_ADMIN\",\"CAP_SYSLOG\",\"CAP_WAKE_ALARM\",\"CAP_BLOCK_SUSPEND\",\"CAP_AUDIT_READ\",\"CAP_PERFMON\",\"CAP_BPF\",\"CAP_CHECKPOINT_RESTORE\"],\"cgroup\":{\"v1\":true,\"v2\":true,\"systemd\":true,\"systemdUser\":true,\"rdma\":true},\"seccomp\":{\"enabled\":true,\"actions\":[\"SCMP_ACT_ALLOW\",\"SCMP_ACT_ERRNO\",\"SCMP_ACT_KILL\",\"SCMP_ACT_KILL_PROCESS\",\"SCMP_ACT_KILL_THREAD\",\"SCMP_ACT_LOG\",\"SCMP_ACT_NOTIFY\",\"SCMP_ACT_TRACE\",\"SCMP_ACT_TRAP\"],\"operators\":[\"SCMP_CMP_EQ\",\"SCMP_CMP_GE\",\"SCMP_CMP_GT\",\"SCMP_CMP_LE\",\"SCMP_CMP_LT\",\"SCMP_CMP_MASKED_EQ\",\"SCMP_CMP_NE\"],\"archs\":[\"SCMP_ARCH_AARCH64\",\"SCMP_ARCH_ARM\",\"SCMP_ARCH_LOONGARCH64\",\"SCMP_ARCH_MIPS\",\"SCMP_ARCH_MIPS64\",\"SCMP_ARCH_MIPS64N32\",\"SCMP_ARCH_MIPSEL\",\"SCMP_ARCH_MIPSEL64\",\"SCMP_ARCH_MIPSEL64N32\",\"SCMP_ARCH_PPC\",\"SCMP_ARCH_PPC64\",\"SCMP_ARCH_PPC64LE\",\"SCMP_ARCH_RISCV64\",\"SCMP_ARCH_S390\",\"SCMP_ARCH_S390X\",\"SCMP_ARCH_X32\",\"SCMP_ARCH_X86\",\"SCMP_ARCH_X86_64\"],\"knownFlags\":[\"SECCOMP_FILTER_FLAG_TSYNC\",\"SECCOMP_FILTER_FLAG_SPEC_ALLOW\",\"SECCOMP_FILTER_FLAG_LOG\",\"SECCOMP_FILTER_FLAG_WAIT_KILLABLE_RECV\"],\"supportedFlags\":[\"SECCOMP_FILTER_FLAG_TSYNC\",\"SECCOMP_FILTER_FLAG_SPEC_ALLOW\",\"SECCOMP_FILTER_FLAG_LOG\"]},\"apparmor\":{\"enabled\":true},\"selinux\":{\"enabled\":true},\"intelRdt\":{\"enabled\":true},\"mountExtensions\":{\"idmap\":{\"enabled\":true}}},\"annotations\":{\"io.github.seccomp.libseccomp.version\":\"2.5.5\",\"org.opencontainers.runc.checkpoint.enabled\":\"true\",\"org.opencontainers.runc.commit\":\"v1.5.1-0-g8f2685a4\",\"org.opencontainers.runc.version\":\"1.5.1\"},\"potentiallyUnsafeConfigAnnotations\":[\"bundle\",\"org.systemd.property.\",\"org.criu.config\"]}"
+          }
+        }
+      },
+      "DefaultRuntime": "runc",
+      "Swarm": {
+        "NodeID": "",
+        "NodeAddr": "",
+        "LocalNodeState": "inactive",
+        "ControlAvailable": false,
+        "Error": "",
+        "RemoteManagers": null
+      },
+      "LiveRestoreEnabled": false,
+      "Isolation": "",
+      "InitBinary": "docker-init",
+      "ContainerdCommit": {
+        "ID": "ee2735368117d2eb259779949d5e75cdafec9761",
+        "Expected": "ee2735368117d2eb259779949d5e75cdafec9761"
+      },
+      "RuncCommit": {
+        "ID": "v1.5.1-0-g8f2685a4",
+        "Expected": "v1.5.1-0-g8f2685a4"
+      },
+      "InitCommit": {
+        "ID": "de40ad0",
+        "Expected": "de40ad0"
+      },
+      "SecurityOptions": [
+        "name=apparmor",
+        "name=seccomp,profile=builtin",
+        "name=cgroupns"
+      ],
+      "CDISpecDirs": [],
+      "Containerd": {
+        "Address": "/run/containerd/containerd.sock",
+        "Namespaces": {
+          "Containers": "moby",
+          "Plugins": "plugins.moby"
+        }
+      },
+      "Warnings": null,
+      "ClientInfo": {
+        "Debug": false,
+        "Platform": {
+          "Name": "Docker Engine - Community"
+        },
+        "Version": "28.0.4",
+        "DefaultAPIVersion": "1.48",
+        "GitCommit": "b8034c0",
+        "GoVersion": "go1.23.7",
+        "Os": "linux",
+        "Arch": "amd64",
+        "BuildTime": "Tue Mar 25 15:07:16 2025",
+        "Context": "default",
+        "Plugins": [
+          {
+            "SchemaVersion": "0.1.0",
+            "Vendor": "Docker Inc.",
+            "Version": "v0.37.1",
+            "ShortDescription": "Docker Buildx",
+            "Name": "buildx",
+            "Path": "/usr/libexec/docker/cli-plugins/docker-buildx"
+          },
+          {
+            "SchemaVersion": "0.1.0",
+            "Vendor": "Docker Inc.",
+            "Version": "v2.38.2",
+            "ShortDescription": "Docker Compose",
+            "Name": "compose",
+            "Path": "/usr/libexec/docker/cli-plugins/docker-compose"
+          }
+        ],
+        "Warnings": null
+      }
+    },
+    "runner_image_version": "20260927.320.1",
+    "runner_image_os": "ubuntu24",
+    "postgresql": "18.6",
+    "rabbitmq": "4.0.5",
+    "python_proton": "0.40.0",
+    "python_version": "3.12.14",
+    "repetitions": 3,
+    "warmup_seconds": 30.0,
+    "duration_seconds": 120.0,
+    "offered_rates": [
+      200.0,
+      400.0
+    ],
+    "profiles": [
+      "1x1",
+      "4x4"
+    ],
+    "ordering": "fresh baseline per repetition; broker and profile order alternates; new server data per cell",
+    "storage": "fresh Docker named/anonymous volume on same runner; no physical SSD guarantee; host caches not cleared"
+  },
+  "matrix_status": {
+    "status": "completed",
+    "recorded_cells": 27,
+    "expected_cells": 27,
+    "remaining_cells_not_run": 0
+  },
+  "totals": {
+    "cells": 27,
+    "failed_cells": 0,
+    "all_phases": {
+      "attempted": 1000146,
+      "accepted": 1000146,
+      "received_unique": 1000146
+    },
+    "measured_resource_samples": 6379,
+    "provisional_target_false": 24,
+    "under_95_percent_offered_load": 11,
+    "duplicates": 0,
+    "missing_confirmed": 0,
+    "unexpected_received": 0,
+    "publish_failures": 0,
+    "checksum_or_run_failures": 0,
+    "measured_db_transactions": 560158
+  },
+  "groups": [
+    {
+      "broker": "baseline",
+      "profile": "0x0",
+      "requested_rate": 0,
+      "repetitions": 3,
+      "labels": [
+        "r1-baseline",
+        "r2-baseline",
+        "r3-baseline"
+      ],
+      "statistics_note": "median and range of per-cell metrics, not pooled percentile estimates",
+      "metrics": {
+        "confirmed_publish_per_s": {
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.0
+        },
+        "completed_per_s": {
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.0
+        },
+        "attempted_publish_per_s": {
+          "median": 0.0,
+          "min": 0.0,
+          "max": 0.0
+        },
+        "synthetic_db_transactions_per_s": {
+          "median": 170.18333333333334,
+          "min": 165.24166666666667,
+          "max": 172.71666666666667
+        },
+        "synthetic_db_p50_ms": {
+          "median": 0.655074,
+          "min": 0.650106,
+          "max": 0.670305
+        },
+        "synthetic_db_p95_ms": {
+          "median": 0.824412,
+          "min": 0.796891,
+          "max": 0.903829
+        },
+        "synthetic_db_p99_ms": {
+          "median": 24.511659,
+          "min": 19.742737,
+          "max": 37.002468
+        },
+        "db_schedule_lateness_p50_ms": {
+          "median": 0.068014,
+          "min": 0.067981,
+          "max": 0.068493
+        },
+        "db_schedule_lateness_p95_ms": {
+          "median": 0.076029,
+          "min": 0.075417,
+          "max": 0.076282
+        },
+        "db_schedule_lateness_p99_ms": {
+          "median": 0.120097,
+          "min": 0.119424,
+          "max": 0.132995
+        },
+        "server_mean_cpu_cores": {
+          "median": 0.03706959308519221,
+          "min": 0.035050280934324274,
+          "max": 0.037921429222517344
+        },
+        "server_peak_cgroup_mib": {
+          "median": 94.35546875,
+          "min": 94.33203125,
+          "max": 95.40234375
+        },
+        "client_mean_cpu_cores": {
+          "median": 0.05290574859237021,
+          "min": 0.05166761635767846,
+          "max": 0.0534097798296681
+        },
+        "client_peak_rss_sum_mib": {
+          "median": 98.5078125,
+          "min": 98.265625,
+          "max": 98.57421875
+        },
+        "measured_resource_span_seconds": {
+          "median": 119.453778322,
+          "min": 119.417159818,
+          "max": 119.457718077
+        },
+        "measured_resource_count": {
+          "median": 237,
+          "min": 237,
+          "max": 237
+        },
+        "peak_pids": {
+          "median": 12,
+          "min": 12,
+          "max": 13
+        },
+        "cpu_throttled_periods_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "cpu_throttled_time_ns_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_read_bytes": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_write_bytes": {
+          "median": 170086400,
+          "min": 164958208,
+          "max": 172912640
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "median": 4739184,
+          "min": 4653208,
+          "max": 4867336
+        },
+        "whole_cell_postgres_database_bytes": {
+          "median": 180224,
+          "min": 180224,
+          "max": 180224
+        }
+      }
+    },
+    {
+      "broker": "echoo",
+      "profile": "1x1",
+      "requested_rate": 200.0,
+      "repetitions": 3,
+      "labels": [
+        "r1-echoo-1x1-200pps",
+        "r2-echoo-1x1-200pps",
+        "r3-echoo-1x1-200pps"
+      ],
+      "statistics_note": "median and range of per-cell metrics, not pooled percentile estimates",
+      "metrics": {
+        "confirmed_publish_per_s": {
+          "median": 157.60833333333332,
+          "min": 135.80833333333334,
+          "max": 181.15833333333333
+        },
+        "completed_per_s": {
+          "median": 157.60833333333332,
+          "min": 135.80833333333334,
+          "max": 181.15833333333333
+        },
+        "attempted_publish_per_s": {
+          "median": 157.6,
+          "min": 135.8,
+          "max": 181.16666666666666
+        },
+        "offered_load_achieved_fraction": {
+          "median": 0.788,
+          "min": 0.679,
+          "max": 0.9058333333333334
+        },
+        "synthetic_db_transactions_per_s": {
+          "median": 159.675,
+          "min": 138.33333333333334,
+          "max": 182.10833333333332
+        },
+        "db_p95_increase_percent": {
+          "median": 112.30198007792218,
+          "min": 50.12961522588897,
+          "max": 220.14930523747918
+        },
+        "publish_p50_ms": {
+          "median": 1.256287,
+          "min": 1.242336,
+          "max": 1.30615
+        },
+        "publish_p95_ms": {
+          "median": 2.361883,
+          "min": 1.661133,
+          "max": 3.760419
+        },
+        "publish_p99_ms": {
+          "median": 47.973474,
+          "min": 10.89002,
+          "max": 89.199839
+        },
+        "end_to_end_p50_ms": {
+          "median": 1.349484,
+          "min": 1.330827,
+          "max": 1.368423
+        },
+        "end_to_end_p95_ms": {
+          "median": 2.469221,
+          "min": 1.743092,
+          "max": 3.868498
+        },
+        "end_to_end_p99_ms": {
+          "median": 48.115584,
+          "min": 10.929708,
+          "max": 89.109957
+        },
+        "synthetic_db_p50_ms": {
+          "median": 0.735611,
+          "min": 0.730143,
+          "max": 0.769401
+        },
+        "synthetic_db_p95_ms": {
+          "median": 1.750243,
+          "min": 1.356915,
+          "max": 2.551241
+        },
+        "synthetic_db_p99_ms": {
+          "median": 45.742543,
+          "min": 9.289819,
+          "max": 85.99202
+        },
+        "publish_schedule_lateness_p50_ms": {
+          "median": 0.072455,
+          "min": 0.071407,
+          "max": 0.07352
+        },
+        "publish_schedule_lateness_p95_ms": {
+          "median": 0.087515,
+          "min": 0.083851,
+          "max": 0.10915
+        },
+        "publish_schedule_lateness_p99_ms": {
+          "median": 0.17668,
+          "min": 0.136841,
+          "max": 0.198021
+        },
+        "db_schedule_lateness_p50_ms": {
+          "median": 0.072994,
+          "min": 0.072748,
+          "max": 0.074885
+        },
+        "db_schedule_lateness_p95_ms": {
+          "median": 0.088978,
+          "min": 0.084066,
+          "max": 0.099782
+        },
+        "db_schedule_lateness_p99_ms": {
+          "median": 0.225737,
+          "min": 0.215086,
+          "max": 0.3536
+        },
+        "server_mean_cpu_cores": {
+          "median": 0.2232156881329901,
+          "min": 0.1843766927121458,
+          "max": 0.2376984938516491
+        },
+        "server_peak_cgroup_mib": {
+          "median": 172.26953125,
+          "min": 171.9140625,
+          "max": 189.26953125
+        },
+        "client_mean_cpu_cores": {
+          "median": 0.22998463503635622,
+          "min": 0.21100232736018512,
+          "max": 0.2658008953230237
+        },
+        "client_peak_rss_sum_mib": {
+          "median": 189.640625,
+          "min": 189.63671875,
+          "max": 190.01953125
+        },
+        "measured_resource_span_seconds": {
+          "median": 119.61953366,
+          "min": 119.616686548,
+          "max": 119.638423194
+        },
+        "measured_resource_count": {
+          "median": 237,
+          "min": 237,
+          "max": 237
+        },
+        "peak_pids": {
+          "median": 13,
+          "min": 13,
+          "max": 14
+        },
+        "cpu_throttled_periods_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "cpu_throttled_time_ns_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_read_bytes": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_write_bytes": {
+          "median": 723963904,
+          "min": 631840768,
+          "max": 840953856
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "median": 66049552,
+          "min": 59795904,
+          "max": 76772080
+        },
+        "whole_cell_postgres_database_bytes": {
+          "median": 3227648,
+          "min": 2932736,
+          "max": 3727360
+        },
+        "db_p95_absolute_increase_ms": {
+          "median": 0.925831,
+          "min": 0.4530860000000001,
+          "max": 1.75435
+        }
+      }
+    },
+    {
+      "broker": "echoo",
+      "profile": "1x1",
+      "requested_rate": 400.0,
+      "repetitions": 3,
+      "labels": [
+        "r1-echoo-1x1-400pps",
+        "r2-echoo-1x1-400pps",
+        "r3-echoo-1x1-400pps"
+      ],
+      "statistics_note": "median and range of per-cell metrics, not pooled percentile estimates",
+      "metrics": {
+        "confirmed_publish_per_s": {
+          "median": 347.15,
+          "min": 317.73333333333335,
+          "max": 369.625
+        },
+        "completed_per_s": {
+          "median": 347.15,
+          "min": 317.73333333333335,
+          "max": 369.625
+        },
+        "attempted_publish_per_s": {
+          "median": 347.14166666666665,
+          "min": 317.725,
+          "max": 369.6166666666667
+        },
+        "offered_load_achieved_fraction": {
+          "median": 0.8678541666666667,
+          "min": 0.7943125,
+          "max": 0.9240416666666667
+        },
+        "synthetic_db_transactions_per_s": {
+          "median": 176.63333333333333,
+          "min": 163.34166666666667,
+          "max": 187.70833333333334
+        },
+        "db_p95_increase_percent": {
+          "median": 73.25958004294189,
+          "min": 72.83397136383263,
+          "max": 87.72522235953926
+        },
+        "publish_p50_ms": {
+          "median": 0.908504,
+          "min": 0.908486,
+          "max": 1.178563
+        },
+        "publish_p95_ms": {
+          "median": 1.200895,
+          "min": 1.155188,
+          "max": 1.488808
+        },
+        "publish_p99_ms": {
+          "median": 4.90023,
+          "min": 3.569486,
+          "max": 12.259144
+        },
+        "end_to_end_p50_ms": {
+          "median": 1.289845,
+          "min": 1.240463,
+          "max": 1.289987
+        },
+        "end_to_end_p95_ms": {
+          "median": 1.623365,
+          "min": 1.512945,
+          "max": 1.80168
+        },
+        "end_to_end_p99_ms": {
+          "median": 8.364558,
+          "min": 3.613553,
+          "max": 20.807937
+        },
+        "synthetic_db_p50_ms": {
+          "median": 0.835278,
+          "min": 0.812675,
+          "max": 0.836649
+        },
+        "synthetic_db_p95_ms": {
+          "median": 1.424864,
+          "min": 1.38069,
+          "max": 1.696715
+        },
+        "synthetic_db_p99_ms": {
+          "median": 14.545473,
+          "min": 6.552454,
+          "max": 42.448014
+        },
+        "publish_schedule_lateness_p50_ms": {
+          "median": 0.069965,
+          "min": 0.069859,
+          "max": 0.070144
+        },
+        "publish_schedule_lateness_p95_ms": {
+          "median": 0.079006,
+          "min": 0.078707,
+          "max": 0.080271
+        },
+        "publish_schedule_lateness_p99_ms": {
+          "median": 0.12006,
+          "min": 0.113023,
+          "max": 0.133297
+        },
+        "db_schedule_lateness_p50_ms": {
+          "median": 0.072385,
+          "min": 0.072332,
+          "max": 0.073998
+        },
+        "db_schedule_lateness_p95_ms": {
+          "median": 0.093599,
+          "min": 0.088993,
+          "max": 0.179169
+        },
+        "db_schedule_lateness_p99_ms": {
+          "median": 0.257995,
+          "min": 0.188611,
+          "max": 0.452466
+        },
+        "server_mean_cpu_cores": {
+          "median": 0.37822696486245383,
+          "min": 0.3540294777846132,
+          "max": 0.3861249157372529
+        },
+        "server_peak_cgroup_mib": {
+          "median": 245.8359375,
+          "min": 244.17578125,
+          "max": 262.98828125
+        },
+        "client_mean_cpu_cores": {
+          "median": 0.38559987519676947,
+          "min": 0.3567099315427994,
+          "max": 0.4441183252572812
+        },
+        "client_peak_rss_sum_mib": {
+          "median": 189.87890625,
+          "min": 189.375,
+          "max": 190.11328125
+        },
+        "measured_resource_span_seconds": {
+          "median": 119.705105533,
+          "min": 119.24750002,
+          "max": 119.735515932
+        },
+        "measured_resource_count": {
+          "median": 237,
+          "min": 236,
+          "max": 237
+        },
+        "peak_pids": {
+          "median": 13,
+          "min": 13,
+          "max": 13
+        },
+        "cpu_throttled_periods_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "cpu_throttled_time_ns_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_read_bytes": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_write_bytes": {
+          "median": 1411903488,
+          "min": 1321340928,
+          "max": 1509097472
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "median": 138964592,
+          "min": 128038000,
+          "max": 150654432
+        },
+        "whole_cell_postgres_database_bytes": {
+          "median": 6815744,
+          "min": 6283264,
+          "max": 7372800
+        },
+        "db_p95_absolute_increase_ms": {
+          "median": 0.6004519999999999,
+          "min": 0.583799,
+          "max": 0.792886
+        }
+      }
+    },
+    {
+      "broker": "echoo",
+      "profile": "4x4",
+      "requested_rate": 200.0,
+      "repetitions": 3,
+      "labels": [
+        "r1-echoo-4x4-200pps",
+        "r2-echoo-4x4-200pps",
+        "r3-echoo-4x4-200pps"
+      ],
+      "statistics_note": "median and range of per-cell metrics, not pooled percentile estimates",
+      "metrics": {
+        "confirmed_publish_per_s": {
+          "median": 179.63333333333333,
+          "min": 173.38333333333333,
+          "max": 179.725
+        },
+        "completed_per_s": {
+          "median": 179.63333333333333,
+          "min": 173.38333333333333,
+          "max": 179.725
+        },
+        "attempted_publish_per_s": {
+          "median": 179.625,
+          "min": 173.38333333333333,
+          "max": 179.725
+        },
+        "offered_load_achieved_fraction": {
+          "median": 0.898125,
+          "min": 0.8669166666666667,
+          "max": 0.898625
+        },
+        "synthetic_db_transactions_per_s": {
+          "median": 172.35833333333332,
+          "min": 165.25,
+          "max": 173.70833333333334
+        },
+        "db_p95_increase_percent": {
+          "median": 134.85538784006056,
+          "min": 116.24931264652938,
+          "max": 174.40076497287586
+        },
+        "publish_p50_ms": {
+          "median": 2.138535,
+          "min": 2.089491,
+          "max": 2.296476
+        },
+        "publish_p95_ms": {
+          "median": 11.824594,
+          "min": 5.729975,
+          "max": 14.076521
+        },
+        "publish_p99_ms": {
+          "median": 121.348013,
+          "min": 97.269129,
+          "max": 141.790144
+        },
+        "end_to_end_p50_ms": {
+          "median": 2.475509,
+          "min": 2.383404,
+          "max": 2.804374
+        },
+        "end_to_end_p95_ms": {
+          "median": 12.277409,
+          "min": 7.406992,
+          "max": 15.255785
+        },
+        "end_to_end_p99_ms": {
+          "median": 128.8426,
+          "min": 99.015691,
+          "max": 143.969519
+        },
+        "synthetic_db_p50_ms": {
+          "median": 0.759186,
+          "min": 0.758375,
+          "max": 0.80288
+        },
+        "synthetic_db_p95_ms": {
+          "median": 1.954524,
+          "min": 1.936176,
+          "max": 2.186675
+        },
+        "synthetic_db_p99_ms": {
+          "median": 21.015236,
+          "min": 12.467152,
+          "max": 30.2886
+        },
+        "publish_schedule_lateness_p50_ms": {
+          "median": 0.09236,
+          "min": 0.087895,
+          "max": 0.099419
+        },
+        "publish_schedule_lateness_p95_ms": {
+          "median": 0.652819,
+          "min": 0.515741,
+          "max": 0.766617
+        },
+        "publish_schedule_lateness_p99_ms": {
+          "median": 1.440748,
+          "min": 1.177357,
+          "max": 1.453787
+        },
+        "db_schedule_lateness_p50_ms": {
+          "median": 0.071083,
+          "min": 0.07087,
+          "max": 0.072449
+        },
+        "db_schedule_lateness_p95_ms": {
+          "median": 0.325616,
+          "min": 0.273546,
+          "max": 0.440528
+        },
+        "db_schedule_lateness_p99_ms": {
+          "median": 0.818389,
+          "min": 0.733196,
+          "max": 0.997858
+        },
+        "server_mean_cpu_cores": {
+          "median": 0.3213808449110656,
+          "min": 0.31112368317438027,
+          "max": 0.3316443980405276
+        },
+        "server_peak_cgroup_mib": {
+          "median": 181.55078125,
+          "min": 180.984375,
+          "max": 182.140625
+        },
+        "client_mean_cpu_cores": {
+          "median": 0.3313403371217259,
+          "min": 0.30361242739838795,
+          "max": 0.3705635720404851
+        },
+        "client_peak_rss_sum_mib": {
+          "median": 462.3671875,
+          "min": 462.17578125,
+          "max": 463.16796875
+        },
+        "measured_resource_span_seconds": {
+          "median": 119.333493602,
+          "min": 119.296829548,
+          "max": 119.412709016
+        },
+        "measured_resource_count": {
+          "median": 236,
+          "min": 236,
+          "max": 236
+        },
+        "peak_pids": {
+          "median": 13,
+          "min": 13,
+          "max": 13
+        },
+        "cpu_throttled_periods_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "cpu_throttled_time_ns_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_read_bytes": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_write_bytes": {
+          "median": 811290624,
+          "min": 782602240,
+          "max": 811347968
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "median": 73901544,
+          "min": 70432056,
+          "max": 75463408
+        },
+        "whole_cell_postgres_database_bytes": {
+          "median": 7200768,
+          "min": 7069696,
+          "max": 7643136
+        },
+        "db_p95_absolute_increase_ms": {
+          "median": 1.111764,
+          "min": 1.050695,
+          "max": 1.3897840000000001
+        }
+      }
+    },
+    {
+      "broker": "echoo",
+      "profile": "4x4",
+      "requested_rate": 400.0,
+      "repetitions": 3,
+      "labels": [
+        "r1-echoo-4x4-400pps",
+        "r2-echoo-4x4-400pps",
+        "r3-echoo-4x4-400pps"
+      ],
+      "statistics_note": "median and range of per-cell metrics, not pooled percentile estimates",
+      "metrics": {
+        "confirmed_publish_per_s": {
+          "median": 328.51666666666665,
+          "min": 326.53333333333336,
+          "max": 388.8833333333333
+        },
+        "completed_per_s": {
+          "median": 328.51666666666665,
+          "min": 326.53333333333336,
+          "max": 388.8833333333333
+        },
+        "attempted_publish_per_s": {
+          "median": 328.51666666666665,
+          "min": 326.53333333333336,
+          "max": 388.875
+        },
+        "offered_load_achieved_fraction": {
+          "median": 0.8212916666666666,
+          "min": 0.8163333333333334,
+          "max": 0.9721875
+        },
+        "synthetic_db_transactions_per_s": {
+          "median": 162.45833333333334,
+          "min": 161.46666666666667,
+          "max": 193.775
+        },
+        "db_p95_increase_percent": {
+          "median": 143.47857835940206,
+          "min": 132.2464427380909,
+          "max": 208.47549526207766
+        },
+        "publish_p50_ms": {
+          "median": 2.174096,
+          "min": 2.046438,
+          "max": 2.371579
+        },
+        "publish_p95_ms": {
+          "median": 7.335093,
+          "min": 3.640833,
+          "max": 8.458371
+        },
+        "publish_p99_ms": {
+          "median": 88.865608,
+          "min": 8.886145,
+          "max": 91.957808
+        },
+        "end_to_end_p50_ms": {
+          "median": 2.328453,
+          "min": 2.283937,
+          "max": 2.440418
+        },
+        "end_to_end_p95_ms": {
+          "median": 7.756733,
+          "min": 3.994103,
+          "max": 8.549179
+        },
+        "end_to_end_p99_ms": {
+          "median": 89.235133,
+          "min": 10.067081,
+          "max": 93.261575
+        },
+        "synthetic_db_p50_ms": {
+          "median": 0.889929,
+          "min": 0.882287,
+          "max": 1.002824
+        },
+        "synthetic_db_p95_ms": {
+          "median": 2.20063,
+          "min": 1.850751,
+          "max": 2.543109
+        },
+        "synthetic_db_p99_ms": {
+          "median": 41.460861,
+          "min": 3.677167,
+          "max": 43.407845
+        },
+        "publish_schedule_lateness_p50_ms": {
+          "median": 0.07861,
+          "min": 0.077055,
+          "max": 0.086409
+        },
+        "publish_schedule_lateness_p95_ms": {
+          "median": 0.429462,
+          "min": 0.308335,
+          "max": 0.561806
+        },
+        "publish_schedule_lateness_p99_ms": {
+          "median": 1.332359,
+          "min": 0.697244,
+          "max": 1.387608
+        },
+        "db_schedule_lateness_p50_ms": {
+          "median": 0.074434,
+          "min": 0.073896,
+          "max": 0.078702
+        },
+        "db_schedule_lateness_p95_ms": {
+          "median": 0.435667,
+          "min": 0.41326,
+          "max": 0.583895
+        },
+        "db_schedule_lateness_p99_ms": {
+          "median": 0.898267,
+          "min": 0.868099,
+          "max": 1.17641
+        },
+        "server_mean_cpu_cores": {
+          "median": 0.46681996259670216,
+          "min": 0.44372658588667524,
+          "max": 0.5170587250827869
+        },
+        "server_peak_cgroup_mib": {
+          "median": 261.21484375,
+          "min": 254.13671875,
+          "max": 274.25
+        },
+        "client_mean_cpu_cores": {
+          "median": 0.5333027504113154,
+          "min": 0.4759309261084193,
+          "max": 0.5415577011483413
+        },
+        "client_peak_rss_sum_mib": {
+          "median": 462.44921875,
+          "min": 462.15625,
+          "max": 462.61328125
+        },
+        "measured_resource_span_seconds": {
+          "median": 119.538104671,
+          "min": 119.471118351,
+          "max": 119.59944409
+        },
+        "measured_resource_count": {
+          "median": 236,
+          "min": 236,
+          "max": 236
+        },
+        "peak_pids": {
+          "median": 13,
+          "min": 13,
+          "max": 13
+        },
+        "cpu_throttled_periods_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "cpu_throttled_time_ns_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_read_bytes": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_write_bytes": {
+          "median": 1341034496,
+          "min": 1330126848,
+          "max": 1583624192
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "median": 137778488,
+          "min": 131381136,
+          "max": 154519216
+        },
+        "whole_cell_postgres_database_bytes": {
+          "median": 12664832,
+          "min": 10657792,
+          "max": 14229504
+        },
+        "db_p95_absolute_increase_ms": {
+          "median": 1.2968009999999999,
+          "min": 1.05386,
+          "max": 1.7186969999999997
+        }
+      }
+    },
+    {
+      "broker": "rabbitmq",
+      "profile": "1x1",
+      "requested_rate": 200.0,
+      "repetitions": 3,
+      "labels": [
+        "r1-rabbitmq-1x1-200pps",
+        "r2-rabbitmq-1x1-200pps",
+        "r3-rabbitmq-1x1-200pps"
+      ],
+      "statistics_note": "median and range of per-cell metrics, not pooled percentile estimates",
+      "metrics": {
+        "confirmed_publish_per_s": {
+          "median": 199.925,
+          "min": 199.40833333333333,
+          "max": 199.98333333333332
+        },
+        "completed_per_s": {
+          "median": 199.925,
+          "min": 199.40833333333333,
+          "max": 199.98333333333332
+        },
+        "attempted_publish_per_s": {
+          "median": 199.93333333333334,
+          "min": 199.40833333333333,
+          "max": 199.975
+        },
+        "offered_load_achieved_fraction": {
+          "median": 0.9996666666666667,
+          "min": 0.9970416666666667,
+          "max": 0.999875
+        },
+        "synthetic_db_transactions_per_s": {
+          "median": 180.10833333333332,
+          "min": 178.85,
+          "max": 186.5
+        },
+        "db_p95_increase_percent": {
+          "median": 71.44316191418851,
+          "min": 40.284832639802445,
+          "max": 81.5426451045375
+        },
+        "publish_p50_ms": {
+          "median": 1.12233,
+          "min": 1.055355,
+          "max": 1.152064
+        },
+        "publish_p95_ms": {
+          "median": 1.483081,
+          "min": 1.380741,
+          "max": 1.508839
+        },
+        "publish_p99_ms": {
+          "median": 1.748581,
+          "min": 1.620113,
+          "max": 1.864321
+        },
+        "end_to_end_p50_ms": {
+          "median": 0.918731,
+          "min": 0.879304,
+          "max": 0.95944
+        },
+        "end_to_end_p95_ms": {
+          "median": 1.141308,
+          "min": 1.045487,
+          "max": 1.219102
+        },
+        "end_to_end_p99_ms": {
+          "median": 1.359488,
+          "min": 1.262346,
+          "max": 1.511753
+        },
+        "synthetic_db_p50_ms": {
+          "median": 0.735641,
+          "min": 0.711687,
+          "max": 0.762552
+        },
+        "synthetic_db_p95_ms": {
+          "median": 1.413398,
+          "min": 1.267935,
+          "max": 1.446697
+        },
+        "synthetic_db_p99_ms": {
+          "median": 6.937761,
+          "min": 2.74072,
+          "max": 7.545774
+        },
+        "publish_schedule_lateness_p50_ms": {
+          "median": 0.070953,
+          "min": 0.070713,
+          "max": 0.072461
+        },
+        "publish_schedule_lateness_p95_ms": {
+          "median": 0.078249,
+          "min": 0.076897,
+          "max": 0.080616
+        },
+        "publish_schedule_lateness_p99_ms": {
+          "median": 0.092197,
+          "min": 0.083791,
+          "max": 0.104609
+        },
+        "db_schedule_lateness_p50_ms": {
+          "median": 0.072337,
+          "min": 0.071643,
+          "max": 0.073737
+        },
+        "db_schedule_lateness_p95_ms": {
+          "median": 0.091712,
+          "min": 0.090769,
+          "max": 0.093195
+        },
+        "db_schedule_lateness_p99_ms": {
+          "median": 0.288975,
+          "min": 0.271286,
+          "max": 0.410286
+        },
+        "server_mean_cpu_cores": {
+          "median": 0.2497287179430871,
+          "min": 0.23416058328380962,
+          "max": 0.253681485145639
+        },
+        "server_peak_cgroup_mib": {
+          "median": 228.93359375,
+          "min": 225.40625,
+          "max": 231.9453125
+        },
+        "client_mean_cpu_cores": {
+          "median": 0.2921252925772036,
+          "min": 0.28294307744803976,
+          "max": 0.3046668343169503
+        },
+        "client_peak_rss_sum_mib": {
+          "median": 189.44140625,
+          "min": 189.39453125,
+          "max": 189.734375
+        },
+        "measured_resource_span_seconds": {
+          "median": 119.706056446,
+          "min": 119.277833708,
+          "max": 119.743140662
+        },
+        "measured_resource_count": {
+          "median": 237,
+          "min": 236,
+          "max": 237
+        },
+        "peak_pids": {
+          "median": 81,
+          "min": 77,
+          "max": 81
+        },
+        "cpu_throttled_periods_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "cpu_throttled_time_ns_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_read_bytes": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_write_bytes": {
+          "median": 180473856,
+          "min": 178429952,
+          "max": 186515456
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "median": 4784800,
+          "min": 4724160,
+          "max": 4907672
+        },
+        "whole_cell_postgres_database_bytes": {
+          "median": 180224,
+          "min": 180224,
+          "max": 180224
+        },
+        "db_p95_absolute_increase_ms": {
+          "median": 0.5889859999999999,
+          "min": 0.36410600000000004,
+          "max": 0.6498059999999999
+        }
+      }
+    },
+    {
+      "broker": "rabbitmq",
+      "profile": "1x1",
+      "requested_rate": 400.0,
+      "repetitions": 3,
+      "labels": [
+        "r1-rabbitmq-1x1-400pps",
+        "r2-rabbitmq-1x1-400pps",
+        "r3-rabbitmq-1x1-400pps"
+      ],
+      "statistics_note": "median and range of per-cell metrics, not pooled percentile estimates",
+      "metrics": {
+        "confirmed_publish_per_s": {
+          "median": 399.30833333333334,
+          "min": 399.21666666666664,
+          "max": 399.3833333333333
+        },
+        "completed_per_s": {
+          "median": 399.30833333333334,
+          "min": 399.21666666666664,
+          "max": 399.3833333333333
+        },
+        "attempted_publish_per_s": {
+          "median": 399.31666666666666,
+          "min": 399.21666666666664,
+          "max": 399.3833333333333
+        },
+        "offered_load_achieved_fraction": {
+          "median": 0.9982916666666667,
+          "min": 0.9980416666666667,
+          "max": 0.9984583333333333
+        },
+        "synthetic_db_transactions_per_s": {
+          "median": 176.98333333333332,
+          "min": 159.675,
+          "max": 184.75833333333333
+        },
+        "db_p95_increase_percent": {
+          "median": 83.90783683088404,
+          "min": 57.355097037160796,
+          "max": 95.70566658418362
+        },
+        "publish_p50_ms": {
+          "median": 1.030705,
+          "min": 1.028812,
+          "max": 1.039218
+        },
+        "publish_p95_ms": {
+          "median": 1.356184,
+          "min": 1.352439,
+          "max": 1.36022
+        },
+        "publish_p99_ms": {
+          "median": 1.623777,
+          "min": 1.618499,
+          "max": 1.652249
+        },
+        "end_to_end_p50_ms": {
+          "median": 0.841587,
+          "min": 0.841348,
+          "max": 0.845813
+        },
+        "end_to_end_p95_ms": {
+          "median": 1.022753,
+          "min": 1.015403,
+          "max": 1.032968
+        },
+        "end_to_end_p99_ms": {
+          "median": 1.227495,
+          "min": 1.201638,
+          "max": 1.235415
+        },
+        "synthetic_db_p50_ms": {
+          "median": 0.881295,
+          "min": 0.857601,
+          "max": 0.901395
+        },
+        "synthetic_db_p95_ms": {
+          "median": 1.465545,
+          "min": 1.422221,
+          "max": 1.613421
+        },
+        "synthetic_db_p99_ms": {
+          "median": 6.996455,
+          "min": 4.973833,
+          "max": 43.522453
+        },
+        "publish_schedule_lateness_p50_ms": {
+          "median": 0.069206,
+          "min": 0.069173,
+          "max": 0.069244
+        },
+        "publish_schedule_lateness_p95_ms": {
+          "median": 0.077122,
+          "min": 0.076747,
+          "max": 0.077873
+        },
+        "publish_schedule_lateness_p99_ms": {
+          "median": 0.091989,
+          "min": 0.09034,
+          "max": 0.096595
+        },
+        "db_schedule_lateness_p50_ms": {
+          "median": 0.07331,
+          "min": 0.073277,
+          "max": 0.07338
+        },
+        "db_schedule_lateness_p95_ms": {
+          "median": 0.231665,
+          "min": 0.186567,
+          "max": 0.256968
+        },
+        "db_schedule_lateness_p99_ms": {
+          "median": 0.481159,
+          "min": 0.381903,
+          "max": 0.486654
+        },
+        "server_mean_cpu_cores": {
+          "median": 0.42391447939309873,
+          "min": 0.42159019626483124,
+          "max": 0.426817042532959
+        },
+        "server_peak_cgroup_mib": {
+          "median": 229.828125,
+          "min": 229.25,
+          "max": 231.7109375
+        },
+        "client_mean_cpu_cores": {
+          "median": 0.4955639847861517,
+          "min": 0.4921574136245824,
+          "max": 0.5014655223240564
+        },
+        "client_peak_rss_sum_mib": {
+          "median": 189.41015625,
+          "min": 189.3984375,
+          "max": 189.4609375
+        },
+        "measured_resource_span_seconds": {
+          "median": 119.392695047,
+          "min": 119.379135321,
+          "max": 119.410003947
+        },
+        "measured_resource_count": {
+          "median": 236,
+          "min": 236,
+          "max": 236
+        },
+        "peak_pids": {
+          "median": 77,
+          "min": 77,
+          "max": 82
+        },
+        "cpu_throttled_periods_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "cpu_throttled_time_ns_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_read_bytes": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_write_bytes": {
+          "median": 176766976,
+          "min": 159375360,
+          "max": 184627200
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "median": 4859872,
+          "min": 4328968,
+          "max": 5020792
+        },
+        "whole_cell_postgres_database_bytes": {
+          "median": 180224,
+          "min": 180224,
+          "max": 180224
+        },
+        "db_p95_absolute_increase_ms": {
+          "median": 0.6686540000000001,
+          "min": 0.518392,
+          "max": 0.789009
+        }
+      }
+    },
+    {
+      "broker": "rabbitmq",
+      "profile": "4x4",
+      "requested_rate": 200.0,
+      "repetitions": 3,
+      "labels": [
+        "r1-rabbitmq-4x4-200pps",
+        "r2-rabbitmq-4x4-200pps",
+        "r3-rabbitmq-4x4-200pps"
+      ],
+      "statistics_note": "median and range of per-cell metrics, not pooled percentile estimates",
+      "metrics": {
+        "confirmed_publish_per_s": {
+          "median": 200.0,
+          "min": 200.0,
+          "max": 200.0
+        },
+        "completed_per_s": {
+          "median": 200.0,
+          "min": 200.0,
+          "max": 200.0
+        },
+        "attempted_publish_per_s": {
+          "median": 200.0,
+          "min": 200.0,
+          "max": 200.0
+        },
+        "offered_load_achieved_fraction": {
+          "median": 1.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "synthetic_db_transactions_per_s": {
+          "median": 182.49166666666667,
+          "min": 172.98333333333332,
+          "max": 184.00833333333333
+        },
+        "db_p95_increase_percent": {
+          "median": 72.69314371940243,
+          "min": 56.618342628970744,
+          "max": 84.34014187636703
+        },
+        "publish_p50_ms": {
+          "median": 1.209668,
+          "min": 1.17664,
+          "max": 1.307703
+        },
+        "publish_p95_ms": {
+          "median": 1.702242,
+          "min": 1.634944,
+          "max": 1.926612
+        },
+        "publish_p99_ms": {
+          "median": 2.000871,
+          "min": 1.969496,
+          "max": 3.861678
+        },
+        "end_to_end_p50_ms": {
+          "median": 1.118935,
+          "min": 1.042823,
+          "max": 1.141198
+        },
+        "end_to_end_p95_ms": {
+          "median": 1.34618,
+          "min": 1.329316,
+          "max": 1.539012
+        },
+        "end_to_end_p99_ms": {
+          "median": 1.615305,
+          "min": 1.609426,
+          "max": 3.28571
+        },
+        "synthetic_db_p50_ms": {
+          "median": 0.721131,
+          "min": 0.714311,
+          "max": 0.736653
+        },
+        "synthetic_db_p95_ms": {
+          "median": 1.423703,
+          "min": 1.415562,
+          "max": 1.46899
+        },
+        "synthetic_db_p99_ms": {
+          "median": 7.040671,
+          "min": 5.089335,
+          "max": 9.89125
+        },
+        "publish_schedule_lateness_p50_ms": {
+          "median": 0.080543,
+          "min": 0.078464,
+          "max": 0.082276
+        },
+        "publish_schedule_lateness_p95_ms": {
+          "median": 0.091404,
+          "min": 0.090493,
+          "max": 0.096362
+        },
+        "publish_schedule_lateness_p99_ms": {
+          "median": 0.102076,
+          "min": 0.098381,
+          "max": 0.108221
+        },
+        "db_schedule_lateness_p50_ms": {
+          "median": 0.07343,
+          "min": 0.072502,
+          "max": 0.073433
+        },
+        "db_schedule_lateness_p95_ms": {
+          "median": 0.101579,
+          "min": 0.095572,
+          "max": 0.11424
+        },
+        "db_schedule_lateness_p99_ms": {
+          "median": 0.434046,
+          "min": 0.299028,
+          "max": 0.487785
+        },
+        "server_mean_cpu_cores": {
+          "median": 0.24131066980970992,
+          "min": 0.23994079378558203,
+          "max": 0.2808812468920548
+        },
+        "server_peak_cgroup_mib": {
+          "median": 206.08203125,
+          "min": 186.30859375,
+          "max": 223.69140625
+        },
+        "client_mean_cpu_cores": {
+          "median": 0.3405315779315795,
+          "min": 0.3245496361541778,
+          "max": 0.35516060572393404
+        },
+        "client_peak_rss_sum_mib": {
+          "median": 462.7109375,
+          "min": 462.62890625,
+          "max": 462.8515625
+        },
+        "measured_resource_span_seconds": {
+          "median": 119.430921053,
+          "min": 119.396220742,
+          "max": 119.467078601
+        },
+        "measured_resource_count": {
+          "median": 236,
+          "min": 236,
+          "max": 236
+        },
+        "peak_pids": {
+          "median": 58,
+          "min": 57,
+          "max": 77
+        },
+        "cpu_throttled_periods_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "cpu_throttled_time_ns_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_read_bytes": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_write_bytes": {
+          "median": 181993472,
+          "min": 172515328,
+          "max": 183590912
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "median": 4767640,
+          "min": 4747360,
+          "max": 4913472
+        },
+        "whole_cell_postgres_database_bytes": {
+          "median": 180224,
+          "min": 180224,
+          "max": 180224
+        },
+        "db_p95_absolute_increase_ms": {
+          "median": 0.5992909999999999,
+          "min": 0.511733,
+          "max": 0.672099
+        }
+      }
+    },
+    {
+      "broker": "rabbitmq",
+      "profile": "4x4",
+      "requested_rate": 400.0,
+      "repetitions": 3,
+      "labels": [
+        "r1-rabbitmq-4x4-400pps",
+        "r2-rabbitmq-4x4-400pps",
+        "r3-rabbitmq-4x4-400pps"
+      ],
+      "statistics_note": "median and range of per-cell metrics, not pooled percentile estimates",
+      "metrics": {
+        "confirmed_publish_per_s": {
+          "median": 400.0,
+          "min": 399.9916666666667,
+          "max": 400.0
+        },
+        "completed_per_s": {
+          "median": 400.0,
+          "min": 400.0,
+          "max": 400.0
+        },
+        "attempted_publish_per_s": {
+          "median": 400.0,
+          "min": 400.0,
+          "max": 400.0
+        },
+        "offered_load_achieved_fraction": {
+          "median": 1.0,
+          "min": 1.0,
+          "max": 1.0
+        },
+        "synthetic_db_transactions_per_s": {
+          "median": 169.05,
+          "min": 163.91666666666666,
+          "max": 183.7
+        },
+        "db_p95_increase_percent": {
+          "median": 129.04609168327195,
+          "min": 101.86836193553708,
+          "max": 171.41729546449892
+        },
+        "publish_p50_ms": {
+          "median": 1.354453,
+          "min": 1.199794,
+          "max": 1.556688
+        },
+        "publish_p95_ms": {
+          "median": 1.953434,
+          "min": 1.709904,
+          "max": 2.477803
+        },
+        "publish_p99_ms": {
+          "median": 2.505966,
+          "min": 2.171903,
+          "max": 3.483132
+        },
+        "end_to_end_p50_ms": {
+          "median": 1.09501,
+          "min": 1.078847,
+          "max": 1.262015
+        },
+        "end_to_end_p95_ms": {
+          "median": 1.567886,
+          "min": 1.344487,
+          "max": 2.071956
+        },
+        "end_to_end_p99_ms": {
+          "median": 2.029225,
+          "min": 1.783112,
+          "max": 2.949125
+        },
+        "synthetic_db_p50_ms": {
+          "median": 0.847547,
+          "min": 0.730795,
+          "max": 0.887915
+        },
+        "synthetic_db_p95_ms": {
+          "median": 2.070185,
+          "min": 1.664227,
+          "max": 2.1629
+        },
+        "synthetic_db_p99_ms": {
+          "median": 23.423125,
+          "min": 4.991518,
+          "max": 35.388166
+        },
+        "publish_schedule_lateness_p50_ms": {
+          "median": 0.080456,
+          "min": 0.078057,
+          "max": 0.083004
+        },
+        "publish_schedule_lateness_p95_ms": {
+          "median": 0.102473,
+          "min": 0.098728,
+          "max": 0.396138
+        },
+        "publish_schedule_lateness_p99_ms": {
+          "median": 0.412063,
+          "min": 0.11696,
+          "max": 0.804274
+        },
+        "db_schedule_lateness_p50_ms": {
+          "median": 0.07511,
+          "min": 0.073501,
+          "max": 0.075602
+        },
+        "db_schedule_lateness_p95_ms": {
+          "median": 0.398982,
+          "min": 0.264,
+          "max": 0.661814
+        },
+        "db_schedule_lateness_p99_ms": {
+          "median": 0.698736,
+          "min": 0.64468,
+          "max": 1.063971
+        },
+        "server_mean_cpu_cores": {
+          "median": 0.38221650865860773,
+          "min": 0.3821340649560538,
+          "max": 0.44008820260132836
+        },
+        "server_peak_cgroup_mib": {
+          "median": 218.53515625,
+          "min": 208.53125,
+          "max": 227.8359375
+        },
+        "client_mean_cpu_cores": {
+          "median": 0.6125592535896001,
+          "min": 0.6118909379729052,
+          "max": 0.6240311102533198
+        },
+        "client_peak_rss_sum_mib": {
+          "median": 462.73046875,
+          "min": 462.6015625,
+          "max": 462.7890625
+        },
+        "measured_resource_span_seconds": {
+          "median": 119.236935003,
+          "min": 119.224825137,
+          "max": 119.270094398
+        },
+        "measured_resource_count": {
+          "median": 235,
+          "min": 235,
+          "max": 235
+        },
+        "peak_pids": {
+          "median": 77,
+          "min": 57,
+          "max": 77
+        },
+        "cpu_throttled_periods_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "cpu_throttled_time_ns_delta": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_read_bytes": {
+          "median": 0,
+          "min": 0,
+          "max": 0
+        },
+        "measured_sampled_block_write_bytes": {
+          "median": 168198144,
+          "min": 163160064,
+          "max": 182878208
+        },
+        "whole_cell_postgres_wal_lsn_bytes": {
+          "median": 4585784,
+          "min": 4514072,
+          "max": 4696552
+        },
+        "whole_cell_postgres_database_bytes": {
+          "median": 180224,
+          "min": 180224,
+          "max": 180224
+        },
+        "db_p95_absolute_increase_ms": {
+          "median": 1.166356,
+          "min": 0.8398149999999999,
+          "max": 1.366009
+        }
+      }
+    }
+  ],
+  "cells": [
+    {
+      "format_version": 2,
+      "run_id": "78965fb2-44b5-45d7-a173-f0961c942747",
+      "label": "r1-baseline",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 303866717186,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 0,
+        "consumers": 0,
+        "offered_rate_per_s": 0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "mean_ms": null
+      },
+      "end_to_end": {
+        "count": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "mean_ms": null
+      },
+      "synthetic_db": {
+        "count": 20726,
+        "p50_ms": 0.655074,
+        "p95_ms": 0.824412,
+        "p99_ms": 19.742737,
+        "mean_ms": 1.5423267893949628
+      },
+      "db_schedule_lateness": {
+        "count": 20726,
+        "p50_ms": 0.067981,
+        "p95_ms": 0.076029,
+        "p99_ms": 0.120097,
+        "mean_ms": 0.06979172879475055
+      },
+      "publish_schedule_lateness": {
+        "count": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "mean_ms": null
+      },
+      "confirmed_publish_per_s": 0.0,
+      "completed_per_s": 0.0,
+      "attempted_publish_per_s": 0.0,
+      "offered_load_achieved_fraction": null,
+      "synthetic_db_transactions_per_s": 172.71666666666667,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 0,
+        "accepted": 0,
+        "received_unique": 0
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 0,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 0,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 300,
+      "measured_resource_sample_count": 237,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "baseline",
+      "profile": "0x0",
+      "requested_rate": 0,
+      "server_stack_metadata": "r1-baseline.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.03706959308519221,
+        "server_peak_cgroup_mib": 94.33203125,
+        "client_mean_cpu_cores": 0.05290574859237021,
+        "client_peak_rss_sum_mib": 98.265625,
+        "measured_resource_span_seconds": 119.457718077,
+        "measured_resource_count": 237,
+        "peak_pids": 12,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 172912640,
+        "whole_cell_postgres_wal_lsn_bytes": 4867336,
+        "whole_cell_postgres_database_bytes": 180224,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 222834688,
+          "rios": 0,
+          "wios": 26586,
+          "dbytes": 356352,
+          "dios": 3
+        },
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "0716965d-0b76-4017-9430-9e4aa43419d3",
+      "label": "r1-echoo-1x1-200pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 458953724269,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 1,
+        "consumers": 1,
+        "offered_rate_per_s": 200.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 18912,
+        "p50_ms": 1.30615,
+        "p95_ms": 2.361883,
+        "p99_ms": 47.973474,
+        "mean_ms": 2.848507588462352
+      },
+      "end_to_end": {
+        "count": 18912,
+        "p50_ms": 1.368423,
+        "p95_ms": 2.469221,
+        "p99_ms": 48.115584,
+        "mean_ms": 2.911688798857868
+      },
+      "synthetic_db": {
+        "count": 19161,
+        "p50_ms": 0.730143,
+        "p95_ms": 1.750243,
+        "p99_ms": 45.742543,
+        "mean_ms": 2.227545108553833
+      },
+      "db_schedule_lateness": {
+        "count": 19161,
+        "p50_ms": 0.072748,
+        "p95_ms": 0.088978,
+        "p99_ms": 0.225737,
+        "mean_ms": 0.0792717074265435
+      },
+      "publish_schedule_lateness": {
+        "count": 18912,
+        "p50_ms": 0.071407,
+        "p95_ms": 0.087515,
+        "p99_ms": 0.17668,
+        "mean_ms": 0.07678442401649746
+      },
+      "confirmed_publish_per_s": 157.60833333333332,
+      "completed_per_s": 157.60833333333332,
+      "attempted_publish_per_s": 157.6,
+      "offered_load_achieved_fraction": 0.788,
+      "synthetic_db_transactions_per_s": 159.675,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 23477,
+        "accepted": 23477,
+        "received_unique": 23477
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 1,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 1,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 300,
+      "measured_resource_sample_count": 237,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "echoo",
+      "profile": "1x1",
+      "requested_rate": 200.0,
+      "server_stack_metadata": "r1-echoo-1x1-200pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r1-baseline",
+      "baseline_db_p95_ms": 0.824412,
+      "db_p95_increase_percent": 112.30198007792218,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.2232156881329901,
+        "server_peak_cgroup_mib": 172.26953125,
+        "client_mean_cpu_cores": 0.22998463503635622,
+        "client_peak_rss_sum_mib": 189.63671875,
+        "measured_resource_span_seconds": 119.616686548,
+        "measured_resource_count": 237,
+        "peak_pids": 13,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 723963904,
+        "whole_cell_postgres_wal_lsn_bytes": 66049552,
+        "whole_cell_postgres_database_bytes": 3227648,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 907423744,
+          "rios": 0,
+          "wios": 94528,
+          "dbytes": 356352,
+          "dios": 3
+        },
+        "db_p95_absolute_increase_ms": 0.925831,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "da3bab08-a827-492d-95ed-fda72c759dca",
+      "label": "r1-echoo-1x1-400pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 776316230314,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 1,
+        "consumers": 1,
+        "offered_rate_per_s": 400.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 41657,
+        "p50_ms": 0.908504,
+        "p95_ms": 1.155188,
+        "p99_ms": 4.90023,
+        "mean_ms": 1.3365556825503517
+      },
+      "end_to_end": {
+        "count": 41657,
+        "p50_ms": 1.289845,
+        "p95_ms": 1.623365,
+        "p99_ms": 8.364558,
+        "mean_ms": 1.847734576469741
+      },
+      "synthetic_db": {
+        "count": 21196,
+        "p50_ms": 0.836649,
+        "p95_ms": 1.424864,
+        "p99_ms": 14.545473,
+        "mean_ms": 1.6450525541611625
+      },
+      "db_schedule_lateness": {
+        "count": 21196,
+        "p50_ms": 0.072385,
+        "p95_ms": 0.088993,
+        "p99_ms": 0.188611,
+        "mean_ms": 0.07804786672013588
+      },
+      "publish_schedule_lateness": {
+        "count": 41657,
+        "p50_ms": 0.069859,
+        "p95_ms": 0.078707,
+        "p99_ms": 0.12006,
+        "mean_ms": 0.07284218906786374
+      },
+      "confirmed_publish_per_s": 347.15,
+      "completed_per_s": 347.15,
+      "attempted_publish_per_s": 347.14166666666665,
+      "offered_load_achieved_fraction": 0.8678541666666667,
+      "synthetic_db_transactions_per_s": 176.63333333333333,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 51156,
+        "accepted": 51156,
+        "received_unique": 51156
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 1,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 2,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 300,
+      "measured_resource_sample_count": 237,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "echoo",
+      "profile": "1x1",
+      "requested_rate": 400.0,
+      "server_stack_metadata": "r1-echoo-1x1-400pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r1-baseline",
+      "baseline_db_p95_ms": 0.824412,
+      "db_p95_increase_percent": 72.83397136383263,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.3861249157372529,
+        "server_peak_cgroup_mib": 245.8359375,
+        "client_mean_cpu_cores": 0.38559987519676947,
+        "client_peak_rss_sum_mib": 190.11328125,
+        "measured_resource_span_seconds": 119.735515932,
+        "measured_resource_count": 237,
+        "peak_pids": 13,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 1411903488,
+        "whole_cell_postgres_wal_lsn_bytes": 138964592,
+        "whole_cell_postgres_database_bytes": 6815744,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 1748733952,
+          "rios": 0,
+          "wios": 180119,
+          "dbytes": 356352,
+          "dios": 3
+        },
+        "db_p95_absolute_increase_ms": 0.6004519999999999,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "f36d1952-5b3c-440e-9d77-a30348d8c125",
+      "label": "r1-echoo-4x4-200pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 1094641470443,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 4,
+        "consumers": 4,
+        "offered_rate_per_s": 200.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 20806,
+        "p50_ms": 2.089491,
+        "p95_ms": 14.076521,
+        "p99_ms": 141.790144,
+        "mean_ms": 6.2992954507353645
+      },
+      "end_to_end": {
+        "count": 20806,
+        "p50_ms": 2.383404,
+        "p95_ms": 15.255785,
+        "p99_ms": 143.969519,
+        "mean_ms": 6.7340063204364125
+      },
+      "synthetic_db": {
+        "count": 19830,
+        "p50_ms": 0.758375,
+        "p95_ms": 1.936176,
+        "p99_ms": 30.2886,
+        "mean_ms": 2.063866346646495
+      },
+      "db_schedule_lateness": {
+        "count": 19830,
+        "p50_ms": 0.071083,
+        "p95_ms": 0.325616,
+        "p99_ms": 0.733196,
+        "mean_ms": 0.10513274412506303
+      },
+      "publish_schedule_lateness": {
+        "count": 20806,
+        "p50_ms": 0.087895,
+        "p95_ms": 0.515741,
+        "p99_ms": 1.440748,
+        "mean_ms": 0.15407596520234548
+      },
+      "confirmed_publish_per_s": 173.38333333333333,
+      "completed_per_s": 173.38333333333333,
+      "attempted_publish_per_s": 173.38333333333333,
+      "offered_load_achieved_fraction": 0.8669166666666667,
+      "synthetic_db_transactions_per_s": 165.25,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 25183,
+        "accepted": 25183,
+        "received_unique": 25183
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 2,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 5,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 299,
+      "measured_resource_sample_count": 236,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "echoo",
+      "profile": "4x4",
+      "requested_rate": 200.0,
+      "server_stack_metadata": "r1-echoo-4x4-200pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r1-baseline",
+      "baseline_db_p95_ms": 0.824412,
+      "db_p95_increase_percent": 134.85538784006056,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.31112368317438027,
+        "server_peak_cgroup_mib": 180.984375,
+        "client_mean_cpu_cores": 0.30361242739838795,
+        "client_peak_rss_sum_mib": 462.17578125,
+        "measured_resource_span_seconds": 119.296829548,
+        "measured_resource_count": 236,
+        "peak_pids": 13,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 782602240,
+        "whole_cell_postgres_wal_lsn_bytes": 70432056,
+        "whole_cell_postgres_database_bytes": 7200768,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 957353984,
+          "rios": 0,
+          "wios": 99701,
+          "dbytes": 356352,
+          "dios": 3
+        },
+        "db_p95_absolute_increase_ms": 1.111764,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "fdfa0848-ba70-4985-be86-4e0cd1f757c0",
+      "label": "r1-echoo-4x4-400pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 1413080174808,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 4,
+        "consumers": 4,
+        "offered_rate_per_s": 400.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 39184,
+        "p50_ms": 2.174096,
+        "p95_ms": 7.335093,
+        "p99_ms": 91.957808,
+        "mean_ms": 4.958808529348714
+      },
+      "end_to_end": {
+        "count": 39184,
+        "p50_ms": 2.283937,
+        "p95_ms": 7.756733,
+        "p99_ms": 93.261575,
+        "mean_ms": 5.124660549076154
+      },
+      "synthetic_db": {
+        "count": 19376,
+        "p50_ms": 1.002824,
+        "p95_ms": 2.543109,
+        "p99_ms": 41.460861,
+        "mean_ms": 2.454674178003716
+      },
+      "db_schedule_lateness": {
+        "count": 19376,
+        "p50_ms": 0.078702,
+        "p95_ms": 0.583895,
+        "p99_ms": 1.17641,
+        "mean_ms": 0.1531544894199009
+      },
+      "publish_schedule_lateness": {
+        "count": 39184,
+        "p50_ms": 0.086409,
+        "p95_ms": 0.561806,
+        "p99_ms": 1.387608,
+        "mean_ms": 0.15689789528889342
+      },
+      "confirmed_publish_per_s": 326.53333333333336,
+      "completed_per_s": 326.53333333333336,
+      "attempted_publish_per_s": 326.53333333333336,
+      "offered_load_achieved_fraction": 0.8163333333333334,
+      "synthetic_db_transactions_per_s": 161.46666666666667,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 50749,
+        "accepted": 50749,
+        "received_unique": 50749
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 3,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 5,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 299,
+      "measured_resource_sample_count": 236,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "echoo",
+      "profile": "4x4",
+      "requested_rate": 400.0,
+      "server_stack_metadata": "r1-echoo-4x4-400pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r1-baseline",
+      "baseline_db_p95_ms": 0.824412,
+      "db_p95_increase_percent": 208.47549526207766,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.44372658588667524,
+        "server_peak_cgroup_mib": 254.13671875,
+        "client_mean_cpu_cores": 0.5415577011483413,
+        "client_peak_rss_sum_mib": 462.15625,
+        "measured_resource_span_seconds": 119.59944409,
+        "measured_resource_count": 236,
+        "peak_pids": 13,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 1330126848,
+        "whole_cell_postgres_wal_lsn_bytes": 137778488,
+        "whole_cell_postgres_database_bytes": 10657792,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 1732317184,
+          "rios": 0,
+          "wios": 177885,
+          "dbytes": 356352,
+          "dios": 3
+        },
+        "db_p95_absolute_increase_ms": 1.7186969999999997,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "f0710825-a779-4fd0-80bf-f98a0a7afacb",
+      "label": "r1-rabbitmq-1x1-200pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 617763710108,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 1,
+        "consumers": 1,
+        "offered_rate_per_s": 200.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 23992,
+        "p50_ms": 1.12233,
+        "p95_ms": 1.483081,
+        "p99_ms": 1.748581,
+        "mean_ms": 1.1797107490830276
+      },
+      "end_to_end": {
+        "count": 23992,
+        "p50_ms": 0.918731,
+        "p95_ms": 1.141308,
+        "p99_ms": 1.359488,
+        "mean_ms": 0.9511245496832278
+      },
+      "synthetic_db": {
+        "count": 22380,
+        "p50_ms": 0.735641,
+        "p95_ms": 1.413398,
+        "p99_ms": 6.937761,
+        "mean_ms": 1.2635762711349419
+      },
+      "db_schedule_lateness": {
+        "count": 22380,
+        "p50_ms": 0.072337,
+        "p95_ms": 0.090769,
+        "p99_ms": 0.288975,
+        "mean_ms": 0.07967709311885612
+      },
+      "publish_schedule_lateness": {
+        "count": 23992,
+        "p50_ms": 0.070953,
+        "p95_ms": 0.078249,
+        "p99_ms": 0.104609,
+        "mean_ms": 0.07164099524841613
+      },
+      "confirmed_publish_per_s": 199.925,
+      "completed_per_s": 199.925,
+      "attempted_publish_per_s": 199.93333333333334,
+      "offered_load_achieved_fraction": 0.9996666666666667,
+      "synthetic_db_transactions_per_s": 186.5,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 29992,
+        "accepted": 29992,
+        "received_unique": 29992
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 0,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 1,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 300,
+      "measured_resource_sample_count": 237,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "rabbitmq",
+      "profile": "1x1",
+      "requested_rate": 200.0,
+      "server_stack_metadata": "r1-rabbitmq-1x1-200pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r1-baseline",
+      "baseline_db_p95_ms": 0.824412,
+      "db_p95_increase_percent": 71.44316191418851,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.2497287179430871,
+        "server_peak_cgroup_mib": 231.9453125,
+        "client_mean_cpu_cores": 0.2921252925772036,
+        "client_peak_rss_sum_mib": 189.44140625,
+        "measured_resource_span_seconds": 119.743140662,
+        "measured_resource_count": 237,
+        "peak_pids": 81,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 186515456,
+        "whole_cell_postgres_wal_lsn_bytes": 4907672,
+        "whole_cell_postgres_database_bytes": 180224,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 232091648,
+          "rios": 0,
+          "wios": 27714,
+          "dbytes": 380928,
+          "dios": 4
+        },
+        "db_p95_absolute_increase_ms": 0.5889859999999999,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "e9e31023-91be-430d-9fb0-671c4c35722c",
+      "label": "r1-rabbitmq-1x1-400pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 935717257311,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 1,
+        "consumers": 1,
+        "offered_rate_per_s": 400.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 47906,
+        "p50_ms": 1.028812,
+        "p95_ms": 1.356184,
+        "p99_ms": 1.652249,
+        "mean_ms": 1.0948086173965683
+      },
+      "end_to_end": {
+        "count": 47906,
+        "p50_ms": 0.845813,
+        "p95_ms": 1.022753,
+        "p99_ms": 1.235415,
+        "mean_ms": 0.8722998370350269
+      },
+      "synthetic_db": {
+        "count": 19161,
+        "p50_ms": 0.901395,
+        "p95_ms": 1.613421,
+        "p99_ms": 43.522453,
+        "mean_ms": 2.327378681175304
+      },
+      "db_schedule_lateness": {
+        "count": 19161,
+        "p50_ms": 0.07338,
+        "p95_ms": 0.256968,
+        "p99_ms": 0.486654,
+        "mean_ms": 0.09387244564479934
+      },
+      "publish_schedule_lateness": {
+        "count": 47906,
+        "p50_ms": 0.069173,
+        "p95_ms": 0.077873,
+        "p99_ms": 0.096595,
+        "mean_ms": 0.07071329184235794
+      },
+      "confirmed_publish_per_s": 399.21666666666664,
+      "completed_per_s": 399.21666666666664,
+      "attempted_publish_per_s": 399.21666666666664,
+      "offered_load_achieved_fraction": 0.9980416666666667,
+      "synthetic_db_transactions_per_s": 159.675,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 59892,
+        "accepted": 59892,
+        "received_unique": 59892
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 0,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 1,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 299,
+      "measured_resource_sample_count": 236,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "rabbitmq",
+      "profile": "1x1",
+      "requested_rate": 400.0,
+      "server_stack_metadata": "r1-rabbitmq-1x1-400pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r1-baseline",
+      "baseline_db_p95_ms": 0.824412,
+      "db_p95_increase_percent": 95.70566658418362,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.426817042532959,
+        "server_peak_cgroup_mib": 231.7109375,
+        "client_mean_cpu_cores": 0.4921574136245824,
+        "client_peak_rss_sum_mib": 189.4609375,
+        "measured_resource_span_seconds": 119.392695047,
+        "measured_resource_count": 236,
+        "peak_pids": 82,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 159375360,
+        "whole_cell_postgres_wal_lsn_bytes": 4328968,
+        "whole_cell_postgres_database_bytes": 180224,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 198053888,
+          "rios": 0,
+          "wios": 23627,
+          "dbytes": 380928,
+          "dios": 5
+        },
+        "db_p95_absolute_increase_ms": 0.789009,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "70bcbbe9-46d8-4497-8fcb-35aae500d271",
+      "label": "r1-rabbitmq-4x4-200pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 1254654860589,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 4,
+        "consumers": 4,
+        "offered_rate_per_s": 200.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 24000,
+        "p50_ms": 1.209668,
+        "p95_ms": 1.702242,
+        "p99_ms": 2.000871,
+        "mean_ms": 1.277105924125
+      },
+      "end_to_end": {
+        "count": 24000,
+        "p50_ms": 1.118935,
+        "p95_ms": 1.34618,
+        "p99_ms": 1.609426,
+        "mean_ms": 1.130392615625
+      },
+      "synthetic_db": {
+        "count": 20758,
+        "p50_ms": 0.721131,
+        "p95_ms": 1.423703,
+        "p99_ms": 9.89125,
+        "mean_ms": 1.654373069611716
+      },
+      "db_schedule_lateness": {
+        "count": 20758,
+        "p50_ms": 0.07343,
+        "p95_ms": 0.101579,
+        "p99_ms": 0.434046,
+        "mean_ms": 0.08418336771365256
+      },
+      "publish_schedule_lateness": {
+        "count": 24000,
+        "p50_ms": 0.080543,
+        "p95_ms": 0.090493,
+        "p99_ms": 0.098381,
+        "mean_ms": 0.08155374216666667
+      },
+      "confirmed_publish_per_s": 200.0,
+      "completed_per_s": 200.0,
+      "attempted_publish_per_s": 200.0,
+      "offered_load_achieved_fraction": 1.0,
+      "synthetic_db_transactions_per_s": 172.98333333333332,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 30000,
+        "accepted": 30000,
+        "received_unique": 30000
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 0,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 1,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 299,
+      "measured_resource_sample_count": 236,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "rabbitmq",
+      "profile": "4x4",
+      "requested_rate": 200.0,
+      "server_stack_metadata": "r1-rabbitmq-4x4-200pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r1-baseline",
+      "baseline_db_p95_ms": 0.824412,
+      "db_p95_increase_percent": 72.69314371940243,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.23994079378558203,
+        "server_peak_cgroup_mib": 186.30859375,
+        "client_mean_cpu_cores": 0.3405315779315795,
+        "client_peak_rss_sum_mib": 462.7109375,
+        "measured_resource_span_seconds": 119.430921053,
+        "measured_resource_count": 236,
+        "peak_pids": 58,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 172515328,
+        "whole_cell_postgres_wal_lsn_bytes": 4747360,
+        "whole_cell_postgres_database_bytes": 180224,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 220680192,
+          "rios": 0,
+          "wios": 26337,
+          "dbytes": 380928,
+          "dios": 4
+        },
+        "db_p95_absolute_increase_ms": 0.5992909999999999,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "5c1f2869-ca30-4f91-8228-9db030d3b972",
+      "label": "r1-rabbitmq-4x4-400pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 1573709912781,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 4,
+        "consumers": 4,
+        "offered_rate_per_s": 400.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 48000,
+        "p50_ms": 1.199794,
+        "p95_ms": 1.709904,
+        "p99_ms": 2.171903,
+        "mean_ms": 1.2921083418333332
+      },
+      "end_to_end": {
+        "count": 48000,
+        "p50_ms": 1.09501,
+        "p95_ms": 1.344487,
+        "p99_ms": 1.783112,
+        "mean_ms": 1.1208692643333333
+      },
+      "synthetic_db": {
+        "count": 20286,
+        "p50_ms": 0.887915,
+        "p95_ms": 1.664227,
+        "p99_ms": 23.423125,
+        "mean_ms": 1.977357053485162
+      },
+      "db_schedule_lateness": {
+        "count": 20286,
+        "p50_ms": 0.075602,
+        "p95_ms": 0.264,
+        "p99_ms": 0.64468,
+        "mean_ms": 0.10081963595583161
+      },
+      "publish_schedule_lateness": {
+        "count": 48000,
+        "p50_ms": 0.080456,
+        "p95_ms": 0.102473,
+        "p99_ms": 0.11696,
+        "mean_ms": 0.08376376760416666
+      },
+      "confirmed_publish_per_s": 400.0,
+      "completed_per_s": 400.0,
+      "attempted_publish_per_s": 400.0,
+      "offered_load_achieved_fraction": 1.0,
+      "synthetic_db_transactions_per_s": 169.05,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 60000,
+        "accepted": 60000,
+        "received_unique": 60000
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 1,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 1,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 298,
+      "measured_resource_sample_count": 235,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "rabbitmq",
+      "profile": "4x4",
+      "requested_rate": 400.0,
+      "server_stack_metadata": "r1-rabbitmq-4x4-400pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r1-baseline",
+      "baseline_db_p95_ms": 0.824412,
+      "db_p95_increase_percent": 101.86836193553708,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.44008820260132836,
+        "server_peak_cgroup_mib": 227.8359375,
+        "client_mean_cpu_cores": 0.6240311102533198,
+        "client_peak_rss_sum_mib": 462.6015625,
+        "measured_resource_span_seconds": 119.224825137,
+        "measured_resource_count": 235,
+        "peak_pids": 77,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 168198144,
+        "whole_cell_postgres_wal_lsn_bytes": 4585784,
+        "whole_cell_postgres_database_bytes": 180224,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 213192704,
+          "rios": 0,
+          "wios": 25445,
+          "dbytes": 380928,
+          "dios": 5
+        },
+        "db_p95_absolute_increase_ms": 0.8398149999999999,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "524ad55b-1f51-4f19-9aee-19c298f70d19",
+      "label": "r2-baseline",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 1732020701333,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 0,
+        "consumers": 0,
+        "offered_rate_per_s": 0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "mean_ms": null
+      },
+      "end_to_end": {
+        "count": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "mean_ms": null
+      },
+      "synthetic_db": {
+        "count": 19829,
+        "p50_ms": 0.670305,
+        "p95_ms": 0.903829,
+        "p99_ms": 37.002468,
+        "mean_ms": 1.8372942799939482
+      },
+      "db_schedule_lateness": {
+        "count": 19829,
+        "p50_ms": 0.068493,
+        "p95_ms": 0.076282,
+        "p99_ms": 0.132995,
+        "mean_ms": 0.07075682107014979
+      },
+      "publish_schedule_lateness": {
+        "count": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "mean_ms": null
+      },
+      "confirmed_publish_per_s": 0.0,
+      "completed_per_s": 0.0,
+      "attempted_publish_per_s": 0.0,
+      "offered_load_achieved_fraction": null,
+      "synthetic_db_transactions_per_s": 165.24166666666667,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 0,
+        "accepted": 0,
+        "received_unique": 0
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 0,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 0,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 300,
+      "measured_resource_sample_count": 237,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "baseline",
+      "profile": "0x0",
+      "requested_rate": 0,
+      "server_stack_metadata": "r2-baseline.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.037921429222517344,
+        "server_peak_cgroup_mib": 95.40234375,
+        "client_mean_cpu_cores": 0.0534097798296681,
+        "client_peak_rss_sum_mib": 98.57421875,
+        "measured_resource_span_seconds": 119.453778322,
+        "measured_resource_count": 237,
+        "peak_pids": 13,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 164958208,
+        "whole_cell_postgres_wal_lsn_bytes": 4653208,
+        "whole_cell_postgres_database_bytes": 180224,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 213053440,
+          "rios": 0,
+          "wios": 25398,
+          "dbytes": 356352,
+          "dios": 3
+        },
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "8a23348d-abf0-4b60-84b5-cb536d7b9159",
+      "label": "r2-echoo-1x1-200pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 3005548454386,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 1,
+        "consumers": 1,
+        "offered_rate_per_s": 200.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 21740,
+        "p50_ms": 1.242336,
+        "p95_ms": 1.661133,
+        "p99_ms": 10.89002,
+        "mean_ms": 1.8786753265869365
+      },
+      "end_to_end": {
+        "count": 21740,
+        "p50_ms": 1.330827,
+        "p95_ms": 1.743092,
+        "p99_ms": 10.929708,
+        "mean_ms": 1.965793925574977
+      },
+      "synthetic_db": {
+        "count": 21853,
+        "p50_ms": 0.735611,
+        "p95_ms": 1.356915,
+        "p99_ms": 9.289819,
+        "mean_ms": 1.3729124274927929
+      },
+      "db_schedule_lateness": {
+        "count": 21853,
+        "p50_ms": 0.072994,
+        "p95_ms": 0.084066,
+        "p99_ms": 0.215086,
+        "mean_ms": 0.0783950901478058
+      },
+      "publish_schedule_lateness": {
+        "count": 21740,
+        "p50_ms": 0.072455,
+        "p95_ms": 0.083851,
+        "p99_ms": 0.136841,
+        "mean_ms": 0.07565031071757129
+      },
+      "confirmed_publish_per_s": 181.15833333333333,
+      "completed_per_s": 181.15833333333333,
+      "attempted_publish_per_s": 181.16666666666666,
+      "offered_load_achieved_fraction": 0.9058333333333334,
+      "synthetic_db_transactions_per_s": 182.10833333333332,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 27351,
+        "accepted": 27351,
+        "received_unique": 27351
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 0,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 1,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 300,
+      "measured_resource_sample_count": 237,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "echoo",
+      "profile": "1x1",
+      "requested_rate": 200.0,
+      "server_stack_metadata": "r2-echoo-1x1-200pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r2-baseline",
+      "baseline_db_p95_ms": 0.903829,
+      "db_p95_increase_percent": 50.12961522588897,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.2376984938516491,
+        "server_peak_cgroup_mib": 189.26953125,
+        "client_mean_cpu_cores": 0.2658008953230237,
+        "client_peak_rss_sum_mib": 189.640625,
+        "measured_resource_span_seconds": 119.638423194,
+        "measured_resource_count": 237,
+        "peak_pids": 13,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 840953856,
+        "whole_cell_postgres_wal_lsn_bytes": 76772080,
+        "whole_cell_postgres_database_bytes": 3727360,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 1061244928,
+          "rios": 0,
+          "wios": 109948,
+          "dbytes": 356352,
+          "dios": 3
+        },
+        "db_p95_absolute_increase_ms": 0.4530860000000001,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "e697a125-1cf8-4be6-a64f-bbc5d8a8e9b1",
+      "label": "r2-echoo-1x1-400pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 2689408798729,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 1,
+        "consumers": 1,
+        "offered_rate_per_s": 400.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 38127,
+        "p50_ms": 0.908486,
+        "p95_ms": 1.200895,
+        "p99_ms": 12.259144,
+        "mean_ms": 1.6175539001495003
+      },
+      "end_to_end": {
+        "count": 38127,
+        "p50_ms": 1.289987,
+        "p95_ms": 1.80168,
+        "p99_ms": 20.807937,
+        "mean_ms": 2.2153162223096494
+      },
+      "synthetic_db": {
+        "count": 19601,
+        "p50_ms": 0.835278,
+        "p95_ms": 1.696715,
+        "p99_ms": 42.448014,
+        "mean_ms": 2.1627151038722516
+      },
+      "db_schedule_lateness": {
+        "count": 19601,
+        "p50_ms": 0.072332,
+        "p95_ms": 0.093599,
+        "p99_ms": 0.257995,
+        "mean_ms": 0.07938517641957044
+      },
+      "publish_schedule_lateness": {
+        "count": 38127,
+        "p50_ms": 0.069965,
+        "p95_ms": 0.080271,
+        "p99_ms": 0.133297,
+        "mean_ms": 0.0735125649277415
+      },
+      "confirmed_publish_per_s": 317.73333333333335,
+      "completed_per_s": 317.73333333333335,
+      "attempted_publish_per_s": 317.725,
+      "offered_load_achieved_fraction": 0.7943125,
+      "synthetic_db_transactions_per_s": 163.34166666666667,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 47070,
+        "accepted": 47070,
+        "received_unique": 47070
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 1,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 2,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 300,
+      "measured_resource_sample_count": 237,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "echoo",
+      "profile": "1x1",
+      "requested_rate": 400.0,
+      "server_stack_metadata": "r2-echoo-1x1-400pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r2-baseline",
+      "baseline_db_p95_ms": 0.903829,
+      "db_p95_increase_percent": 87.72522235953926,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.3540294777846132,
+        "server_peak_cgroup_mib": 244.17578125,
+        "client_mean_cpu_cores": 0.3567099315427994,
+        "client_peak_rss_sum_mib": 189.87890625,
+        "measured_resource_span_seconds": 119.705105533,
+        "measured_resource_count": 237,
+        "peak_pids": 13,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 1321340928,
+        "whole_cell_postgres_wal_lsn_bytes": 128038000,
+        "whole_cell_postgres_database_bytes": 6283264,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 1622331392,
+          "rios": 0,
+          "wios": 166040,
+          "dbytes": 356352,
+          "dios": 3
+        },
+        "db_p95_absolute_increase_ms": 0.792886,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "a2751a57-a63b-4e02-8967-ee54368cf592",
+      "label": "r2-echoo-4x4-200pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 2371523238705,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 4,
+        "consumers": 4,
+        "offered_rate_per_s": 200.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 21567,
+        "p50_ms": 2.138535,
+        "p95_ms": 5.729975,
+        "p99_ms": 121.348013,
+        "mean_ms": 5.210719609125052
+      },
+      "end_to_end": {
+        "count": 21567,
+        "p50_ms": 2.804374,
+        "p95_ms": 7.406992,
+        "p99_ms": 128.8426,
+        "mean_ms": 5.983531190615292
+      },
+      "synthetic_db": {
+        "count": 20845,
+        "p50_ms": 0.759186,
+        "p95_ms": 1.954524,
+        "p99_ms": 12.467152,
+        "mean_ms": 1.7563904680259055
+      },
+      "db_schedule_lateness": {
+        "count": 20845,
+        "p50_ms": 0.07087,
+        "p95_ms": 0.273546,
+        "p99_ms": 0.818389,
+        "mean_ms": 0.10246286433197409
+      },
+      "publish_schedule_lateness": {
+        "count": 21567,
+        "p50_ms": 0.09236,
+        "p95_ms": 0.652819,
+        "p99_ms": 1.177357,
+        "mean_ms": 0.18035721607084898
+      },
+      "confirmed_publish_per_s": 179.725,
+      "completed_per_s": 179.725,
+      "attempted_publish_per_s": 179.725,
+      "offered_load_achieved_fraction": 0.898625,
+      "synthetic_db_transactions_per_s": 173.70833333333334,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 27004,
+        "accepted": 27004,
+        "received_unique": 27004
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 2,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 5,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 299,
+      "measured_resource_sample_count": 236,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "echoo",
+      "profile": "4x4",
+      "requested_rate": 200.0,
+      "server_stack_metadata": "r2-echoo-4x4-200pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r2-baseline",
+      "baseline_db_p95_ms": 0.903829,
+      "db_p95_increase_percent": 116.24931264652938,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.3213808449110656,
+        "server_peak_cgroup_mib": 182.140625,
+        "client_mean_cpu_cores": 0.3313403371217259,
+        "client_peak_rss_sum_mib": 462.3671875,
+        "measured_resource_span_seconds": 119.333493602,
+        "measured_resource_count": 236,
+        "peak_pids": 13,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 811347968,
+        "whole_cell_postgres_wal_lsn_bytes": 75463408,
+        "whole_cell_postgres_database_bytes": 7643136,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 1025470464,
+          "rios": 0,
+          "wios": 107393,
+          "dbytes": 356352,
+          "dios": 3
+        },
+        "db_p95_absolute_increase_ms": 1.050695,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "7606084e-32c7-4211-ba85-4e8e7be03d05",
+      "label": "r2-echoo-4x4-400pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 2051216847999,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 4,
+        "consumers": 4,
+        "offered_rate_per_s": 400.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 39422,
+        "p50_ms": 2.371579,
+        "p95_ms": 8.458371,
+        "p99_ms": 88.865608,
+        "mean_ms": 5.031887964994166
+      },
+      "end_to_end": {
+        "count": 39422,
+        "p50_ms": 2.440418,
+        "p95_ms": 8.549179,
+        "p99_ms": 89.235133,
+        "mean_ms": 5.093843036654659
+      },
+      "synthetic_db": {
+        "count": 19495,
+        "p50_ms": 0.889929,
+        "p95_ms": 2.20063,
+        "p99_ms": 43.407845,
+        "mean_ms": 2.2906197294690944
+      },
+      "db_schedule_lateness": {
+        "count": 19495,
+        "p50_ms": 0.074434,
+        "p95_ms": 0.41326,
+        "p99_ms": 0.898267,
+        "mean_ms": 0.12329409930751475
+      },
+      "publish_schedule_lateness": {
+        "count": 39422,
+        "p50_ms": 0.07861,
+        "p95_ms": 0.429462,
+        "p99_ms": 1.332359,
+        "mean_ms": 0.13407476406575008
+      },
+      "confirmed_publish_per_s": 328.51666666666665,
+      "completed_per_s": 328.51666666666665,
+      "attempted_publish_per_s": 328.51666666666665,
+      "offered_load_achieved_fraction": 0.8212916666666666,
+      "synthetic_db_transactions_per_s": 162.45833333333334,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 48413,
+        "accepted": 48413,
+        "received_unique": 48413
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 2,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 4,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 299,
+      "measured_resource_sample_count": 236,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "echoo",
+      "profile": "4x4",
+      "requested_rate": 400.0,
+      "server_stack_metadata": "r2-echoo-4x4-400pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r2-baseline",
+      "baseline_db_p95_ms": 0.903829,
+      "db_p95_increase_percent": 143.47857835940206,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.46681996259670216,
+        "server_peak_cgroup_mib": 261.21484375,
+        "client_mean_cpu_cores": 0.4759309261084193,
+        "client_peak_rss_sum_mib": 462.61328125,
+        "measured_resource_span_seconds": 119.471118351,
+        "measured_resource_count": 236,
+        "peak_pids": 13,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 1341034496,
+        "whole_cell_postgres_wal_lsn_bytes": 131381136,
+        "whole_cell_postgres_database_bytes": 14229504,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 1662291968,
+          "rios": 0,
+          "wios": 169709,
+          "dbytes": 356352,
+          "dios": 3
+        },
+        "db_p95_absolute_increase_ms": 1.2968009999999999,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "ea5f26e9-89b5-4bdf-a2e9-5e2e45b0dc91",
+      "label": "r2-rabbitmq-1x1-200pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 2848052753624,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 1,
+        "consumers": 1,
+        "offered_rate_per_s": 200.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 23929,
+        "p50_ms": 1.055355,
+        "p95_ms": 1.380741,
+        "p99_ms": 1.620113,
+        "mean_ms": 1.138142038238121
+      },
+      "end_to_end": {
+        "count": 23929,
+        "p50_ms": 0.879304,
+        "p95_ms": 1.045487,
+        "p99_ms": 1.262346,
+        "mean_ms": 0.9153539392369092
+      },
+      "synthetic_db": {
+        "count": 21613,
+        "p50_ms": 0.711687,
+        "p95_ms": 1.267935,
+        "p99_ms": 2.74072,
+        "mean_ms": 1.371172694211817
+      },
+      "db_schedule_lateness": {
+        "count": 21613,
+        "p50_ms": 0.071643,
+        "p95_ms": 0.093195,
+        "p99_ms": 0.410286,
+        "mean_ms": 0.08177979262480914
+      },
+      "publish_schedule_lateness": {
+        "count": 23929,
+        "p50_ms": 0.070713,
+        "p95_ms": 0.076897,
+        "p99_ms": 0.083791,
+        "mean_ms": 0.07066666074637469
+      },
+      "confirmed_publish_per_s": 199.40833333333333,
+      "completed_per_s": 199.40833333333333,
+      "attempted_publish_per_s": 199.40833333333333,
+      "offered_load_achieved_fraction": 0.9970416666666667,
+      "synthetic_db_transactions_per_s": 180.10833333333332,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 29929,
+        "accepted": 29929,
+        "received_unique": 29929
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 0,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 1,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 300,
+      "measured_resource_sample_count": 237,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "rabbitmq",
+      "profile": "1x1",
+      "requested_rate": 200.0,
+      "server_stack_metadata": "r2-rabbitmq-1x1-200pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r2-baseline",
+      "baseline_db_p95_ms": 0.903829,
+      "db_p95_increase_percent": 40.284832639802445,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.23416058328380962,
+        "server_peak_cgroup_mib": 228.93359375,
+        "client_mean_cpu_cores": 0.28294307744803976,
+        "client_peak_rss_sum_mib": 189.734375,
+        "measured_resource_span_seconds": 119.706056446,
+        "measured_resource_count": 237,
+        "peak_pids": 81,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 180473856,
+        "whole_cell_postgres_wal_lsn_bytes": 4784800,
+        "whole_cell_postgres_database_bytes": 180224,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 223891456,
+          "rios": 0,
+          "wios": 26723,
+          "dbytes": 380928,
+          "dios": 4
+        },
+        "db_p95_absolute_increase_ms": 0.36410600000000004,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "f43249e3-64bd-4ae3-a0ba-baef7db5ad32",
+      "label": "r2-rabbitmq-1x1-400pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 2530117196721,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 1,
+        "consumers": 1,
+        "offered_rate_per_s": 400.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 47918,
+        "p50_ms": 1.039218,
+        "p95_ms": 1.352439,
+        "p99_ms": 1.623777,
+        "mean_ms": 1.0990534432781
+      },
+      "end_to_end": {
+        "count": 47918,
+        "p50_ms": 0.841587,
+        "p95_ms": 1.015403,
+        "p99_ms": 1.201638,
+        "mean_ms": 0.8676023577152636
+      },
+      "synthetic_db": {
+        "count": 22171,
+        "p50_ms": 0.881295,
+        "p95_ms": 1.422221,
+        "p99_ms": 4.973833,
+        "mean_ms": 1.405241571602544
+      },
+      "db_schedule_lateness": {
+        "count": 22171,
+        "p50_ms": 0.07331,
+        "p95_ms": 0.231665,
+        "p99_ms": 0.481159,
+        "mean_ms": 0.0933269858373551
+      },
+      "publish_schedule_lateness": {
+        "count": 47918,
+        "p50_ms": 0.069244,
+        "p95_ms": 0.076747,
+        "p99_ms": 0.091989,
+        "mean_ms": 0.07046131679118495
+      },
+      "confirmed_publish_per_s": 399.30833333333334,
+      "completed_per_s": 399.30833333333334,
+      "attempted_publish_per_s": 399.31666666666666,
+      "offered_load_achieved_fraction": 0.9982916666666667,
+      "synthetic_db_transactions_per_s": 184.75833333333333,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 59909,
+        "accepted": 59909,
+        "received_unique": 59909
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 0,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 1,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 299,
+      "measured_resource_sample_count": 236,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "rabbitmq",
+      "profile": "1x1",
+      "requested_rate": 400.0,
+      "server_stack_metadata": "r2-rabbitmq-1x1-400pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r2-baseline",
+      "baseline_db_p95_ms": 0.903829,
+      "db_p95_increase_percent": 57.355097037160796,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.42159019626483124,
+        "server_peak_cgroup_mib": 229.25,
+        "client_mean_cpu_cores": 0.5014655223240564,
+        "client_peak_rss_sum_mib": 189.3984375,
+        "measured_resource_span_seconds": 119.410003947,
+        "measured_resource_count": 236,
+        "peak_pids": 77,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 184627200,
+        "whole_cell_postgres_wal_lsn_bytes": 5020792,
+        "whole_cell_postgres_database_bytes": 180224,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 235311104,
+          "rios": 0,
+          "wios": 28092,
+          "dbytes": 380928,
+          "dios": 4
+        },
+        "db_p95_absolute_increase_ms": 0.518392,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "58ef80fc-0a1b-4c86-9946-fe9955b5a43b",
+      "label": "r2-rabbitmq-4x4-200pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 2211950480305,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 4,
+        "consumers": 4,
+        "offered_rate_per_s": 200.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 24000,
+        "p50_ms": 1.17664,
+        "p95_ms": 1.634944,
+        "p99_ms": 1.969496,
+        "mean_ms": 1.2611157992916666
+      },
+      "end_to_end": {
+        "count": 24000,
+        "p50_ms": 1.042823,
+        "p95_ms": 1.329316,
+        "p99_ms": 1.615305,
+        "mean_ms": 1.082435355
+      },
+      "synthetic_db": {
+        "count": 21899,
+        "p50_ms": 0.714311,
+        "p95_ms": 1.415562,
+        "p99_ms": 5.089335,
+        "mean_ms": 1.3463304056349605
+      },
+      "db_schedule_lateness": {
+        "count": 21899,
+        "p50_ms": 0.072502,
+        "p95_ms": 0.095572,
+        "p99_ms": 0.299028,
+        "mean_ms": 0.08042590364856843
+      },
+      "publish_schedule_lateness": {
+        "count": 24000,
+        "p50_ms": 0.078464,
+        "p95_ms": 0.091404,
+        "p99_ms": 0.102076,
+        "mean_ms": 0.080051288625
+      },
+      "confirmed_publish_per_s": 200.0,
+      "completed_per_s": 200.0,
+      "attempted_publish_per_s": 200.0,
+      "offered_load_achieved_fraction": 1.0,
+      "synthetic_db_transactions_per_s": 182.49166666666667,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 30000,
+        "accepted": 30000,
+        "received_unique": 30000
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 0,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 1,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 299,
+      "measured_resource_sample_count": 236,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "rabbitmq",
+      "profile": "4x4",
+      "requested_rate": 200.0,
+      "server_stack_metadata": "r2-rabbitmq-4x4-200pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r2-baseline",
+      "baseline_db_p95_ms": 0.903829,
+      "db_p95_increase_percent": 56.618342628970744,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.24131066980970992,
+        "server_peak_cgroup_mib": 206.08203125,
+        "client_mean_cpu_cores": 0.3245496361541778,
+        "client_peak_rss_sum_mib": 462.62890625,
+        "measured_resource_span_seconds": 119.396220742,
+        "measured_resource_count": 236,
+        "peak_pids": 57,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 181993472,
+        "whole_cell_postgres_wal_lsn_bytes": 4767640,
+        "whole_cell_postgres_database_bytes": 180224,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 224145408,
+          "rios": 0,
+          "wios": 26754,
+          "dbytes": 380928,
+          "dios": 4
+        },
+        "db_p95_absolute_increase_ms": 0.511733,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "ee0d3834-7f2a-4e45-bcf5-283cb88b1360",
+      "label": "r2-rabbitmq-4x4-400pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 1891739164886,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 4,
+        "consumers": 4,
+        "offered_rate_per_s": 400.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 48000,
+        "p50_ms": 1.354453,
+        "p95_ms": 1.953434,
+        "p99_ms": 2.505966,
+        "mean_ms": 1.4144723529166667
+      },
+      "end_to_end": {
+        "count": 48000,
+        "p50_ms": 1.078847,
+        "p95_ms": 1.567886,
+        "p99_ms": 2.029225,
+        "mean_ms": 1.1356293539375
+      },
+      "synthetic_db": {
+        "count": 19670,
+        "p50_ms": 0.847547,
+        "p95_ms": 2.070185,
+        "p99_ms": 35.388166,
+        "mean_ms": 2.1978153649211998
+      },
+      "db_schedule_lateness": {
+        "count": 19670,
+        "p50_ms": 0.07511,
+        "p95_ms": 0.398982,
+        "p99_ms": 0.698736,
+        "mean_ms": 0.12002002582613117
+      },
+      "publish_schedule_lateness": {
+        "count": 48000,
+        "p50_ms": 0.078057,
+        "p95_ms": 0.098728,
+        "p99_ms": 0.412063,
+        "mean_ms": 0.08883396933333333
+      },
+      "confirmed_publish_per_s": 399.9916666666667,
+      "completed_per_s": 400.0,
+      "attempted_publish_per_s": 400.0,
+      "offered_load_achieved_fraction": 1.0,
+      "synthetic_db_transactions_per_s": 163.91666666666666,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 60000,
+        "accepted": 60000,
+        "received_unique": 60000
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 1,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 2,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 298,
+      "measured_resource_sample_count": 235,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "rabbitmq",
+      "profile": "4x4",
+      "requested_rate": 400.0,
+      "server_stack_metadata": "r2-rabbitmq-4x4-400pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r2-baseline",
+      "baseline_db_p95_ms": 0.903829,
+      "db_p95_increase_percent": 129.04609168327195,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.38221650865860773,
+        "server_peak_cgroup_mib": 208.53125,
+        "client_mean_cpu_cores": 0.6118909379729052,
+        "client_peak_rss_sum_mib": 462.73046875,
+        "measured_resource_span_seconds": 119.236935003,
+        "measured_resource_count": 235,
+        "peak_pids": 57,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 163160064,
+        "whole_cell_postgres_wal_lsn_bytes": 4514072,
+        "whole_cell_postgres_database_bytes": 180224,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 206573568,
+          "rios": 0,
+          "wios": 24645,
+          "dbytes": 380928,
+          "dios": 5
+        },
+        "db_p95_absolute_increase_ms": 1.166356,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "257e0119-af59-4fe3-b304-e359c054032c",
+      "label": "r3-baseline",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 3160350027712,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 0,
+        "consumers": 0,
+        "offered_rate_per_s": 0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "mean_ms": null
+      },
+      "end_to_end": {
+        "count": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "mean_ms": null
+      },
+      "synthetic_db": {
+        "count": 20422,
+        "p50_ms": 0.650106,
+        "p95_ms": 0.796891,
+        "p99_ms": 24.511659,
+        "mean_ms": 1.6261774401625697
+      },
+      "db_schedule_lateness": {
+        "count": 20422,
+        "p50_ms": 0.068014,
+        "p95_ms": 0.075417,
+        "p99_ms": 0.119424,
+        "mean_ms": 0.0695889034374694
+      },
+      "publish_schedule_lateness": {
+        "count": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "mean_ms": null
+      },
+      "confirmed_publish_per_s": 0.0,
+      "completed_per_s": 0.0,
+      "attempted_publish_per_s": 0.0,
+      "offered_load_achieved_fraction": null,
+      "synthetic_db_transactions_per_s": 170.18333333333334,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 0,
+        "accepted": 0,
+        "received_unique": 0
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 0,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 0,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 300,
+      "measured_resource_sample_count": 237,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "baseline",
+      "profile": "0x0",
+      "requested_rate": 0,
+      "server_stack_metadata": "r3-baseline.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.035050280934324274,
+        "server_peak_cgroup_mib": 94.35546875,
+        "client_mean_cpu_cores": 0.05166761635767846,
+        "client_peak_rss_sum_mib": 98.5078125,
+        "measured_resource_span_seconds": 119.417159818,
+        "measured_resource_count": 237,
+        "peak_pids": 12,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 170086400,
+        "whole_cell_postgres_wal_lsn_bytes": 4739184,
+        "whole_cell_postgres_database_bytes": 180224,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 217903104,
+          "rios": 0,
+          "wios": 25995,
+          "dbytes": 356352,
+          "dios": 3
+        },
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "9278283b-df95-4e13-b7ad-bf2a6822aa35",
+      "label": "r3-echoo-1x1-200pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 3314541174856,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 1,
+        "consumers": 1,
+        "offered_rate_per_s": 200.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 16296,
+        "p50_ms": 1.256287,
+        "p95_ms": 3.760419,
+        "p99_ms": 89.199839,
+        "mean_ms": 3.854366928694158
+      },
+      "end_to_end": {
+        "count": 16296,
+        "p50_ms": 1.349484,
+        "p95_ms": 3.868498,
+        "p99_ms": 89.109957,
+        "mean_ms": 3.9431823886843396
+      },
+      "synthetic_db": {
+        "count": 16600,
+        "p50_ms": 0.769401,
+        "p95_ms": 2.551241,
+        "p99_ms": 85.99202,
+        "mean_ms": 3.2724006094578315
+      },
+      "db_schedule_lateness": {
+        "count": 16600,
+        "p50_ms": 0.074885,
+        "p95_ms": 0.099782,
+        "p99_ms": 0.3536,
+        "mean_ms": 0.08316434963855422
+      },
+      "publish_schedule_lateness": {
+        "count": 16296,
+        "p50_ms": 0.07352,
+        "p95_ms": 0.10915,
+        "p99_ms": 0.198021,
+        "mean_ms": 0.08089792740549828
+      },
+      "confirmed_publish_per_s": 135.80833333333334,
+      "completed_per_s": 135.80833333333334,
+      "attempted_publish_per_s": 135.8,
+      "offered_load_achieved_fraction": 0.679,
+      "synthetic_db_transactions_per_s": 138.33333333333334,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 21215,
+        "accepted": 21215,
+        "received_unique": 21215
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 1,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 1,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 300,
+      "measured_resource_sample_count": 237,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "echoo",
+      "profile": "1x1",
+      "requested_rate": 200.0,
+      "server_stack_metadata": "r3-echoo-1x1-200pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r3-baseline",
+      "baseline_db_p95_ms": 0.796891,
+      "db_p95_increase_percent": 220.14930523747918,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.1843766927121458,
+        "server_peak_cgroup_mib": 171.9140625,
+        "client_mean_cpu_cores": 0.21100232736018512,
+        "client_peak_rss_sum_mib": 190.01953125,
+        "measured_resource_span_seconds": 119.61953366,
+        "measured_resource_count": 237,
+        "peak_pids": 14,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 631840768,
+        "whole_cell_postgres_wal_lsn_bytes": 59795904,
+        "whole_cell_postgres_database_bytes": 2932736,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 827666432,
+          "rios": 0,
+          "wios": 85549,
+          "dbytes": 356352,
+          "dios": 3
+        },
+        "db_p95_absolute_increase_ms": 1.75435,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "c672a407-4db1-4357-a223-9c7df36a6d07",
+      "label": "r3-echoo-1x1-400pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 3630397490095,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 1,
+        "consumers": 1,
+        "offered_rate_per_s": 400.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 44354,
+        "p50_ms": 1.178563,
+        "p95_ms": 1.488808,
+        "p99_ms": 3.569486,
+        "mean_ms": 1.4361873140190287
+      },
+      "end_to_end": {
+        "count": 44354,
+        "p50_ms": 1.240463,
+        "p95_ms": 1.512945,
+        "p99_ms": 3.613553,
+        "mean_ms": 1.4946115718086306
+      },
+      "synthetic_db": {
+        "count": 22525,
+        "p50_ms": 0.812675,
+        "p95_ms": 1.38069,
+        "p99_ms": 6.552454,
+        "mean_ms": 1.2783170534961155
+      },
+      "db_schedule_lateness": {
+        "count": 22525,
+        "p50_ms": 0.073998,
+        "p95_ms": 0.179169,
+        "p99_ms": 0.452466,
+        "mean_ms": 0.09044217256381798
+      },
+      "publish_schedule_lateness": {
+        "count": 44354,
+        "p50_ms": 0.070144,
+        "p95_ms": 0.079006,
+        "p99_ms": 0.113023,
+        "mean_ms": 0.07287347274203003
+      },
+      "confirmed_publish_per_s": 369.625,
+      "completed_per_s": 369.625,
+      "attempted_publish_per_s": 369.6166666666667,
+      "offered_load_achieved_fraction": 0.9240416666666667,
+      "synthetic_db_transactions_per_s": 187.70833333333334,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 55470,
+        "accepted": 55470,
+        "received_unique": 55470
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 1,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 1,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 299,
+      "measured_resource_sample_count": 236,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "echoo",
+      "profile": "1x1",
+      "requested_rate": 400.0,
+      "server_stack_metadata": "r3-echoo-1x1-400pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r3-baseline",
+      "baseline_db_p95_ms": 0.796891,
+      "db_p95_increase_percent": 73.25958004294189,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.37822696486245383,
+        "server_peak_cgroup_mib": 262.98828125,
+        "client_mean_cpu_cores": 0.4441183252572812,
+        "client_peak_rss_sum_mib": 189.375,
+        "measured_resource_span_seconds": 119.24750002,
+        "measured_resource_count": 236,
+        "peak_pids": 13,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 1509097472,
+        "whole_cell_postgres_wal_lsn_bytes": 150654432,
+        "whole_cell_postgres_database_bytes": 7372800,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 1901326336,
+          "rios": 0,
+          "wios": 195254,
+          "dbytes": 356352,
+          "dios": 3
+        },
+        "db_p95_absolute_increase_ms": 0.583799,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "404facb8-8510-4b3d-a33d-3653a6bdf056",
+      "label": "r3-echoo-4x4-200pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 3949202728403,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 4,
+        "consumers": 4,
+        "offered_rate_per_s": 200.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 21555,
+        "p50_ms": 2.296476,
+        "p95_ms": 11.824594,
+        "p99_ms": 97.269129,
+        "mean_ms": 5.603883682069125
+      },
+      "end_to_end": {
+        "count": 21555,
+        "p50_ms": 2.475509,
+        "p95_ms": 12.277409,
+        "p99_ms": 99.015691,
+        "mean_ms": 5.845619655949895
+      },
+      "synthetic_db": {
+        "count": 20683,
+        "p50_ms": 0.80288,
+        "p95_ms": 2.186675,
+        "p99_ms": 21.015236,
+        "mean_ms": 1.8877273822462892
+      },
+      "db_schedule_lateness": {
+        "count": 20683,
+        "p50_ms": 0.072449,
+        "p95_ms": 0.440528,
+        "p99_ms": 0.997858,
+        "mean_ms": 0.11964866494222308
+      },
+      "publish_schedule_lateness": {
+        "count": 21555,
+        "p50_ms": 0.099419,
+        "p95_ms": 0.766617,
+        "p99_ms": 1.453787,
+        "mean_ms": 0.19405093458594294
+      },
+      "confirmed_publish_per_s": 179.63333333333333,
+      "completed_per_s": 179.63333333333333,
+      "attempted_publish_per_s": 179.625,
+      "offered_load_achieved_fraction": 0.898125,
+      "synthetic_db_transactions_per_s": 172.35833333333332,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 26423,
+        "accepted": 26423,
+        "received_unique": 26423
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 1,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 6,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 299,
+      "measured_resource_sample_count": 236,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "echoo",
+      "profile": "4x4",
+      "requested_rate": 200.0,
+      "server_stack_metadata": "r3-echoo-4x4-200pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r3-baseline",
+      "baseline_db_p95_ms": 0.796891,
+      "db_p95_increase_percent": 174.40076497287586,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.3316443980405276,
+        "server_peak_cgroup_mib": 181.55078125,
+        "client_mean_cpu_cores": 0.3705635720404851,
+        "client_peak_rss_sum_mib": 463.16796875,
+        "measured_resource_span_seconds": 119.412709016,
+        "measured_resource_count": 236,
+        "peak_pids": 13,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 811290624,
+        "whole_cell_postgres_wal_lsn_bytes": 73901544,
+        "whole_cell_postgres_database_bytes": 7069696,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 1002164224,
+          "rios": 0,
+          "wios": 104777,
+          "dbytes": 356352,
+          "dios": 3
+        },
+        "db_p95_absolute_increase_ms": 1.3897840000000001,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "57144a25-9aad-428f-8a6c-be861a3064f3",
+      "label": "r3-echoo-4x4-400pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 4268603127111,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 4,
+        "consumers": 4,
+        "offered_rate_per_s": 400.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 46665,
+        "p50_ms": 2.046438,
+        "p95_ms": 3.640833,
+        "p99_ms": 8.886145,
+        "mean_ms": 2.565726255544841
+      },
+      "end_to_end": {
+        "count": 46665,
+        "p50_ms": 2.328453,
+        "p95_ms": 3.994103,
+        "p99_ms": 10.067081,
+        "mean_ms": 2.831373158405657
+      },
+      "synthetic_db": {
+        "count": 23253,
+        "p50_ms": 0.882287,
+        "p95_ms": 1.850751,
+        "p99_ms": 3.677167,
+        "mean_ms": 1.213592382445276
+      },
+      "db_schedule_lateness": {
+        "count": 23253,
+        "p50_ms": 0.073896,
+        "p95_ms": 0.435667,
+        "p99_ms": 0.868099,
+        "mean_ms": 0.11797932180793876
+      },
+      "publish_schedule_lateness": {
+        "count": 46665,
+        "p50_ms": 0.077055,
+        "p95_ms": 0.308335,
+        "p99_ms": 0.697244,
+        "mean_ms": 0.11176191608271724
+      },
+      "confirmed_publish_per_s": 388.8833333333333,
+      "completed_per_s": 388.8833333333333,
+      "attempted_publish_per_s": 388.875,
+      "offered_load_achieved_fraction": 0.9721875,
+      "synthetic_db_transactions_per_s": 193.775,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 57009,
+        "accepted": 57009,
+        "received_unique": 57009
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 2,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 5,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 299,
+      "measured_resource_sample_count": 236,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "echoo",
+      "profile": "4x4",
+      "requested_rate": 400.0,
+      "server_stack_metadata": "r3-echoo-4x4-400pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r3-baseline",
+      "baseline_db_p95_ms": 0.796891,
+      "db_p95_increase_percent": 132.2464427380909,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.5170587250827869,
+        "server_peak_cgroup_mib": 274.25,
+        "client_mean_cpu_cores": 0.5333027504113154,
+        "client_peak_rss_sum_mib": 462.44921875,
+        "measured_resource_span_seconds": 119.538104671,
+        "measured_resource_count": 236,
+        "peak_pids": 13,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 1583624192,
+        "whole_cell_postgres_wal_lsn_bytes": 154519216,
+        "whole_cell_postgres_database_bytes": 12664832,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 1947791360,
+          "rios": 0,
+          "wios": 199961,
+          "dbytes": 356352,
+          "dios": 3
+        },
+        "db_p95_absolute_increase_ms": 1.05386,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "249cae60-2eb0-4b57-9b32-35d624310e6e",
+      "label": "r3-rabbitmq-1x1-200pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 3473024127107,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 1,
+        "consumers": 1,
+        "offered_rate_per_s": 200.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 23997,
+        "p50_ms": 1.152064,
+        "p95_ms": 1.508839,
+        "p99_ms": 1.864321,
+        "mean_ms": 1.1992952589490353
+      },
+      "end_to_end": {
+        "count": 23997,
+        "p50_ms": 0.95944,
+        "p95_ms": 1.219102,
+        "p99_ms": 1.511753,
+        "mean_ms": 0.9899554464724757
+      },
+      "synthetic_db": {
+        "count": 21462,
+        "p50_ms": 0.762552,
+        "p95_ms": 1.446697,
+        "p99_ms": 7.545774,
+        "mean_ms": 1.5158804864877458
+      },
+      "db_schedule_lateness": {
+        "count": 21462,
+        "p50_ms": 0.073737,
+        "p95_ms": 0.091712,
+        "p99_ms": 0.271286,
+        "mean_ms": 0.08074192745317305
+      },
+      "publish_schedule_lateness": {
+        "count": 23997,
+        "p50_ms": 0.072461,
+        "p95_ms": 0.080616,
+        "p99_ms": 0.092197,
+        "mean_ms": 0.07354176730424636
+      },
+      "confirmed_publish_per_s": 199.98333333333332,
+      "completed_per_s": 199.98333333333332,
+      "attempted_publish_per_s": 199.975,
+      "offered_load_achieved_fraction": 0.999875,
+      "synthetic_db_transactions_per_s": 178.85,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 29997,
+        "accepted": 29997,
+        "received_unique": 29997
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 0,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 1,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 299,
+      "measured_resource_sample_count": 236,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "rabbitmq",
+      "profile": "1x1",
+      "requested_rate": 200.0,
+      "server_stack_metadata": "r3-rabbitmq-1x1-200pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r3-baseline",
+      "baseline_db_p95_ms": 0.796891,
+      "db_p95_increase_percent": 81.5426451045375,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.253681485145639,
+        "server_peak_cgroup_mib": 225.40625,
+        "client_mean_cpu_cores": 0.3046668343169503,
+        "client_peak_rss_sum_mib": 189.39453125,
+        "measured_resource_span_seconds": 119.277833708,
+        "measured_resource_count": 236,
+        "peak_pids": 77,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 178429952,
+        "whole_cell_postgres_wal_lsn_bytes": 4724160,
+        "whole_cell_postgres_database_bytes": 180224,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 220401664,
+          "rios": 0,
+          "wios": 26314,
+          "dbytes": 380928,
+          "dios": 5
+        },
+        "db_p95_absolute_increase_ms": 0.6498059999999999,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "2473a370-029d-4e78-bb58-6c9927695873",
+      "label": "r3-rabbitmq-1x1-400pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 3789386804594,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 1,
+        "consumers": 1,
+        "offered_rate_per_s": 400.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 47926,
+        "p50_ms": 1.030705,
+        "p95_ms": 1.36022,
+        "p99_ms": 1.618499,
+        "mean_ms": 1.0919404859992488
+      },
+      "end_to_end": {
+        "count": 47926,
+        "p50_ms": 0.841348,
+        "p95_ms": 1.032968,
+        "p99_ms": 1.227495,
+        "mean_ms": 0.8717823658765597
+      },
+      "synthetic_db": {
+        "count": 21238,
+        "p50_ms": 0.857601,
+        "p95_ms": 1.465545,
+        "p99_ms": 6.996455,
+        "mean_ms": 1.6393097584989171
+      },
+      "db_schedule_lateness": {
+        "count": 21238,
+        "p50_ms": 0.073277,
+        "p95_ms": 0.186567,
+        "p99_ms": 0.381903,
+        "mean_ms": 0.08878441943685846
+      },
+      "publish_schedule_lateness": {
+        "count": 47926,
+        "p50_ms": 0.069206,
+        "p95_ms": 0.077122,
+        "p99_ms": 0.09034,
+        "mean_ms": 0.07035312097817469
+      },
+      "confirmed_publish_per_s": 399.3833333333333,
+      "completed_per_s": 399.3833333333333,
+      "attempted_publish_per_s": 399.3833333333333,
+      "offered_load_achieved_fraction": 0.9984583333333333,
+      "synthetic_db_transactions_per_s": 176.98333333333332,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 59912,
+        "accepted": 59912,
+        "received_unique": 59912
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 0,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 1,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 299,
+      "measured_resource_sample_count": 236,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "rabbitmq",
+      "profile": "1x1",
+      "requested_rate": 400.0,
+      "server_stack_metadata": "r3-rabbitmq-1x1-400pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r3-baseline",
+      "baseline_db_p95_ms": 0.796891,
+      "db_p95_increase_percent": 83.90783683088404,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.42391447939309873,
+        "server_peak_cgroup_mib": 229.828125,
+        "client_mean_cpu_cores": 0.4955639847861517,
+        "client_peak_rss_sum_mib": 189.41015625,
+        "measured_resource_span_seconds": 119.379135321,
+        "measured_resource_count": 236,
+        "peak_pids": 77,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 176766976,
+        "whole_cell_postgres_wal_lsn_bytes": 4859872,
+        "whole_cell_postgres_database_bytes": 180224,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 226291712,
+          "rios": 0,
+          "wios": 27012,
+          "dbytes": 380928,
+          "dios": 5
+        },
+        "db_p95_absolute_increase_ms": 0.6686540000000001,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "40349a4e-09b8-48ba-b9ec-61e9fc70b972",
+      "label": "r3-rabbitmq-4x4-200pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 4109511622596,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 4,
+        "consumers": 4,
+        "offered_rate_per_s": 200.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 24000,
+        "p50_ms": 1.307703,
+        "p95_ms": 1.926612,
+        "p99_ms": 3.861678,
+        "mean_ms": 1.4085076708333333
+      },
+      "end_to_end": {
+        "count": 24000,
+        "p50_ms": 1.141198,
+        "p95_ms": 1.539012,
+        "p99_ms": 3.28571,
+        "mean_ms": 1.2100743724166667
+      },
+      "synthetic_db": {
+        "count": 22081,
+        "p50_ms": 0.736653,
+        "p95_ms": 1.46899,
+        "p99_ms": 7.040671,
+        "mean_ms": 1.3208846970245913
+      },
+      "db_schedule_lateness": {
+        "count": 22081,
+        "p50_ms": 0.073433,
+        "p95_ms": 0.11424,
+        "p99_ms": 0.487785,
+        "mean_ms": 0.08729853702277976
+      },
+      "publish_schedule_lateness": {
+        "count": 24000,
+        "p50_ms": 0.082276,
+        "p95_ms": 0.096362,
+        "p99_ms": 0.108221,
+        "mean_ms": 0.08416634825
+      },
+      "confirmed_publish_per_s": 200.0,
+      "completed_per_s": 200.0,
+      "attempted_publish_per_s": 200.0,
+      "offered_load_achieved_fraction": 1.0,
+      "synthetic_db_transactions_per_s": 184.00833333333333,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 30000,
+        "accepted": 30000,
+        "received_unique": 30000
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 0,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 1,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 299,
+      "measured_resource_sample_count": 236,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "rabbitmq",
+      "profile": "4x4",
+      "requested_rate": 200.0,
+      "server_stack_metadata": "r3-rabbitmq-4x4-200pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r3-baseline",
+      "baseline_db_p95_ms": 0.796891,
+      "db_p95_increase_percent": 84.34014187636703,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.2808812468920548,
+        "server_peak_cgroup_mib": 223.69140625,
+        "client_mean_cpu_cores": 0.35516060572393404,
+        "client_peak_rss_sum_mib": 462.8515625,
+        "measured_resource_span_seconds": 119.467078601,
+        "measured_resource_count": 236,
+        "peak_pids": 77,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 183590912,
+        "whole_cell_postgres_wal_lsn_bytes": 4913472,
+        "whole_cell_postgres_database_bytes": 180224,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 232247296,
+          "rios": 0,
+          "wios": 27731,
+          "dbytes": 380928,
+          "dios": 4
+        },
+        "db_p95_absolute_increase_ms": 0.672099,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    },
+    {
+      "format_version": 2,
+      "run_id": "5dff2427-3b8d-44e8-afdc-6f2da44fc715",
+      "label": "r3-rabbitmq-4x4-400pps",
+      "status": "passed",
+      "errors": [],
+      "measurement_start_ns": 4429222886699,
+      "duration_seconds": 120.0,
+      "warmup_seconds": 30.0,
+      "conditions": {
+        "producers": 4,
+        "consumers": 4,
+        "offered_rate_per_s": 400.0,
+        "payload_bytes": 1024,
+        "credit_per_consumer": 32,
+        "db_interval_s": 0.005,
+        "publisher_inflight_per_connection": 1,
+        "tls": "mTLS; server name verified",
+        "sasl": "EXTERNAL",
+        "settlement": "durable=True; wait remote ACCEPTED; manual consumer ACCEPTED",
+        "end_to_end_latency": "send start to verified receipt, not consumer ACK commit latency",
+        "pacing": "aggregate fixed target; no catch-up bursts; under-achievement reported",
+        "client_location": "host processes, outside the shared server container budget"
+      },
+      "publish": {
+        "count": 48000,
+        "p50_ms": 1.556688,
+        "p95_ms": 2.477803,
+        "p99_ms": 3.483132,
+        "mean_ms": 1.6575172975625
+      },
+      "end_to_end": {
+        "count": 48000,
+        "p50_ms": 1.262015,
+        "p95_ms": 2.071956,
+        "p99_ms": 2.949125,
+        "mean_ms": 1.3604899652708333
+      },
+      "synthetic_db": {
+        "count": 22044,
+        "p50_ms": 0.730795,
+        "p95_ms": 2.1629,
+        "p99_ms": 4.991518,
+        "mean_ms": 1.4730086576846306
+      },
+      "db_schedule_lateness": {
+        "count": 22044,
+        "p50_ms": 0.073501,
+        "p95_ms": 0.661814,
+        "p99_ms": 1.063971,
+        "mean_ms": 0.16128998634549083
+      },
+      "publish_schedule_lateness": {
+        "count": 48000,
+        "p50_ms": 0.083004,
+        "p95_ms": 0.396138,
+        "p99_ms": 0.804274,
+        "mean_ms": 0.13102664208333334
+      },
+      "confirmed_publish_per_s": 400.0,
+      "completed_per_s": 400.0,
+      "attempted_publish_per_s": 400.0,
+      "offered_load_achieved_fraction": 1.0,
+      "synthetic_db_transactions_per_s": 183.7,
+      "duplicates": 0,
+      "missing_confirmed": 0,
+      "unexpected_received": 0,
+      "publish_failures": 0,
+      "checksum_or_run_failures": 0,
+      "all_phases": {
+        "attempted": 59995,
+        "accepted": 59995,
+        "received_unique": 59995
+      },
+      "backlog_note": "backlog.json reconstructs exact ID-based application outstanding/confirmed-not-received once per second; broker ready/unacked depth is verified before/after only",
+      "backlog_max_confirmed_not_received": 0,
+      "backlog_confirmed_not_received_at_measurement_end": 0,
+      "backlog_max_client_outstanding": 3,
+      "raw_evidence": "per-client *.jsonl.gz, resources.jsonl.gz, accounting.json, backlog.json; warmup and drain retained",
+      "observed_measurement_seconds": 120.0,
+      "measurement_window_complete": true,
+      "resource_sample_count": 298,
+      "measured_resource_sample_count": 235,
+      "failure_kind": null,
+      "failure_phase": null,
+      "client_host": {
+        "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "cpu_count": 4,
+        "affinity": [
+          2,
+          3
+        ],
+        "memory_bytes": 16766402560
+      },
+      "broker": "rabbitmq",
+      "profile": "4x4",
+      "requested_rate": 400.0,
+      "server_stack_metadata": "r3-rabbitmq-4x4-400pps.stack",
+      "evidence_kind": "fixed_load_measurement",
+      "baseline_label": "r3-baseline",
+      "baseline_db_p95_ms": 0.796891,
+      "db_p95_increase_percent": 171.41729546449892,
+      "provisional_db_p95_le_10_percent": false,
+      "independent_audit_metrics": {
+        "server_mean_cpu_cores": 0.3821340649560538,
+        "server_peak_cgroup_mib": 218.53515625,
+        "client_mean_cpu_cores": 0.6125592535896001,
+        "client_peak_rss_sum_mib": 462.7890625,
+        "measured_resource_span_seconds": 119.270094398,
+        "measured_resource_count": 235,
+        "peak_pids": 77,
+        "cpu_throttled_periods_delta": 0,
+        "cpu_throttled_time_ns_delta": 0,
+        "measured_sampled_block_read_bytes": 0,
+        "measured_sampled_block_write_bytes": 182878208,
+        "whole_cell_postgres_wal_lsn_bytes": 4696552,
+        "whole_cell_postgres_database_bytes": 180224,
+        "whole_cell_cgroup_io": {
+          "rbytes": 0,
+          "wbytes": 221900800,
+          "rios": 0,
+          "wios": 26490,
+          "dbytes": 380928,
+          "dios": 5
+        },
+        "db_p95_absolute_increase_ms": 1.366009,
+        "final_queue_depth": 0,
+        "container_exit_code": 0,
+        "container_oom_killed": false,
+        "cgroup_memory_events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0
+        }
+      }
+    }
+  ],
+  "evidence": {
+    "run_url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36672765081",
+    "job_id": 109751141402,
+    "branch": "benchmarks/wake-pg18-20260930",
+    "fixed_sha": "472e62698137d0e1035d04775d443f1cbcc1ae33",
+    "job_status": "completed/success",
+    "job_started_log_utc": "2026-09-30T05:18:02.6088902Z",
+    "matrix_started_log_utc": "2026-09-30T05:22:08.8228662Z",
+    "artifact_created_utc": "2026-09-30T06:33:35Z",
+    "completion_observed_utc": "2026-09-30T06:35:29Z",
+    "full_artifact_id": 11080649776,
+    "full_artifact_url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36672765081/artifacts/11080649776",
+    "full_artifact_size_bytes": 61188926,
+    "full_artifact_sha256": "d3593a50ab24b65ae774c655532ba581766732ce52250bf9d1cc0e59c9956163",
+    "full_artifact_expires_utc": "2026-10-30T06:33:32Z",
+    "zip_digest_verified": true,
+    "all_manifest_files_verified": true,
+    "zip_files": 729,
+    "manifest_files": 728,
+    "two_raw_verifiers_agree": true,
+    "smoke_artifact_id": 11078803108,
+    "smoke_artifact_url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36672765081/artifacts/11078803108",
+    "smoke_workflow_step": "completed/success",
+    "smoke_metadata_size_bytes": 233356,
+    "smoke_metadata_sha256": "36ab749ee2b7f7e3f92c0defeb6c73aca5b504730f5a25941d610fc35e5986e5",
+    "smoke_local_hash_and_raw_verification": false,
+    "smoke_local_verification_limitation": "Transfer unavailable: HTTP 502 on prepared transfer and HTTP 403 on original reference; no further retries performed. Smoke success is workflow-reported only. Smoke samples are excluded from measurements.",
+    "comparison_run_url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36663717022",
+    "comparison_fixed_sha": "51ca71797859a5d09d16f573dde71795176fe240",
+    "comparison_qualification": "Separate GitHub VM; runner image changed 20260920.314.1 → 20260927.320.1. Cross-run differences are observational, not causal attribution to wake code.",
+    "runtime_equivalence": {
+      "build_packages_all_54_cells_sha256": "3e5750150e6801b83736cc9a04ca9638c25710a2d3a3c8dcc86fe16e74d5898d",
+      "python_inputs_byte_identical": true,
+      "matched_postgresql_conf_byte_identical": true,
+      "rabbitmq_conf_byte_identical": true,
+      "docker_version_both": "28.0.4",
+      "os_both": "Ubuntu 24.04.5 LTS",
+      "kernel_both": "6.17.0-1022-azure",
+      "docker_storage_driver_both": "overlay2",
+      "runtime_source_changed_paths": [
+        "src/echoo_pgmq.c"
+      ],
+      "bench_python_dockerfile_sql_cmake_unchanged": true,
+      "separate_nonruntime_ci_docs_test_changes": true
+    },
+    "timing_associations_file": "timing-associations.json",
+    "causal_limit": "Independent PG-only baselines also underachieve200 tx/s with19.743–37.002ms p99 versus old1.513–1.695ms. No isolated PG COMMIT/WAL/scheduler traces; do not attribute differences to wake alone."
+  },
+  "limitations": [
+    "Consumer raw rows retain validation results, not payload bodies. Offline checks verify valid flags, timestamps and identities, not body hashes a second time.",
+    "Schedule lateness is checked against raw recorded fields; due timestamps are not preserved.",
+    "Resources are sampled; storage deltas span the entire cell before shutdown.",
+    "All genuine slow/failing cells remain in this output. Infrastructure aborts leave unrun cells unmeasured."
+  ]
+}

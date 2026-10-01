@@ -1,0 +1,140 @@
+{
+  "raw_events": 375,
+  "trials": [
+    {
+      "trial": "publish_baseline_1",
+      "scenario": "publish",
+      "contended": false,
+      "node_duration_ms": 4.879919,
+      "enqueue_to_commit_send_ms": 5.075173,
+      "observed_wait_to_commit_send_ms": null,
+      "commit_call_ms": 0.199771,
+      "commit_send_to_stdout_ack_observed_ms": 6.65132,
+      "commit_return_to_stdout_ack_observed_ms": 6.451549
+    },
+    {
+      "trial": "publish_baseline_2",
+      "scenario": "publish",
+      "contended": false,
+      "node_duration_ms": 2.268602,
+      "enqueue_to_commit_send_ms": 4.645145,
+      "observed_wait_to_commit_send_ms": null,
+      "commit_call_ms": 0.110266,
+      "commit_send_to_stdout_ack_observed_ms": 3.839926,
+      "commit_return_to_stdout_ack_observed_ms": 3.72966
+    },
+    {
+      "trial": "publish_contended_1",
+      "scenario": "publish",
+      "contended": true,
+      "node_duration_ms": 157.926051,
+      "enqueue_to_commit_send_ms": 161.901275,
+      "observed_wait_to_commit_send_ms": 150.121001,
+      "commit_call_ms": 0.459864,
+      "commit_send_to_stdout_ack_observed_ms": 2.067869,
+      "commit_return_to_stdout_ack_observed_ms": 1.608005
+    },
+    {
+      "trial": "publish_contended_2",
+      "scenario": "publish",
+      "contended": true,
+      "node_duration_ms": 157.563499,
+      "enqueue_to_commit_send_ms": 160.741417,
+      "observed_wait_to_commit_send_ms": 150.117386,
+      "commit_call_ms": 0.461376,
+      "commit_send_to_stdout_ack_observed_ms": 2.435062,
+      "commit_return_to_stdout_ack_observed_ms": 1.973686
+    },
+    {
+      "trial": "publish_contended_3",
+      "scenario": "publish",
+      "contended": true,
+      "node_duration_ms": 157.941444,
+      "enqueue_to_commit_send_ms": 162.988094,
+      "observed_wait_to_commit_send_ms": 150.178988,
+      "commit_call_ms": 0.627967,
+      "commit_send_to_stdout_ack_observed_ms": 2.151149,
+      "commit_return_to_stdout_ack_observed_ms": 1.523182
+    },
+    {
+      "trial": "settle_baseline_1",
+      "scenario": "settle",
+      "contended": false,
+      "node_duration_ms": 1.465871,
+      "enqueue_to_commit_send_ms": 5.680376,
+      "observed_wait_to_commit_send_ms": null,
+      "commit_call_ms": 0.154463,
+      "commit_send_to_stdout_ack_observed_ms": 2.432183,
+      "commit_return_to_stdout_ack_observed_ms": 2.27772
+    },
+    {
+      "trial": "settle_baseline_2",
+      "scenario": "settle",
+      "contended": false,
+      "node_duration_ms": 1.254982,
+      "enqueue_to_commit_send_ms": 4.424793,
+      "observed_wait_to_commit_send_ms": null,
+      "commit_call_ms": 0.223687,
+      "commit_send_to_stdout_ack_observed_ms": 2.229481,
+      "commit_return_to_stdout_ack_observed_ms": 2.005794
+    },
+    {
+      "trial": "settle_contended_1",
+      "scenario": "settle",
+      "contended": true,
+      "node_duration_ms": 157.892548,
+      "enqueue_to_commit_send_ms": 162.285247,
+      "observed_wait_to_commit_send_ms": 150.149301,
+      "commit_call_ms": 0.527345,
+      "commit_send_to_stdout_ack_observed_ms": 2.005169,
+      "commit_return_to_stdout_ack_observed_ms": 1.477824
+    },
+    {
+      "trial": "settle_contended_2",
+      "scenario": "settle",
+      "contended": true,
+      "node_duration_ms": 157.50881,
+      "enqueue_to_commit_send_ms": 160.585079,
+      "observed_wait_to_commit_send_ms": 150.13506,
+      "commit_call_ms": 0.452943,
+      "commit_send_to_stdout_ack_observed_ms": 2.022606,
+      "commit_return_to_stdout_ack_observed_ms": 1.569663
+    },
+    {
+      "trial": "settle_contended_3",
+      "scenario": "settle",
+      "contended": true,
+      "node_duration_ms": 157.099484,
+      "enqueue_to_commit_send_ms": 160.546612,
+      "observed_wait_to_commit_send_ms": 150.125678,
+      "commit_call_ms": 0.501021,
+      "commit_send_to_stdout_ack_observed_ms": 2.074689,
+      "commit_return_to_stdout_ack_observed_ms": 1.573668
+    }
+  ],
+  "matched_lock_waits": 6,
+  "normal_client_exits": 20,
+  "module_identity": {
+    "worker": [
+      80,
+      "2026-09-30 14:48:02.763279-05"
+    ],
+    "proc_start_ticks": "3557200",
+    "path": "/workspace/shared/echoo-global-contention-check/echoo-preview-run-01/pg/lib/postgresql/echoo_pgmq.so",
+    "inode": 550564,
+    "device_major_minor": [
+      0,
+      27
+    ],
+    "sha256": "ca902b3523ad3f0aa50c133a8eec0dd94e88dec0a28b237c0c01ea00efac9c37"
+  },
+  "same_executor_cleanup_verified": true,
+  "elapsed_seconds": 5.3278951730026165,
+  "scope": "Two normal success scenarios; per-trial timing only. No percentiles, capacity, Windows, SSD, ERP or production qualification.",
+  "limitations": [
+    "Only durations within each clock were subtracted; Python ACK endpoints include stdout/IPC delay.",
+    "Payload/receipt assertions were executed by the fixed script; original stored row/receipt bodies were not independently saved, so offline audit does not re-read them.",
+    "Runtime settings were asserted by the fixed script; actual version/durability row was not separately emitted.",
+    "Module mappings and process cleanup are historical same-executor witnesses, not a current PID observation."
+  ]
+}

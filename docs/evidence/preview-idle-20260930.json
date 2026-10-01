@@ -1,0 +1,656 @@
+{
+  "status": "diagnostic_complete_not_qualification",
+  "elapsed_seconds": 133.6145521110011,
+  "identity": {
+    "preview_source_commit": "450681d71c2fefef0a92e57098643701dabcf4f5",
+    "ci_manifest_commit": "191d9947d181aab14667562513eae54109a7ea54",
+    "equal_source_tree": "d0abc20c68ce627015ba2934b38d0a600b812844",
+    "sql_extension_version": "0.1.0",
+    "postgres_version": "18.6",
+    "proton_version": "0.40.0",
+    "node_version": "24.19.0",
+    "rhea_version": "3.0.5",
+    "original_zip_sha256": "e73ba411f3957b8a28bca00e1c9104353f19645160c650dad03b6f8df8083052",
+    "native_so_sha256": "ca902b3523ad3f0aa50c133a8eec0dd94e88dec0a28b237c0c01ea00efac9c37",
+    "sql_0_1_0_sha256": "92f0eb223eda5ad49706211ab4d91ce27dbcf85a9c943f63558a902d5030ecce",
+    "controller_sha256": "8363d67f7982c4134e53456553cf0bcec165f37e4c47454257c723e61ff81ce3",
+    "unchanged_client_sha256": "5ff1cd1bf13a4a146be08f8a943e84e396f3bdc836fb493fbab35d48b9d94c52"
+  },
+  "acceptance": {
+    "metric": "ERP/DB p95",
+    "provisional_relative_limit_percent": 10,
+    "qualified": false
+  },
+  "environment": {
+    "storage": "workspace overlay, fsync=volatile",
+    "postgres_fsync_setting": "on",
+    "physical_ssd_or_durability_qualified": false,
+    "service_cpu_affinity": [
+      0,
+      1
+    ],
+    "client_observer_cpu_affinity": [
+      2,
+      3
+    ],
+    "dedicated_cpu_quota_memory_or_swap_limit": null
+  },
+  "stages": [
+    {
+      "stage": "pg-only-pre",
+      "started_tps": 199.95,
+      "completed_tps": 199.95,
+      "half_started_tps": [
+        200.0,
+        199.9
+      ],
+      "half_completed_tps": [
+        200.0,
+        199.9
+      ],
+      "p95_ms": 0.724847,
+      "p99_ms": 1.386071,
+      "server_cpu_percent_one_core": 4.205244539444452,
+      "server_pss_mib": 48.662109375,
+      "server_uss_mib": 19.40625,
+      "cpu_span_seconds": 19.49946055,
+      "db_completed_tps_cpu_span": 199.95424950358435,
+      "all_sample_process_sets_stable": true,
+      "healthy_connections": 0,
+      "zero_messages_before_after": true,
+      "server_rss_mib": 122.50390625,
+      "measurement_seconds": 20,
+      "warmup_seconds": 5
+    },
+    {
+      "stage": "listener-0",
+      "started_tps": 200.0,
+      "completed_tps": 200.0,
+      "half_started_tps": [
+        200.0,
+        200.0
+      ],
+      "half_completed_tps": [
+        200.0,
+        200.0
+      ],
+      "p95_ms": 0.751564,
+      "p99_ms": 1.350526,
+      "server_cpu_percent_one_core": 4.551654546585997,
+      "server_pss_mib": 50.2587890625,
+      "server_uss_mib": 35.37890625,
+      "cpu_span_seconds": 14.500221694,
+      "db_completed_tps_cpu_span": 199.9969421984756,
+      "all_sample_process_sets_stable": true,
+      "healthy_connections": 0,
+      "zero_messages_before_after": true,
+      "worker_cpu_seconds": 0.02,
+      "worker_cpu_percent_one_core": 0.1379289256541211,
+      "worker_pss_mib": 5.4873046875,
+      "worker_uss_mib": 2.5078125,
+      "server_rss_mib": 120.2578125,
+      "measurement_seconds": 15,
+      "warmup_seconds": 5
+    },
+    {
+      "stage": "idle-1",
+      "started_tps": 200.0,
+      "completed_tps": 200.0,
+      "half_started_tps": [
+        200.0,
+        200.0
+      ],
+      "half_completed_tps": [
+        200.0,
+        200.0
+      ],
+      "p95_ms": 0.635389,
+      "p99_ms": 1.158156,
+      "server_cpu_percent_one_core": 4.413778065858605,
+      "server_pss_mib": 54.9658203125,
+      "server_uss_mib": 21.11328125,
+      "cpu_span_seconds": 14.500049401,
+      "db_completed_tps_cpu_span": 199.99931860921802,
+      "all_sample_process_sets_stable": true,
+      "healthy_connections": 1,
+      "zero_messages_before_after": true,
+      "worker_cpu_seconds": 0.07,
+      "worker_cpu_percent_one_core": 0.48275697595328493,
+      "worker_pss_mib": 10.10546875,
+      "worker_uss_mib": 5.66796875,
+      "server_rss_mib": 145.94921875,
+      "measurement_seconds": 15,
+      "warmup_seconds": 5
+    },
+    {
+      "stage": "idle-4",
+      "started_tps": 200.0,
+      "completed_tps": 200.0,
+      "half_started_tps": [
+        200.0,
+        200.0
+      ],
+      "half_completed_tps": [
+        200.0,
+        200.0
+      ],
+      "p95_ms": 0.748499,
+      "p99_ms": 1.473292,
+      "server_cpu_percent_one_core": 5.241470847391707,
+      "server_pss_mib": 55.5390625,
+      "server_uss_mib": 21.1640625,
+      "cpu_span_seconds": 14.499746772,
+      "db_completed_tps_cpu_span": 200.00349286099933,
+      "all_sample_process_sets_stable": true,
+      "healthy_connections": 4,
+      "zero_messages_before_after": true,
+      "worker_cpu_seconds": 0.13999999999999996,
+      "worker_cpu_percent_one_core": 0.9655341034668931,
+      "worker_pss_mib": 10.68359375,
+      "worker_uss_mib": 6.2421875,
+      "server_rss_mib": 146.90625,
+      "measurement_seconds": 15,
+      "warmup_seconds": 5
+    },
+    {
+      "stage": "idle-8",
+      "started_tps": 200.0,
+      "completed_tps": 200.0,
+      "half_started_tps": [
+        200.0,
+        200.0
+      ],
+      "half_completed_tps": [
+        200.0,
+        200.0
+      ],
+      "p95_ms": 0.698103,
+      "p99_ms": 1.607604,
+      "server_cpu_percent_one_core": 5.452777662144956,
+      "server_pss_mib": 56.453125,
+      "server_uss_mib": 21.38671875,
+      "cpu_span_seconds": 14.488028835,
+      "db_completed_tps_cpu_span": 199.95818844599918,
+      "all_sample_process_sets_stable": true,
+      "healthy_connections": 8,
+      "zero_messages_before_after": true,
+      "worker_cpu_seconds": 0.1800000000000001,
+      "worker_cpu_percent_one_core": 1.242405036944421,
+      "worker_pss_mib": 11.4326171875,
+      "worker_uss_mib": 6.98828125,
+      "server_rss_mib": 148.3984375,
+      "measurement_seconds": 15,
+      "warmup_seconds": 5
+    },
+    {
+      "stage": "pg-only-post",
+      "started_tps": 200.0,
+      "completed_tps": 200.0,
+      "half_started_tps": [
+        200.0,
+        200.0
+      ],
+      "half_completed_tps": [
+        200.0,
+        200.0
+      ],
+      "p95_ms": 0.787808,
+      "p99_ms": 1.550298,
+      "server_cpu_percent_one_core": 4.051243584204829,
+      "server_pss_mib": 47.453125,
+      "server_uss_mib": 33.9921875,
+      "cpu_span_seconds": 19.500185155,
+      "db_completed_tps_cpu_span": 199.94681942803328,
+      "all_sample_process_sets_stable": true,
+      "healthy_connections": 0,
+      "zero_messages_before_after": true,
+      "server_rss_mib": 121.56640625,
+      "measurement_seconds": 20,
+      "warmup_seconds": 5
+    }
+  ],
+  "differences_against_both_baselines": [
+    {
+      "stage": "listener-0",
+      "versus": {
+        "pg-only-pre": {
+          "completed_tps": {
+            "absolute": 0.05000000000001137,
+            "relative_percent": 0.02500625156289641
+          },
+          "p95_ms": {
+            "absolute": 0.02671699999999999,
+            "relative_percent": 3.6858812963287413
+          },
+          "p99_ms": {
+            "absolute": -0.03554500000000016,
+            "relative_percent": -2.5644429470063335
+          },
+          "server_cpu_percent_one_core": {
+            "absolute": 0.3464100071415448,
+            "relative_percent": 8.237571059002159
+          },
+          "server_pss_mib": {
+            "absolute": 1.5966796875,
+            "relative_percent": 3.281155930162553
+          },
+          "server_uss_mib": {
+            "absolute": 15.97265625,
+            "relative_percent": 82.30676328502416
+          },
+          "server_rss_mib": {
+            "absolute": -2.24609375,
+            "relative_percent": -1.8334874525684768
+          }
+        },
+        "pg-only-post": {
+          "completed_tps": {
+            "absolute": 0.0,
+            "relative_percent": 0.0
+          },
+          "p95_ms": {
+            "absolute": -0.03624399999999994,
+            "relative_percent": -4.600613347414591
+          },
+          "p99_ms": {
+            "absolute": -0.19977200000000006,
+            "relative_percent": -12.886038684175563
+          },
+          "server_cpu_percent_one_core": {
+            "absolute": 0.5004109623811681,
+            "relative_percent": 12.35203344306901
+          },
+          "server_pss_mib": {
+            "absolute": 2.8056640625,
+            "relative_percent": 5.912495884096147
+          },
+          "server_uss_mib": {
+            "absolute": 1.38671875,
+            "relative_percent": 4.079521948977247
+          },
+          "server_rss_mib": {
+            "absolute": -1.30859375,
+            "relative_percent": -1.0764435590116
+          }
+        }
+      }
+    },
+    {
+      "stage": "idle-1",
+      "versus": {
+        "pg-only-pre": {
+          "completed_tps": {
+            "absolute": 0.05000000000001137,
+            "relative_percent": 0.02500625156289641
+          },
+          "p95_ms": {
+            "absolute": -0.08945800000000004,
+            "relative_percent": -12.341638994160151
+          },
+          "p99_ms": {
+            "absolute": -0.2279150000000001,
+            "relative_percent": -16.44324136353766
+          },
+          "server_cpu_percent_one_core": {
+            "absolute": 0.20853352641415324,
+            "relative_percent": 4.9588917947136135
+          },
+          "server_pss_mib": {
+            "absolute": 6.3037109375,
+            "relative_percent": 12.954043748745736
+          },
+          "server_uss_mib": {
+            "absolute": 1.70703125,
+            "relative_percent": 8.796296296296296
+          },
+          "server_rss_mib": {
+            "absolute": 23.4453125,
+            "relative_percent": 19.138420330984342
+          }
+        },
+        "pg-only-post": {
+          "completed_tps": {
+            "absolute": 0.0,
+            "relative_percent": 0.0
+          },
+          "p95_ms": {
+            "absolute": -0.15241899999999997,
+            "relative_percent": -19.347226735448228
+          },
+          "p99_ms": {
+            "absolute": -0.392142,
+            "relative_percent": -25.294620776134654
+          },
+          "server_cpu_percent_one_core": {
+            "absolute": 0.36253448165377655,
+            "relative_percent": 8.948720908000752
+          },
+          "server_pss_mib": {
+            "absolute": 7.5126953125,
+            "relative_percent": 15.831824168587422
+          },
+          "server_uss_mib": {
+            "absolute": -12.87890625,
+            "relative_percent": -37.88784187543094
+          },
+          "server_rss_mib": {
+            "absolute": 24.3828125,
+            "relative_percent": 20.0571961055236
+          }
+        }
+      }
+    },
+    {
+      "stage": "idle-4",
+      "versus": {
+        "pg-only-pre": {
+          "completed_tps": {
+            "absolute": 0.05000000000001137,
+            "relative_percent": 0.02500625156289641
+          },
+          "p95_ms": {
+            "absolute": 0.023652000000000006,
+            "relative_percent": 3.263033440160476
+          },
+          "p99_ms": {
+            "absolute": 0.08722099999999999,
+            "relative_percent": 6.292679090753648
+          },
+          "server_cpu_percent_one_core": {
+            "absolute": 1.0362263079472545,
+            "relative_percent": 24.641285381328824
+          },
+          "server_pss_mib": {
+            "absolute": 6.876953125,
+            "relative_percent": 14.132048966486053
+          },
+          "server_uss_mib": {
+            "absolute": 1.7578125,
+            "relative_percent": 9.057971014492754
+          },
+          "server_rss_mib": {
+            "absolute": 24.40234375,
+            "relative_percent": 19.919645419470044
+          }
+        },
+        "pg-only-post": {
+          "completed_tps": {
+            "absolute": 0.0,
+            "relative_percent": 0.0
+          },
+          "p95_ms": {
+            "absolute": -0.03930899999999993,
+            "relative_percent": -4.989667533206052
+          },
+          "p99_ms": {
+            "absolute": -0.07700599999999991,
+            "relative_percent": -4.967174052988517
+          },
+          "server_cpu_percent_one_core": {
+            "absolute": 1.1902272631868778,
+            "relative_percent": 29.379306340092445
+          },
+          "server_pss_mib": {
+            "absolute": 8.0859375,
+            "relative_percent": 17.039841949292065
+          },
+          "server_uss_mib": {
+            "absolute": -12.828125,
+            "relative_percent": -37.7384509308205
+          },
+          "server_rss_mib": {
+            "absolute": 25.33984375,
+            "relative_percent": 20.844445872561934
+          }
+        }
+      }
+    },
+    {
+      "stage": "idle-8",
+      "versus": {
+        "pg-only-pre": {
+          "completed_tps": {
+            "absolute": 0.05000000000001137,
+            "relative_percent": 0.02500625156289641
+          },
+          "p95_ms": {
+            "absolute": -0.02674399999999999,
+            "relative_percent": -3.689606220347189
+          },
+          "p99_ms": {
+            "absolute": 0.22153299999999998,
+            "relative_percent": 15.98280318973559
+          },
+          "server_cpu_percent_one_core": {
+            "absolute": 1.2475331227005038,
+            "relative_percent": 29.66612550111802
+          },
+          "server_pss_mib": {
+            "absolute": 7.791015625,
+            "relative_percent": 16.010435480634158
+          },
+          "server_uss_mib": {
+            "absolute": 1.98046875,
+            "relative_percent": 10.205314009661835
+          },
+          "server_rss_mib": {
+            "absolute": 25.89453125,
+            "relative_percent": 21.137718822741622
+          }
+        },
+        "pg-only-post": {
+          "completed_tps": {
+            "absolute": 0.0,
+            "relative_percent": 0.0
+          },
+          "p95_ms": {
+            "absolute": -0.08970499999999992,
+            "relative_percent": -11.38665766278077
+          },
+          "p99_ms": {
+            "absolute": 0.05730600000000008,
+            "relative_percent": 3.6964506178812124
+          },
+          "server_cpu_percent_one_core": {
+            "absolute": 1.401534077940127,
+            "relative_percent": 34.59515698844896
+          },
+          "server_pss_mib": {
+            "absolute": 9.0,
+            "relative_percent": 18.966084952255514
+          },
+          "server_uss_mib": {
+            "absolute": -12.60546875,
+            "relative_percent": -37.08342909675937
+          },
+          "server_rss_mib": {
+            "absolute": 26.83203125,
+            "relative_percent": 22.071912856270686
+          }
+        }
+      }
+    }
+  ],
+  "baseline_drift": {
+    "passed": true,
+    "throughput_relative_absolute_drift": 0.0002500625156289641,
+    "p99_absolute_drift_ms": 0.1642269999999999,
+    "p99_allowed_absolute_drift_ms": 1
+  },
+  "measurement": {
+    "db_target_tps": 200,
+    "db_operation": "single-row UPDATE + 100-row range SUM over 1000 synthetic inventory rows",
+    "poll_interval_ms": 50,
+    "credit_per_consumer": 32,
+    "cpu_tick_seconds": 0.01,
+    "CPU_unit": "percent of one logical core; differences are percentage points; relative changes are separately labeled",
+    "memory_unit": "MiB; aggregate sampled PG processes within each sample, then take upper-middle sample median; not peak or long-term memory; summed RSS double-counts shared pages",
+    "CPU_scope": "sampled service/backend processes matching PID plus creation time; excludes clients/observer and can omit a process born and exited between samples",
+    "measured_db_start_cohort_count": 19999,
+    "queue_snapshots_before_after_empty": true,
+    "mq_messages_produced": 0,
+    "configured_max_connections": 8,
+    "native_GUC_default_max_connections": {
+      "Linux": 64,
+      "Windows": 32
+    },
+    "polling_context": "50ms is native GUC default; introductory script used 20ms and earlier performance diagnostics used 2ms"
+  },
+  "cleanup": {
+    "known_pg_identities": [
+      {
+        "pid": 48,
+        "created": 1790793453.75
+      },
+      {
+        "pid": 49,
+        "created": 1790793453.77
+      },
+      {
+        "pid": 50,
+        "created": 1790793453.77
+      },
+      {
+        "pid": 51,
+        "created": 1790793453.77
+      },
+      {
+        "pid": 52,
+        "created": 1790793453.77
+      },
+      {
+        "pid": 53,
+        "created": 1790793453.77
+      },
+      {
+        "pid": 55,
+        "created": 1790793453.77
+      },
+      {
+        "pid": 56,
+        "created": 1790793453.77
+      },
+      {
+        "pid": 57,
+        "created": 1790793453.77
+      },
+      {
+        "pid": 80,
+        "created": 1790793479.37
+      },
+      {
+        "pid": 81,
+        "created": 1790793479.39
+      },
+      {
+        "pid": 82,
+        "created": 1790793479.39
+      },
+      {
+        "pid": 83,
+        "created": 1790793479.39
+      },
+      {
+        "pid": 84,
+        "created": 1790793479.39
+      },
+      {
+        "pid": 85,
+        "created": 1790793479.39
+      },
+      {
+        "pid": 87,
+        "created": 1790793479.39
+      },
+      {
+        "pid": 88,
+        "created": 1790793479.39
+      },
+      {
+        "pid": 89,
+        "created": 1790793479.39
+      },
+      {
+        "pid": 90,
+        "created": 1790793479.39
+      },
+      {
+        "pid": 182,
+        "created": 1790793561.44
+      },
+      {
+        "pid": 183,
+        "created": 1790793561.46
+      },
+      {
+        "pid": 184,
+        "created": 1790793561.46
+      },
+      {
+        "pid": 185,
+        "created": 1790793561.46
+      },
+      {
+        "pid": 186,
+        "created": 1790793561.46
+      },
+      {
+        "pid": 187,
+        "created": 1790793561.46
+      },
+      {
+        "pid": 189,
+        "created": 1790793561.46
+      },
+      {
+        "pid": 190,
+        "created": 1790793561.46
+      },
+      {
+        "pid": 191,
+        "created": 1790793561.46
+      },
+      {
+        "pid": 193,
+        "created": 1790793561.55
+      }
+    ],
+    "pg_still_live": [],
+    "node_process_reaped": true,
+    "db_process_still_live": false,
+    "pg_pidfile_present": false
+  },
+  "attempt_history": [
+    {
+      "name": "attempt1-frozen",
+      "status": "infrastructure_failure",
+      "pooled_with_attempt2": false,
+      "node_normal_process_exit": "unconfirmed in original executor"
+    },
+    {
+      "name": "close-probe",
+      "status": "normal_lifecycle_pass",
+      "elapsed_seconds": 7.427767417000723,
+      "root_cause": "parent stdin control pipe retained"
+    },
+    {
+      "name": "attempt2/close-fixture",
+      "status": "normal_lifecycle_pass",
+      "elapsed_seconds": 0.9115058670031431
+    },
+    {
+      "name": "attempt2",
+      "status": "complete",
+      "all_six_stages": true
+    }
+  ],
+  "scope_limits": [
+    "short sequential synthetic idle diagnostic",
+    "no randomized pairs or significance test",
+    "no long-term stability or capacity claim",
+    "no real ERP qualification",
+    "no Windows 11/SSD/durability qualification",
+    "no security/fault/resource-exhaustion test",
+    "no product binary change"
+  ]
+}

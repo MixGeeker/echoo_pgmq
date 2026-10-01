@@ -1,0 +1,78 @@
+name: Ordinary fixed-load benchmark (controlled, not capacity qualification)
+
+on:
+  workflow_dispatch:
+  # Explicitly authorized experiment branches; never run on ordinary PRs.
+  push:
+    branches: [benchmarks/controlled-pg18-20260930, benchmarks/wake-pg18-20260930]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: benchmark-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  equal-budget-linux:
+    name: PG18 + echoo vs PG18 + RabbitMQ, shared 2 CPU / 4 GiB
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.12'
+      - name: Check clean runner and install pinned client tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Two CPU IDs for the ENTIRE server stack, two different IDs for clients.
+          python -c 'import os; assert len(os.sched_getaffinity(0)) >= 4, "Benchmark needs >=4 host logical CPUs; do not weaken the budget"'
+          docker info
+          python -m pip install -r bench/requirements.txt
+          python -m compileall -q bench
+          python -m pytest -q bench/test_measurement.py
+      - name: Build one immutable, normal-release server image
+        shell: bash
+        run: |
+          set -euo pipefail
+          # No test hooks, fuzzing, attack reproductions, crash tests or stress jobs.
+          docker build --pull -f bench/Dockerfile -t echoo-benchmark:${GITHUB_SHA} .
+      - name: Fail-fast real Docker smoke for sampler and both broker paths
+        timeout-minutes: 8
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Real cgroups + Docker HTTP stats + baseline + echoo + RabbitMQ.
+          # 2 s warmup / 5 s measurement; separate evidence, never performance data.
+          python bench/compare_ci.py --image echoo-benchmark:${GITHUB_SHA} \
+            --output "$RUNNER_TEMP/benchmark-infrastructure-smoke" --smoke
+      - name: Preserve infrastructure smoke evidence immediately
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: pg18-benchmark-infrastructure-smoke-${{ github.sha }}
+          path: ${{ runner.temp }}/benchmark-infrastructure-smoke/
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Warm up and measure identical paced workloads
+        shell: bash
+        run: |
+          set -euo pipefail
+          # 3 baselines + 24 broker cells; each gets 30 s warmup + 120 s measurement.
+          # Both 1 producer/1 consumer and 4 producers/4 consumers, at 200 and 400
+          # aggregate messages/s. Clients live outside the shared server budget.
+          python bench/compare_ci.py --image echoo-benchmark:${GITHUB_SHA} \
+            --output "$RUNNER_TEMP/equal-budget-benchmark" \
+            --repetitions 3 --warmup-seconds 30 --duration-seconds 120 --rates 200 400
+      - name: Retain every result, including failures and missed provisional targets
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: pg18-equal-budget-benchmark-${{ github.sha }}
+          path: ${{ runner.temp }}/equal-budget-benchmark/
+          if-no-files-found: warn
+          retention-days: 30

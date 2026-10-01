@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "scope": "fixed450 originalbinary and .2 wrapper ordinary smoke",
+  "windows": {
+    "preview_label": "preview-20260930.2",
+    "ci_run": 36776023123,
+    "ci_url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36776023123",
+    "head": "fd30a1f28adca469c7f17694e9da4aa3da9a2779",
+    "actual_checkout": "ad5898250bed211bde6709c1306238bb2d4b07f5",
+    "status": "passed",
+    "artifact_sha256": "cc018507ce9358ec6f6972340b587edb25d96db7855cb11c256e54be07a77067",
+    "artifact_bytes": 10016,
+    "fixed_candidate": "191d9947d181aab14667562513eae54109a7ea54",
+    "original_inner_sha256": "a8107211653c966dca2792726a84e4013bd7c1eb010e40700f755d3d425ff164",
+    "guide12_hashes_verified": true,
+    "seven_stages_zero": true,
+    "sql_marker": true,
+    "three_original_rhea_scenarios": [
+      "roundtrip",
+      "release",
+      "reconnect"
+    ],
+    "sql_binary_payload_bytes": 12,
+    "sql_binary_remote_second": true,
+    "actual_policy": {
+      "worker_max_message_bytes": 65536,
+      "global_max_message_bytes": 65536,
+      "global_message_count": 0,
+      "global_total_bytes": 0,
+      "retained_message_rows": 0,
+      "queues": [
+        {
+          "name": "preview/reconnect_63ec9446838b43fdbdf682893d1e4dc0",
+          "queue_max_message_bytes": 65536,
+          "queue_message_count": 0,
+          "queue_total_bytes": 0,
+          "retained_message_rows": 0,
+          "effective_sql_max_message_bytes": 65536
+        },
+        {
+          "name": "preview/release_e392a449786340efbb146a6e89195e04",
+          "queue_max_message_bytes": 65536,
+          "queue_message_count": 0,
+          "queue_total_bytes": 0,
+          "retained_message_rows": 0,
+          "effective_sql_max_message_bytes": 65536
+        },
+        {
+          "name": "preview/roundtrip_4f80736d11e546bd914883e405196f51",
+          "queue_max_message_bytes": 65536,
+          "queue_message_count": 0,
+          "queue_total_bytes": 0,
+          "retained_message_rows": 0,
+          "effective_sql_max_message_bytes": 65536
+        },
+        {
+          "name": "preview/sql_635c0ea7424f49a8922a68b2bc35359a",
+          "queue_max_message_bytes": 65536,
+          "queue_message_count": 0,
+          "queue_total_bytes": 0,
+          "retained_message_rows": 0,
+          "effective_sql_max_message_bytes": 65536
+        },
+        {
+          "name": "preview/sql_binary_84a3e2dd2e804b88b94957c693afcc56",
+          "queue_max_message_bytes": 65536,
+          "queue_message_count": 0,
+          "queue_total_bytes": 0,
+          "retained_message_rows": 0,
+          "effective_sql_max_message_bytes": 65536
+        }
+      ],
+      "preview_label": "preview-20260930.2",
+      "max_encoded_message_bytes": 65536
+    },
+    "normal_pg_status": 3,
+    "runner": {
+      "os": "Windows",
+      "release": "2022Server",
+      "version": "10.0.20348",
+      "architecture": "AMD64",
+      "image_os": "win22",
+      "image_version": "20260920.314.1"
+    },
+    "test_ports": {
+      "postgres": 55816,
+      "amqp": 55817,
+      "selection": "OS-assigned loopback; fixed defaults not changed"
+    },
+    "qualification": "ordinary only; blocked_security_review unchanged",
+    "actual_checkout_tree": "8d8832e51b4faa874fe9efbbb67ac635f4e784db",
+    "pr_head_tree": "78154ce24b037818ec7d16161e6f0f725d42daa2",
+    "head_to_actual_checkout_differences": [
+      "README.md",
+      "bench/experiments/bridge-phase-diagnostic.patch",
+      "docs/PROGRESS.md",
+      "docs/evidence/bridge-phase-20260930.json",
+      "docs/evidence/deadline-prior-negative-comparison.json",
+      "docs/evidence/global-contention-20260930.json",
+      "docs/evidence/preview-idle-20260930.json",
+      "docs/performance-bridge-phase-pairs.csv",
+      "docs/performance-bridge-phases.csv",
+      "docs/performance-bridge-phases.md",
+      "docs/performance-deadline-reassessment.md",
+      "docs/performance-global-contention.csv",
+      "docs/performance-global-contention.md",
+      "docs/performance-preview-idle.md",
+      "docs/performance-round-conclusion.md",
+      "docs/preview-20260930.1-contract.md",
+      "docs/protocol.md",
+      "docs/support.md"
+    ],
+    "difference_scope": "report docs and noninstalled diagnostic patch only; no runtime/guide/workflow change; do not claim full tree equality",
+    "controller_and_fixed_inputs_hash_verified": true
+  },
+  "linux": {
+    "schema_version": 1,
+    "preview": "preview-20260930.2",
+    "source": "450681d71c2fefef0a92e57098643701dabcf4f5",
+    "status": "passed",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "stages": [
+      {
+        "name": "install",
+        "exit_code": 0
+      },
+      {
+        "name": "init",
+        "exit_code": 0
+      },
+      {
+        "name": "start",
+        "exit_code": 0
+      },
+      {
+        "name": "sql-demo",
+        "exit_code": 0
+      },
+      {
+        "name": "amqp-demo",
+        "exit_code": 0
+      },
+      {
+        "name": "policy-check",
+        "exit_code": 0
+      },
+      {
+        "name": "stop",
+        "exit_code": 0
+      },
+      {
+        "name": "final-status",
+        "exit_code": 3
+      }
+    ],
+    "scope": "ordinary small legal messages and configuration alignment; no boundary/security/fault tests",
+    "archive_sha256": "e73ba411f3957b8a28bca00e1c9104353f19645160c650dad03b6f8df8083052",
+    "guide_sha256": {
+      "preview.py": "57578f72bfd3716b1775775e0720fb79b32447bc9e5724c6ad533a4500baa904",
+      "interop/rhea_client.js": "882d6758dd124293a42e22a744ed5e69ed517af6a30d57271a7f8f9487f34267"
+    },
+    "elapsed_seconds": 4.81046306600183,
+    "postmaster_pid_absent": true,
+    "remaining_owned_postgres": [],
+    "remaining_listeners": []
+  },
+  "ci_failures_preserved": [
+    {
+      "run": 36775187295,
+      "reason": "LF converted CRLF before any PG action",
+      "artifact_sha256": "757c953d2bd067157808abd22654ac8cd16cf5bc581c65fda7b6ea1e1d08b7ea"
+    },
+    {
+      "run": 36775523890,
+      "reason": "fixed preview loopback port not bindable WinError10013; installed archive but no initdb/server start",
+      "artifact_sha256": "15cdb38a7c6cfce9ecb32406f7bcbc43cb422c70dbb6d0b7a4178e8793e09e09"
+    }
+  ],
+  "linux_controller_first_failure": {
+    "first_result_preserved": true,
+    "ordinary_wrapper_actions": "install init start sql-demo amqp-demo all exit0; stop0 status3",
+    "first_assertion_error": "controller expected11 but fixed literal payload is12 bytes; received/deepEqual/remote settlement all passed in wrapper",
+    "final_controller_error": "post-stop bind probe EADDRINUSE; cannot use bind-without-reuse to distinguish TIME_WAIT from LISTEN",
+    "next_fix": "expect actual12-byte fixture; same-session owned PG process and LISTEN port checks, no rerun of paused or performance gates"
+  },
+  "bundles": [
+    {
+      "platform": "Windows",
+      "name": "echoo-pgmq-pg18-preview-20260930.2-windows-amd64.zip",
+      "bytes": 536119,
+      "sha256": "ae2feb17b17bdbb4d38b0b17c34f391f681183b25f89e3b2935c479890e676af",
+      "members": 17
+    },
+    {
+      "platform": "Linux",
+      "name": "echoo-pgmq-pg18-preview-20260930.2-linux-x86_64.zip",
+      "bytes": 5730143,
+      "sha256": "f3f64706ccb476cd52a612eba134f9ce703126f120592a95b3d1d9458c386277",
+      "members": 17
+    }
+  ],
+  "root_readonly_review": "Narrow config/SQL-encoded-size and independent client receipt review found no blocking ordinary correctness issue; not full security review",
+  "qualification": "blocked_security_review; no security/fuzz/newfault/Win11/SSD/ERP acceptance"
+}

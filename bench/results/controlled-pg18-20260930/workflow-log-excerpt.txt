@@ -1,0 +1,38 @@
+2026-09-30T03:17:46.8152123Z 13 passed in 0.34s
+2026-09-30T03:20:53.8277593Z #15 [10/13] RUN cmake -S /opt/echoo -B /tmp/echoo-build -DCMAKE_BUILD_TYPE=RelWithDebInfo       -DPG_CONFIG=/opt/pg18/bin/pg_config -DPROTON_ROOT=/opt/proton -DECHOO_ENABLE_TEST_HOOKS=OFF     && cmake --build /tmp/echoo-build --parallel 2 && cmake --install /tmp/echoo-build     && cp -L /opt/proton/lib/libqpid-proton*.so* "$(/opt/pg18/bin/pg_config --pkglibdir)/"     && rm -rf /tmp/echoo-build
+2026-09-30T03:21:11.4794057Z r1-baseline: passed; None
+2026-09-30T03:21:23.8065270Z r1-echoo-1x1-100pps: passed; synthetic DB p95 change=None
+2026-09-30T03:21:42.9485292Z r1-rabbitmq-1x1-100pps: passed; synthetic DB p95 change=None
+2026-09-30T03:21:43.1606017Z With the provided path, there will be 67 files uploaded
+2026-09-30T03:21:43.5312234Z SHA256 digest of uploaded artifact zip is 325f179983c3b637562ae7089cd38bf7a5ee17256dad092b68662b2a70794c2d
+2026-09-30T03:21:43.7248432Z Artifact download URL: https://github.com/MixGeeker/echoo_pgmq/actions/runs/36663717022/artifacts/11075865839
+2026-09-30T03:24:18.9520246Z r1-baseline: passed; None
+2026-09-30T03:26:54.7883149Z r1-echoo-1x1-200pps: passed; synthetic DB p95 change=56.24855675213922
+2026-09-30T03:29:37.6381041Z r1-rabbitmq-1x1-200pps: passed; synthetic DB p95 change=40.268270508653025
+2026-09-30T03:32:14.0289618Z r1-echoo-1x1-400pps: passed; synthetic DB p95 change=78.52721703056697
+2026-09-30T03:34:57.3632779Z r1-rabbitmq-1x1-400pps: passed; synthetic DB p95 change=53.25225308148558
+2026-09-30T03:37:34.9261568Z r1-echoo-4x4-200pps: passed; synthetic DB p95 change=61.09811178772184
+2026-09-30T03:40:19.1627355Z r1-rabbitmq-4x4-200pps: passed; synthetic DB p95 change=50.530307801370334
+2026-09-30T03:42:56.5239106Z r1-echoo-4x4-400pps: passed; synthetic DB p95 change=101.2564936061092
+2026-09-30T03:45:41.2808875Z r1-rabbitmq-4x4-400pps: passed; synthetic DB p95 change=55.61280102315172
+2026-09-30T03:48:15.7603548Z r2-baseline: passed; None
+2026-09-30T03:51:01.2079776Z r2-rabbitmq-4x4-400pps: passed; synthetic DB p95 change=74.5186825008972
+2026-09-30T03:53:38.5723314Z r2-echoo-4x4-400pps: passed; synthetic DB p95 change=99.79121313019259
+2026-09-30T03:56:22.8587055Z r2-rabbitmq-4x4-200pps: passed; synthetic DB p95 change=-5.267821888613766
+2026-09-30T03:59:00.5232481Z r2-echoo-4x4-200pps: passed; synthetic DB p95 change=67.99764889961797
+2026-09-30T04:01:44.0864149Z r2-rabbitmq-1x1-400pps: passed; synthetic DB p95 change=55.14810052180368
+2026-09-30T04:04:20.4884837Z r2-echoo-1x1-400pps: passed; synthetic DB p95 change=77.1174822625172
+2026-09-30T04:07:03.8817053Z r2-rabbitmq-1x1-200pps: passed; synthetic DB p95 change=54.673711247922554
+2026-09-30T04:09:39.7895924Z r2-echoo-1x1-200pps: passed; synthetic DB p95 change=48.72769990280048
+2026-09-30T04:12:14.8030767Z r3-baseline: passed; None
+2026-09-30T04:14:50.7830753Z r3-echoo-1x1-200pps: passed; synthetic DB p95 change=53.277664854683216
+2026-09-30T04:17:34.1878058Z r3-rabbitmq-1x1-200pps: passed; synthetic DB p95 change=56.931845218248924
+2026-09-30T04:20:10.7189558Z r3-echoo-1x1-400pps: passed; synthetic DB p95 change=79.0882619530399
+2026-09-30T04:22:54.1743958Z r3-rabbitmq-1x1-400pps: passed; synthetic DB p95 change=53.45771064410621
+2026-09-30T04:25:31.5216524Z r3-echoo-4x4-200pps: passed; synthetic DB p95 change=75.85180099300975
+2026-09-30T04:28:16.2295145Z r3-rabbitmq-4x4-200pps: passed; synthetic DB p95 change=-3.2348144507533205
+2026-09-30T04:30:54.0552488Z r3-echoo-4x4-400pps: passed; synthetic DB p95 change=104.47298942694067
+2026-09-30T04:33:38.8945246Z r3-rabbitmq-4x4-400pps: passed; synthetic DB p95 change=82.82789614807389
+2026-09-30T04:33:39.3313554Z With the provided path, there will be 729 files uploaded
+2026-09-30T04:33:42.3140500Z SHA256 digest of uploaded artifact zip is 8274a9f86ac436d0bbe21a988ae3c6774ed791513e49209cf21a037d5659c1c1
+2026-09-30T04:33:42.5104684Z Artifact download URL: https://github.com/MixGeeker/echoo_pgmq/actions/runs/36663717022/artifacts/11077458716

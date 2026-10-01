@@ -1,0 +1,2824 @@
+{
+  "scope": "Ordinary diagnostic perturbation comparison: A has no phase instrumentation; B has cumulative bridge phases. B phases cover the whole worker lifetime including warmup/drain, not the 30-second client cohort. Per-event native traces remain uncollected by design. Client timing, ID/checksum accounting, psutil resource sampling and PostgreSQL I/O timing remain enabled. Volatile storage: /tmp tmpfs and workspace overlay fsync=volatile. Not SSD, durability, capacity, ERP, reliability or product performance qualification. CPU affinity only; no enforceable cgroup CPU quota, memory ceiling or swap limit. RSS sums double-count shared pages; CPU sums cover currently live owned processes.",
+  "method": {
+    "quantile": "sorted[floor((n-1)*p)]",
+    "client_cohort": "producer start in [measurement_start, measurement_start+30s); late confirmations and receipts retained",
+    "db_cohort": "DB start in fixed measured window; late completions retained",
+    "throughput": "events with timestamps in [start,end), counted separately for starts, confirms and receipts",
+    "cpu": "PID+creation-time matched endpoint deltas of the 12 persistent owned processes and worker inside sampled window; observed transient identities are disclosed separately and not included in these endpoint CPU deltas; not whole-stack/cgroup/exited-process accounting",
+    "rss": "sum of sampled RSS double-counts shared pages, not unique physical memory",
+    "native": "B whole-worker-lifetime aggregate elapsed fields; no native per-event trace, CPU attribution or 30-second cohort native timing",
+    "checksum": "client valid flags and exact run IDs verified; payload bytes are not retained, so audit cannot independently rehash transmitted payload",
+    "comparisons": "only A versus B within this session; report eligibility per predeclared pair, retain invalid-pair observations descriptively; no absolute comparison to prior sessions"
+  },
+  "verification": {
+    "result_manifest_sha256": "161377b64249cbaff26e815c217fad52b735d2cce09840cf6e2d952a9360312f",
+    "manifest_entries_rehashed": 166,
+    "manifest_exact_file_coverage": true,
+    "manifest_mismatches": [],
+    "native_source_files_rehashed": 19,
+    "source_hashes": {
+      "source": {
+        "count": 7,
+        "root": "/workspace/shared/echoo_pgmq_diagnostic",
+        "matched": true
+      },
+      "runtime": {
+        "count": 4,
+        "root": "/workspace/shared/bridge-phase-mechanism/adapter/runtime",
+        "matched": true
+      },
+      "reviewed_adapter": {
+        "count": 4,
+        "root": "/workspace/shared/echoo_local_diag_adapter",
+        "matched": true
+      }
+    },
+    "actual_binary_hashes": {
+      "A": "98804dff6e6abafa81a931d69360141d79729ff4e60edccfdaf32b9bf52e7684",
+      "B": "13da451342c73b971cf8986b3919de24625d62373c7c2bad6e4f42cc75abe9b0"
+    },
+    "instrumentation_symbol_checks": {
+      "A": {
+        "per_event_trace_absent": true,
+        "counter_state_bytes": 0,
+        "test_hooks": "OFF",
+        "build_type": "RelWithDebInfo"
+      },
+      "B": {
+        "per_event_trace_absent": true,
+        "counter_state_bytes": 264,
+        "test_hooks": "OFF",
+        "build_type": "RelWithDebInfo"
+      }
+    },
+    "verification_scope": "Retrospective immutable-file consistency, independent raw recomputation, captured mapped-library witnesses; no live server re-execution",
+    "only_differing_native_source_files": [
+      "include/bridge_phase_diag.h",
+      "include/echoo_pgmq.h",
+      "src/echoo_pgmq.c",
+      "src/storage.c"
+    ],
+    "diagnostic_baseline_files_rehashed": 127,
+    "diagnostic_added_files_rehashed": 6,
+    "patch_replayed_in_memory": true,
+    "same_executor_wrapper_sha256": "62c06aea226bd55f47ecae1058caa62d1bfff45be1852a352c2a718e330f094c",
+    "checks_passed": 275592,
+    "additional_provenance_caveat": "Build provenance says not run because it was captured before execution. Runtime mapped-library identities are separately verified from each cell before/after witness. No live worker is reread after cleanup."
+  },
+  "identities": {
+    "baseline_commit": "450681d71c2fefef0a92e57098643701dabcf4f5",
+    "diagnostic_patch_sha256": "18cd9e21e8947bab1ba51545a397593add3fbe839657f5a4b4626a5b61a3e800",
+    "extension_version": "0.1.1"
+  },
+  "environment": {
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "host_cpu_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "server_cpu_ids": [
+      0,
+      1
+    ],
+    "client_observer_cpu_ids": [
+      2,
+      3
+    ],
+    "server_cpu_quota": null,
+    "server_memory_ceiling_bytes": null,
+    "host_visible_memory_bytes": 10451464192,
+    "scope": "Ordinary diagnostic perturbation comparison: A has no phase instrumentation; B has cumulative bridge phases. B phases cover the whole worker lifetime including warmup/drain, not the 30-second client cohort. Per-event native traces remain uncollected by design. Client timing, ID/checksum accounting, psutil resource sampling and PostgreSQL I/O timing remain enabled. Volatile storage: /tmp tmpfs and workspace overlay fsync=volatile. Not SSD, durability, capacity, ERP, reliability or product performance qualification. CPU affinity only; no enforceable cgroup CPU quota, memory ceiling or swap limit. RSS sums double-count shared pages; CPU sums cover currently live owned processes.",
+    "clock_comparison": "A phases absent; B cumulative worker-lifetime phases include warmup/drain, never combine with exact 30-second client or resource windows; no cross-clock subtraction"
+  },
+  "gates": {
+    "G0": {
+      "run_id": "75f5bbb1-aee9-4867-9100-96c6866eaef3",
+      "measurement_window_ns": [
+        33664607823593,
+        33684607823593
+      ],
+      "duration_s": 20,
+      "db_all_phase_rows": 5000,
+      "db_ms": {
+        "n": 4000,
+        "min": 0.303928,
+        "p50": 0.455577,
+        "p95": 0.805033,
+        "p99": 1.658221,
+        "max": 5.226245,
+        "mean": 0.5098919235,
+        "sum": 2039.567694
+      },
+      "db_client_spans_ms": {
+        "begin_ms": {
+          "n": 4000,
+          "min": 0.064217,
+          "p50": 0.116826,
+          "p95": 0.199321,
+          "p99": 0.459563,
+          "max": 3.342059,
+          "mean": 0.13657195775,
+          "sum": 546.287831
+        },
+        "sql_ms": {
+          "n": 4000,
+          "min": 0.166782,
+          "p50": 0.250858,
+          "p95": 0.46378,
+          "p99": 0.787257,
+          "max": 4.94371,
+          "mean": 0.29124358275,
+          "sum": 1164.974331
+        },
+        "commit_ms": {
+          "n": 4000,
+          "min": 0.046771,
+          "p50": 0.065088,
+          "p95": 0.15271,
+          "p99": 0.300182,
+          "max": 2.317664,
+          "mean": 0.082076383,
+          "sum": 328.305532
+        }
+      },
+      "db_start_per_s": 200.0,
+      "db_complete_per_s": 200.0,
+      "db_over_20ms": 0,
+      "db_scheduling_lateness_ms": {
+        "n": 4000,
+        "min": 0.022559,
+        "p50": 0.089642,
+        "p95": 0.123416,
+        "p99": 0.279491,
+        "max": 2.805548,
+        "mean": 0.10066656475,
+        "sum": 402.666259
+      },
+      "db_max_raw_row": {
+        "start_ns": 33677672920299,
+        "complete_ns": 33677678146544,
+        "sql_start_ns": 33677673053329,
+        "sql_end_ns": 33677677997039,
+        "begin_ms": 0.13303,
+        "sql_ms": 4.94371,
+        "commit_ms": 0.149505,
+        "latency_ms": 5.226245,
+        "schedule_lateness_ms": 0.096706
+      },
+      "cleanup": {
+        "normal_stop_confirmed": true,
+        "supervisor_exit": 0
+      },
+      "private_unit_absent_at_audit": true,
+      "postgres_last_log_line": "2026-09-30 14:16:37.057 CDT [72] LOG:  database system is shut down",
+      "boundary_queue_depths": [
+        0,
+        0
+      ],
+      "gate": {
+        "passed": true,
+        "errors": [],
+        "windows": [
+          {
+            "start_tps": 200.0,
+            "completed_tps": 200.0
+          },
+          {
+            "start_tps": 200.0,
+            "completed_tps": 200.0
+          },
+          {
+            "start_tps": 200.0,
+            "completed_tps": 200.0
+          }
+        ],
+        "tps": 200.0,
+        "count": 4000,
+        "p99_ms": 1.658221,
+        "above_20ms_fraction": 0.0,
+        "excess_over_5ms_seconds": 0.0002262449999999996
+      }
+    },
+    "G1": {
+      "run_id": "d9d6a02d-fefa-41c7-9d34-1198b5bbc6e0",
+      "measurement_window_ns": [
+        33771705396334,
+        33791705396334
+      ],
+      "duration_s": 20,
+      "db_all_phase_rows": 4999,
+      "db_ms": {
+        "n": 3999,
+        "min": 0.29883,
+        "p50": 0.421716,
+        "p95": 0.66316,
+        "p99": 1.125367,
+        "max": 5.670049,
+        "mean": 0.4666006894223556,
+        "sum": 1865.936157
+      },
+      "db_client_spans_ms": {
+        "begin_ms": {
+          "n": 3999,
+          "min": 0.069074,
+          "p50": 0.111718,
+          "p95": 0.202114,
+          "p99": 0.347759,
+          "max": 4.993238,
+          "mean": 0.12900288722180545,
+          "sum": 515.882546
+        },
+        "sql_ms": {
+          "n": 3999,
+          "min": 0.161894,
+          "p50": 0.239251,
+          "p95": 0.378831,
+          "p99": 0.634457,
+          "max": 5.201147,
+          "mean": 0.2696199722430608,
+          "sum": 1078.210269
+        },
+        "commit_ms": {
+          "n": 3999,
+          "min": 0.04665,
+          "p50": 0.057006,
+          "p95": 0.115984,
+          "p99": 0.202796,
+          "max": 0.926016,
+          "mean": 0.06797782995748937,
+          "sum": 271.843342
+        }
+      },
+      "db_start_per_s": 199.95,
+      "db_complete_per_s": 199.95,
+      "db_over_20ms": 0,
+      "db_scheduling_lateness_ms": {
+        "n": 3999,
+        "min": 0.048108,
+        "p50": 0.090046,
+        "p95": 0.142028,
+        "p99": 0.267953,
+        "max": 3.221013,
+        "mean": 0.10243095248812203,
+        "sum": 409.621379
+      },
+      "db_max_raw_row": {
+        "start_ns": 33781286848576,
+        "complete_ns": 33781292518625,
+        "sql_start_ns": 33781287637355,
+        "sql_end_ns": 33781292312224,
+        "begin_ms": 0.788779,
+        "sql_ms": 4.674869,
+        "commit_ms": 0.206401,
+        "latency_ms": 5.670049,
+        "schedule_lateness_ms": 0.868423
+      },
+      "cleanup": {
+        "normal_stop_confirmed": true,
+        "supervisor_exit": 0
+      },
+      "private_unit_absent_at_audit": true,
+      "postgres_last_log_line": "2026-09-30 14:18:24.168 CDT [376] LOG:  database system is shut down",
+      "boundary_queue_depths": [
+        0,
+        0
+      ],
+      "gate": {
+        "passed": true,
+        "errors": [],
+        "windows": [
+          {
+            "start_tps": 199.95,
+            "completed_tps": 199.95
+          },
+          {
+            "start_tps": 200.0,
+            "completed_tps": 200.0
+          },
+          {
+            "start_tps": 199.9,
+            "completed_tps": 199.9
+          }
+        ],
+        "tps": 199.95,
+        "count": 3999,
+        "p99_ms": 1.125367,
+        "above_20ms_fraction": 0.0,
+        "excess_over_5ms_seconds": 0.0023966639999999993
+      }
+    },
+    "G2": {
+      "run_id": "1905588a-147f-414a-b025-40a8ede8c919",
+      "measurement_window_ns": [
+        33878120223294,
+        33898120223294
+      ],
+      "duration_s": 20,
+      "db_all_phase_rows": 4999,
+      "db_ms": {
+        "n": 3999,
+        "min": 0.299932,
+        "p50": 0.490098,
+        "p95": 1.109508,
+        "p99": 2.453986,
+        "max": 9.940367,
+        "mean": 0.5855875991497874,
+        "sum": 2341.764809
+      },
+      "db_client_spans_ms": {
+        "begin_ms": {
+          "n": 3999,
+          "min": 0.062724,
+          "p50": 0.12608,
+          "p95": 0.276226,
+          "p99": 0.990323,
+          "max": 9.082233,
+          "mean": 0.16636802600650163,
+          "sum": 665.305736
+        },
+        "sql_ms": {
+          "n": 3999,
+          "min": 0.158098,
+          "p50": 0.282866,
+          "p95": 0.541366,
+          "p99": 1.445229,
+          "max": 5.104926,
+          "mean": 0.3285848014503626,
+          "sum": 1314.010621
+        },
+        "commit_ms": {
+          "n": 3999,
+          "min": 0.048513,
+          "p50": 0.071508,
+          "p95": 0.159611,
+          "p99": 0.405171,
+          "max": 3.364533,
+          "mean": 0.09063477169292324,
+          "sum": 362.448452
+        }
+      },
+      "db_start_per_s": 199.95,
+      "db_complete_per_s": 199.9,
+      "db_over_20ms": 0,
+      "db_scheduling_lateness_ms": {
+        "n": 3999,
+        "min": 0.075551,
+        "p50": 0.093083,
+        "p95": 0.142216,
+        "p99": 0.456847,
+        "max": 4.447852,
+        "mean": 0.11099777819454863,
+        "sum": 443.880115
+      },
+      "db_max_raw_row": {
+        "start_ns": 33884355579346,
+        "complete_ns": 33884365519713,
+        "sql_start_ns": 33884364661579,
+        "sql_end_ns": 33884365363677,
+        "begin_ms": 9.082233,
+        "sql_ms": 0.702098,
+        "commit_ms": 0.156036,
+        "latency_ms": 9.940367,
+        "schedule_lateness_ms": 0.103645
+      },
+      "cleanup": {
+        "normal_stop_confirmed": true,
+        "supervisor_exit": 0
+      },
+      "private_unit_absent_at_audit": true,
+      "postgres_last_log_line": "2026-09-30 14:20:10.616 CDT [680] LOG:  database system is shut down",
+      "boundary_queue_depths": [
+        0,
+        0
+      ],
+      "gate": {
+        "passed": true,
+        "errors": [],
+        "windows": [
+          {
+            "start_tps": 199.95,
+            "completed_tps": 199.9
+          },
+          {
+            "start_tps": 199.9,
+            "completed_tps": 199.9
+          },
+          {
+            "start_tps": 200.0,
+            "completed_tps": 199.9
+          }
+        ],
+        "tps": 199.9,
+        "count": 3999,
+        "p99_ms": 2.453986,
+        "above_20ms_fraction": 0.0,
+        "excess_over_5ms_seconds": 0.006128097999999999
+      }
+    }
+  },
+  "gate_drift": {
+    "G1": {
+      "passed": true,
+      "throughput_relative_change": 0.0002500000000000568,
+      "p99_absolute_change_ms": 0.5328539999999999,
+      "p99_allowed_change_ms": 1
+    },
+    "G2": {
+      "passed": false,
+      "throughput_relative_change": 0.000250062515628822,
+      "p99_absolute_change_ms": 1.328619,
+      "p99_allowed_change_ms": 1
+    }
+  },
+  "cells": {
+    "P1-B": {
+      "run_id": "867b04df-819c-490e-83dc-37dd52c5eebe",
+      "measurement_window_ns": [
+        33693521271683,
+        33723521271683
+      ],
+      "duration_s": 30,
+      "db_all_phase_rows": 6996,
+      "db_ms": {
+        "n": 5996,
+        "min": 0.25859,
+        "p50": 0.524421,
+        "p95": 0.92155,
+        "p99": 1.769578,
+        "max": 14.095348,
+        "mean": 0.591327549533022,
+        "sum": 3545.599987
+      },
+      "db_client_spans_ms": {
+        "begin_ms": {
+          "n": 5996,
+          "min": 0.057997,
+          "p50": 0.120602,
+          "p95": 0.371631,
+          "p99": 0.61016,
+          "max": 4.979879,
+          "mean": 0.15997262791861241,
+          "sum": 959.195877
+        },
+        "sql_ms": {
+          "n": 5996,
+          "min": 0.14584,
+          "p50": 0.305181,
+          "p95": 0.592404,
+          "p99": 1.015652,
+          "max": 6.4901,
+          "mean": 0.34498567044696465,
+          "sum": 2068.53408
+        },
+        "commit_ms": {
+          "n": 5996,
+          "min": 0.043516,
+          "p50": 0.068954,
+          "p95": 0.161063,
+          "p99": 0.334104,
+          "max": 7.493449,
+          "mean": 0.08636925116744497,
+          "sum": 517.87003
+        }
+      },
+      "db_start_per_s": 199.86666666666667,
+      "db_complete_per_s": 199.86666666666667,
+      "db_over_20ms": 0,
+      "db_scheduling_lateness_ms": {
+        "n": 5996,
+        "min": 0.021354,
+        "p50": 0.087246,
+        "p95": 0.191118,
+        "p99": 0.485851,
+        "max": 14.872878,
+        "mean": 0.11361377768512342,
+        "sum": 681.228211
+      },
+      "db_max_raw_row": {
+        "start_ns": 33694951353950,
+        "complete_ns": 33694965449298,
+        "sql_start_ns": 33694951465749,
+        "sql_end_ns": 33694957955849,
+        "begin_ms": 0.111799,
+        "sql_ms": 6.4901,
+        "commit_ms": 7.493449,
+        "latency_ms": 14.095348,
+        "schedule_lateness_ms": 0.082267
+      },
+      "cleanup": {
+        "normal_stop_confirmed": true,
+        "supervisor_exit": 0
+      },
+      "private_unit_absent_at_audit": true,
+      "postgres_last_log_line": "2026-09-30 14:17:16.283 CDT [161] LOG:  database system is shut down",
+      "boundary_queue_depths": [
+        0,
+        0
+      ],
+      "bridge_phases": {
+        "scope": "worker_lifetime_including_warmup_and_drain",
+        "raw_summary": {
+          "scope": "worker_lifetime_including_warmup_and_drain",
+          "normal_exit": true,
+          "worker_pid": 170,
+          "publish": {
+            "completed": 6996,
+            "begin_us": 67248.755,
+            "work_us": 1354218.516,
+            "commit_us": 122658.703
+          },
+          "claim_empty": {
+            "completed": 14493,
+            "begin_us": 128545.001,
+            "work_us": 1161463.844,
+            "commit_us": 79752.977
+          },
+          "claim_success": {
+            "completed": 6996,
+            "begin_us": 42824.918,
+            "work_us": 1000942.294,
+            "commit_us": 90353.575
+          },
+          "settle": {
+            "completed": 6996,
+            "begin_us": 59010.201,
+            "work_us": 1001977.202,
+            "commit_us": 103966.27
+          },
+          "started": {
+            "publish": 6996,
+            "claim": 21489,
+            "settle": 6996
+          },
+          "settle_outcome": {
+            "applied": 6996,
+            "not_applied": 0
+          },
+          "errors": {
+            "publish": {
+              "begin": 0,
+              "work": 0,
+              "commit": 0
+            },
+            "claim": {
+              "begin": 0,
+              "work": 0,
+              "commit": 0
+            },
+            "settle": {
+              "begin": 0,
+              "work": 0,
+              "commit": 0
+            }
+          },
+          "authorization_excluded": {
+            "completed": 2,
+            "errors": 0
+          },
+          "counter_saturated": false
+        },
+        "categories": {
+          "publish": {
+            "completed": 6996,
+            "total_measured_us": 1544125.9740000002,
+            "mean_us_per_completed_call": {
+              "begin_us": 9.612457833047456,
+              "work_us": 193.57039965694685,
+              "commit_us": 17.53269053744997
+            },
+            "fraction_of_category_measured_time": {
+              "begin_us": 0.043551339807978644,
+              "work_us": 0.8770129761446522,
+              "commit_us": 0.07943568404736905
+            }
+          },
+          "claim_empty": {
+            "completed": 14493,
+            "total_measured_us": 1369761.8220000002,
+            "mean_us_per_completed_call": {
+              "begin_us": 8.8694542882771,
+              "work_us": 80.13964286207134,
+              "commit_us": 5.502861864348306
+            },
+            "fraction_of_category_measured_time": {
+              "begin_us": 0.09384478303849236,
+              "work_us": 0.847931242750026,
+              "commit_us": 0.05822397421148156
+            }
+          },
+          "claim_success": {
+            "completed": 6996,
+            "total_measured_us": 1134120.787,
+            "mean_us_per_completed_call": {
+              "begin_us": 6.121343339050886,
+              "work_us": 143.07351257861635,
+              "commit_us": 12.915033590623214
+            },
+            "fraction_of_category_measured_time": {
+              "begin_us": 0.03776045593281238,
+              "work_us": 0.882571155976881,
+              "commit_us": 0.07966838809030664
+            }
+          },
+          "settle": {
+            "completed": 6996,
+            "total_measured_us": 1164953.673,
+            "mean_us_per_completed_call": {
+              "begin_us": 8.434848627787307,
+              "work_us": 143.22144110920527,
+              "commit_us": 14.860816180674671
+            },
+            "fraction_of_category_measured_time": {
+              "begin_us": 0.05065454735898326,
+              "work_us": 0.8601004702785293,
+              "commit_us": 0.08924498236248748
+            }
+          }
+        },
+        "all_completed_call_phases_us": {
+          "begin_us": 297628.875,
+          "work_us": 4518601.856000001,
+          "commit_us": 396731.525
+        },
+        "all_completed_call_phases_total_us": 5212962.256000001,
+        "all_completed_call_phase_shares": {
+          "begin_us": 0.057094001526183304,
+          "work_us": 0.8668011840675026,
+          "commit_us": 0.076104814406314
+        },
+        "all_category_measured_time_shares": {
+          "publish": 0.29620893038746754,
+          "claim_empty": 0.2627607403877585,
+          "claim_success": 0.21755783589160899,
+          "settle": 0.2234724933331648
+        },
+        "begin_plus_commit_share": 0.1331988159324973,
+        "work_share": 0.8668011840675026,
+        "aggregate_elapsed_not_cpu": true,
+        "per_event_trace_present": false,
+        "whole_lifetime_not_30s_client_cohort": true,
+        "all_lifecycle_client_accepted": 6996,
+        "all_lifecycle_client_received": 6996,
+        "all_lifecycle_count_reconciliation": true,
+        "measured_client_cohort_count_not_phase_denominator": 5996,
+        "empty_claims_per_success": 2.0716123499142367,
+        "measured_bridge_elapsed_us_per_all_lifecycle_receipt": 745.134684962836,
+        "begin_commit_us_per_all_lifecycle_receipt": 99.25105774728416,
+        "nonempty_three_operation_stage_means_sum_us": {
+          "begin_us": 24.16864979988565,
+          "work_us": 479.86535334476844,
+          "commit_us": 45.30854030874785
+        },
+        "interpretation": "All-lifecycle amortization only, not latency of a message, CPU, removable work or 30-second-window metric. Empty polling spans worker lifetime."
+      },
+      "fixed_load_eligible": true,
+      "cohort_count": 5996,
+      "all_phase_ids": 6996,
+      "exact_once_client_id_sets_equal": true,
+      "id_set_sha256": "b7b9ddcea6d02f5004e7880b3ac85958331a460490ca52885bc0c1399de689d8",
+      "confirm_ms": {
+        "n": 5996,
+        "min": 0.565633,
+        "p50": 0.854108,
+        "p95": 1.256645,
+        "p99": 1.832944,
+        "max": 8.330832,
+        "mean": 0.8943905580386925,
+        "sum": 5362.765786
+      },
+      "e2e_ms": {
+        "n": 5996,
+        "min": 0.735804,
+        "p50": 0.969902,
+        "p95": 3.069743,
+        "p99": 3.692202,
+        "max": 15.081395,
+        "mean": 1.1589174276184122,
+        "sum": 6948.868896
+      },
+      "confirmed_per_s": 199.86666666666667,
+      "completed_per_s": 199.86666666666667,
+      "attempted_per_s": 199.86666666666667,
+      "offered_load_fraction": 0.9993333333333333,
+      "publish_scheduling_lateness_ms": {
+        "n": 5996,
+        "min": 0.035703,
+        "p50": 0.087082,
+        "p95": 0.121914,
+        "p99": 0.208183,
+        "max": 12.999935,
+        "mean": 0.09841349983322215,
+        "sum": 590.087345
+      },
+      "received_before_confirm": 699,
+      "cohort_late_confirms": 0,
+      "cohort_late_receipts": 0,
+      "confirm_max_raw_row": {
+        "id": "867b04df-819c-490e-83dc-37dd52c5eebe/0/1287",
+        "start_ns": 33694958389623,
+        "schedule_lateness_ms": 0.156957,
+        "complete_ns": 33694966720455,
+        "delivery_tag_hex": "31323838",
+        "latency_ms": 8.330832,
+        "accepted": true
+      },
+      "e2e_max_raw_row": {
+        "id": "867b04df-819c-490e-83dc-37dd52c5eebe/0/1286",
+        "received_ns": 33694968398315,
+        "delivery_tag_hex": "313238373a31",
+        "sent_ns": 33694953316920,
+        "valid": true,
+        "latency_ms": 15.081395
+      },
+      "id_backlog_reconstruction_matches": true,
+      "measurement_end_confirmed_not_received": 0,
+      "max_sampled_confirmed_not_received": 1,
+      "max_sampled_client_outstanding": 1,
+      "mapped_worker_witness": {
+        "pid": 170,
+        "created": 1790795797.36,
+        "selected_realpath": "/workspace/shared/bridge-phase-mechanism/adapter/private-one/P1-B/selected/echoo_pgmq.so",
+        "inode": 549899,
+        "device": [
+          0,
+          27
+        ],
+        "mappings": [
+          "7f3581b4d000-7f3581b51000 r--p 00000000 00:1b 549899                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P1-B/selected/echoo_pgmq.so",
+          "7f3581b51000-7f3581b56000 r-xp 00004000 00:1b 549899                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P1-B/selected/echoo_pgmq.so",
+          "7f3581b56000-7f3581b59000 r--p 00009000 00:1b 549899                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P1-B/selected/echoo_pgmq.so",
+          "7f3581b59000-7f3581b5a000 r--p 0000b000 00:1b 549899                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P1-B/selected/echoo_pgmq.so",
+          "7f3581b5a000-7f3581b5b000 rw-p 0000c000 00:1b 549899                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P1-B/selected/echoo_pgmq.so"
+        ],
+        "sha256": "13da451342c73b971cf8986b3919de24625d62373c7c2bad6e4f42cc75abe9b0"
+      },
+      "resources": {
+        "n": 60,
+        "sample_window_ns": [
+          33693850034482,
+          33723495006369
+        ],
+        "sample_span_seconds": 29.644971887,
+        "owned_cpu_seconds_aggregate_delta": 6.949999999999999,
+        "owned_cpu_seconds_matched_identity_delta": 6.949999999999999,
+        "owned_cpu_cores": 0.23444110611714675,
+        "worker_cpu_seconds": 5.6499999999999995,
+        "worker_cpu_cores": 0.19058881288660132,
+        "owned_cpu_ms_per_delivered_in_sample_span": 1.1727978400269996,
+        "worker_cpu_ms_per_delivered_in_sample_span": 0.9534255821802227,
+        "delivered_in_sample_span": 5926,
+        "raw_received_matches_sampled_counter_delta": true,
+        "client_cpu_cores": 0.261764458053102,
+        "endpoint_process_sets_equal": true,
+        "all_sampled_process_sets_equal": true,
+        "unique_process_identities": 12,
+        "persistent_process_identities": 12,
+        "process_count_range": [
+          12,
+          12
+        ],
+        "observed_transient_process_identities": [],
+        "rss_sum_mib": {
+          "n": 60,
+          "min": 169.62109375,
+          "p50": 186.18359375,
+          "p95": 199.171875,
+          "p99": 199.1953125,
+          "max": 199.21875,
+          "mean": 186.3162109375,
+          "sum": 11178.97265625
+        },
+        "worker_rss_mib": {
+          "n": 60,
+          "min": 26.75390625,
+          "p50": 34.86328125,
+          "p95": 40.2890625,
+          "p99": 40.3125,
+          "max": 40.3359375,
+          "mean": 34.75123697916667,
+          "sum": 2085.07421875
+        },
+        "client_rss_sum_mib": {
+          "n": 60,
+          "min": 166.4375,
+          "p50": 166.609375,
+          "p95": 166.82421875,
+          "p99": 166.84375,
+          "max": 166.84375,
+          "mean": 166.62688802083332,
+          "sum": 9997.61328125
+        },
+        "cpu_scope": "Matched CPU endpoints of persistent owned identities only; transient CPU omitted from these deltas",
+        "transient_process_caveat": "Observed transient identities listed separately; their entire CPU is not accounted by endpoint deltas. Processes existing only between samples and CPU after last observation can also be missed; not total cgroup CPU",
+        "transient_observations": [],
+        "per_process_cpu_seconds": [
+          {
+            "pid": 161,
+            "created": 1790795797.34,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 162,
+            "created": 1790795797.36,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 163,
+            "created": 1790795797.36,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 164,
+            "created": 1790795797.36,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 165,
+            "created": 1790795797.36,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 166,
+            "created": 1790795797.36,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 168,
+            "created": 1790795797.36,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 169,
+            "created": 1790795797.36,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 170,
+            "created": 1790795797.36,
+            "delta_seconds": 5.6499999999999995
+          },
+          {
+            "pid": 171,
+            "created": 1790795797.36,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 196,
+            "created": 1790795797.97,
+            "delta_seconds": 1.3
+          },
+          {
+            "pid": 202,
+            "created": 1790795798.31,
+            "delta_seconds": 0.0
+          }
+        ]
+      }
+    },
+    "P1-A": {
+      "run_id": "264d4f04-ebe3-4883-9d0d-46ff47da19c7",
+      "measurement_window_ns": [
+        33732897423065,
+        33762897423065
+      ],
+      "duration_s": 30,
+      "db_all_phase_rows": 6997,
+      "db_ms": {
+        "n": 5997,
+        "min": 0.250888,
+        "p50": 0.460014,
+        "p95": 1.018641,
+        "p99": 1.80393,
+        "max": 13.535065,
+        "mean": 0.5584301950975488,
+        "sum": 3348.90588
+      },
+      "db_client_spans_ms": {
+        "begin_ms": {
+          "n": 5997,
+          "min": 0.052109,
+          "p50": 0.115224,
+          "p95": 0.215064,
+          "p99": 0.522373,
+          "max": 9.880742,
+          "mean": 0.13826825812906454,
+          "sum": 829.194744
+        },
+        "sql_ms": {
+          "n": 5997,
+          "min": 0.153161,
+          "p50": 0.263388,
+          "p95": 0.664021,
+          "p99": 1.077109,
+          "max": 5.617099,
+          "mean": 0.32371293213273306,
+          "sum": 1941.306454
+        },
+        "commit_ms": {
+          "n": 5997,
+          "min": 0.044197,
+          "p50": 0.062064,
+          "p95": 0.280954,
+          "p99": 0.581657,
+          "max": 4.566095,
+          "mean": 0.09644900483575121,
+          "sum": 578.404682
+        }
+      },
+      "db_start_per_s": 199.9,
+      "db_complete_per_s": 199.9,
+      "db_over_20ms": 0,
+      "db_scheduling_lateness_ms": {
+        "n": 5997,
+        "min": 0.037282,
+        "p50": 0.086864,
+        "p95": 0.141384,
+        "p99": 0.567183,
+        "max": 4.317469,
+        "mean": 0.1071867832249458,
+        "sum": 642.799139
+      },
+      "db_max_raw_row": {
+        "start_ns": 33733500047044,
+        "complete_ns": 33733513582109,
+        "sql_start_ns": 33733509927786,
+        "sql_end_ns": 33733513409685,
+        "begin_ms": 9.880742,
+        "sql_ms": 3.481899,
+        "commit_ms": 0.172424,
+        "latency_ms": 13.535065,
+        "schedule_lateness_ms": 2.623979
+      },
+      "cleanup": {
+        "normal_stop_confirmed": true,
+        "supervisor_exit": 0
+      },
+      "private_unit_absent_at_audit": true,
+      "postgres_last_log_line": "2026-09-30 14:17:55.712 CDT [269] LOG:  database system is shut down",
+      "boundary_queue_depths": [
+        0,
+        0
+      ],
+      "fixed_load_eligible": true,
+      "cohort_count": 5998,
+      "all_phase_ids": 6998,
+      "exact_once_client_id_sets_equal": true,
+      "id_set_sha256": "7399c4172f4f6d4d1c434ae4f10500e1c3dd225a625c0079a9f38e1eecd455a0",
+      "confirm_ms": {
+        "n": 5998,
+        "min": 0.580155,
+        "p50": 0.844283,
+        "p95": 1.322935,
+        "p99": 2.06919,
+        "max": 13.998877,
+        "mean": 0.9091800016672225,
+        "sum": 5453.26165
+      },
+      "e2e_ms": {
+        "n": 5998,
+        "min": 0.78267,
+        "p50": 1.042081,
+        "p95": 3.120846,
+        "p99": 3.946239,
+        "max": 14.445901,
+        "mean": 1.3150827130710236,
+        "sum": 7887.866113
+      },
+      "confirmed_per_s": 199.93333333333334,
+      "completed_per_s": 199.93333333333334,
+      "attempted_per_s": 199.93333333333334,
+      "offered_load_fraction": 0.9996666666666667,
+      "publish_scheduling_lateness_ms": {
+        "n": 5998,
+        "min": 0.069001,
+        "p50": 0.085957,
+        "p95": 0.114566,
+        "p99": 0.316639,
+        "max": 2.416055,
+        "mean": 0.09596074258086029,
+        "sum": 575.572534
+      },
+      "received_before_confirm": 274,
+      "cohort_late_confirms": 0,
+      "cohort_late_receipts": 0,
+      "confirm_max_raw_row": {
+        "id": "264d4f04-ebe3-4883-9d0d-46ff47da19c7/0/5644",
+        "start_ns": 33756120410950,
+        "schedule_lateness_ms": 0.084441,
+        "complete_ns": 33756134409827,
+        "delivery_tag_hex": "35363435",
+        "latency_ms": 13.998877,
+        "accepted": true
+      },
+      "e2e_max_raw_row": {
+        "id": "264d4f04-ebe3-4883-9d0d-46ff47da19c7/0/5644",
+        "received_ns": 33756134856851,
+        "delivery_tag_hex": "353634353a31",
+        "sent_ns": 33756120410950,
+        "valid": true,
+        "latency_ms": 14.445901
+      },
+      "id_backlog_reconstruction_matches": true,
+      "measurement_end_confirmed_not_received": 0,
+      "max_sampled_confirmed_not_received": 1,
+      "max_sampled_client_outstanding": 1,
+      "mapped_worker_witness": {
+        "pid": 278,
+        "created": 1790795836.78,
+        "selected_realpath": "/workspace/shared/bridge-phase-mechanism/adapter/private-one/P1-A/selected/echoo_pgmq.so",
+        "inode": 549902,
+        "device": [
+          0,
+          27
+        ],
+        "mappings": [
+          "7f8ddf72b000-7f8ddf72f000 r--p 00000000 00:1b 549902                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P1-A/selected/echoo_pgmq.so",
+          "7f8ddf72f000-7f8ddf734000 r-xp 00004000 00:1b 549902                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P1-A/selected/echoo_pgmq.so",
+          "7f8ddf734000-7f8ddf736000 r--p 00009000 00:1b 549902                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P1-A/selected/echoo_pgmq.so",
+          "7f8ddf736000-7f8ddf737000 r--p 0000b000 00:1b 549902                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P1-A/selected/echoo_pgmq.so",
+          "7f8ddf737000-7f8ddf738000 rw-p 0000c000 00:1b 549902                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P1-A/selected/echoo_pgmq.so"
+        ],
+        "sha256": "98804dff6e6abafa81a931d69360141d79729ff4e60edccfdaf32b9bf52e7684"
+      },
+      "resources": {
+        "n": 60,
+        "sample_window_ns": [
+          33733231031306,
+          33762885624342
+        ],
+        "sample_span_seconds": 29.654593036,
+        "owned_cpu_seconds_aggregate_delta": 7.11,
+        "owned_cpu_seconds_matched_identity_delta": 7.11,
+        "owned_cpu_cores": 0.23976049819225717,
+        "worker_cpu_seconds": 5.87,
+        "worker_cpu_cores": 0.19794572776210262,
+        "owned_cpu_ms_per_delivered_in_sample_span": 1.1993927125506074,
+        "worker_cpu_ms_per_delivered_in_sample_span": 0.9902159244264508,
+        "delivered_in_sample_span": 5928,
+        "raw_received_matches_sampled_counter_delta": true,
+        "client_cpu_cores": 0.262691178750729,
+        "endpoint_process_sets_equal": true,
+        "all_sampled_process_sets_equal": true,
+        "unique_process_identities": 12,
+        "persistent_process_identities": 12,
+        "process_count_range": [
+          12,
+          12
+        ],
+        "observed_transient_process_identities": [],
+        "rss_sum_mib": {
+          "n": 60,
+          "min": 167.41796875,
+          "p50": 183.98828125,
+          "p95": 197.30859375,
+          "p99": 197.39453125,
+          "max": 197.41796875,
+          "mean": 184.19680989583333,
+          "sum": 11051.80859375
+        },
+        "worker_rss_mib": {
+          "n": 60,
+          "min": 26.69921875,
+          "p50": 34.796875,
+          "p95": 40.33984375,
+          "p99": 40.36328125,
+          "max": 40.38671875,
+          "mean": 34.705859375,
+          "sum": 2082.3515625
+        },
+        "client_rss_sum_mib": {
+          "n": 60,
+          "min": 167.23046875,
+          "p50": 167.421875,
+          "p95": 167.65234375,
+          "p99": 167.671875,
+          "max": 167.67578125,
+          "mean": 167.43776041666666,
+          "sum": 10046.265625
+        },
+        "cpu_scope": "Matched CPU endpoints of persistent owned identities only; transient CPU omitted from these deltas",
+        "transient_process_caveat": "Observed transient identities listed separately; their entire CPU is not accounted by endpoint deltas. Processes existing only between samples and CPU after last observation can also be missed; not total cgroup CPU",
+        "transient_observations": [],
+        "per_process_cpu_seconds": [
+          {
+            "pid": 269,
+            "created": 1790795836.75,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 270,
+            "created": 1790795836.78,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 271,
+            "created": 1790795836.78,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 272,
+            "created": 1790795836.78,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 273,
+            "created": 1790795836.78,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 274,
+            "created": 1790795836.78,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 276,
+            "created": 1790795836.78,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 277,
+            "created": 1790795836.78,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 278,
+            "created": 1790795836.78,
+            "delta_seconds": 5.87
+          },
+          {
+            "pid": 279,
+            "created": 1790795836.78,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 304,
+            "created": 1790795837.36,
+            "delta_seconds": 1.24
+          },
+          {
+            "pid": 310,
+            "created": 1790795837.69,
+            "delta_seconds": 0.0
+          }
+        ]
+      }
+    },
+    "P2-B": {
+      "run_id": "c0398cd6-b172-4568-94d8-1550b5f03bd2",
+      "measurement_window_ns": [
+        33800561930155,
+        33830561930155
+      ],
+      "duration_s": 30,
+      "db_all_phase_rows": 6994,
+      "db_ms": {
+        "n": 5998,
+        "min": 0.301234,
+        "p50": 0.495712,
+        "p95": 0.784873,
+        "p99": 1.445059,
+        "max": 7.852424,
+        "mean": 0.5379156495498499,
+        "sum": 3226.418066
+      },
+      "db_client_spans_ms": {
+        "begin_ms": {
+          "n": 5998,
+          "min": 0.069584,
+          "p50": 0.122765,
+          "p95": 0.223277,
+          "p99": 0.388045,
+          "max": 3.102037,
+          "mean": 0.1400615928642881,
+          "sum": 840.089434
+        },
+        "sql_ms": {
+          "n": 5998,
+          "min": 0.16593,
+          "p50": 0.273793,
+          "p95": 0.477019,
+          "p99": 0.855269,
+          "max": 5.396377,
+          "mean": 0.3092879043014338,
+          "sum": 1855.10885
+        },
+        "commit_ms": {
+          "n": 5998,
+          "min": 0.04637,
+          "p50": 0.069775,
+          "p95": 0.177448,
+          "p99": 0.294453,
+          "max": 7.581246,
+          "mean": 0.08856615238412804,
+          "sum": 531.219782
+        }
+      },
+      "db_start_per_s": 199.93333333333334,
+      "db_complete_per_s": 199.93333333333334,
+      "db_over_20ms": 0,
+      "db_scheduling_lateness_ms": {
+        "n": 5998,
+        "min": 0.024525,
+        "p50": 0.086274,
+        "p95": 0.118021,
+        "p99": 0.501078,
+        "max": 5.190371,
+        "mean": 0.10389009053017673,
+        "sum": 623.132763
+      },
+      "db_max_raw_row": {
+        "start_ns": 33829764287814,
+        "complete_ns": 33829772140238,
+        "sql_start_ns": 33829764358740,
+        "sql_end_ns": 33829764558992,
+        "begin_ms": 0.070926,
+        "sql_ms": 0.200252,
+        "commit_ms": 7.581246,
+        "latency_ms": 7.852424,
+        "schedule_lateness_ms": 0.101143
+      },
+      "cleanup": {
+        "normal_stop_confirmed": true,
+        "supervisor_exit": 0
+      },
+      "private_unit_absent_at_audit": true,
+      "postgres_last_log_line": "2026-09-30 14:19:03.161 CDT [465] LOG:  database system is shut down",
+      "boundary_queue_depths": [
+        0,
+        0
+      ],
+      "bridge_phases": {
+        "scope": "worker_lifetime_including_warmup_and_drain",
+        "raw_summary": {
+          "scope": "worker_lifetime_including_warmup_and_drain",
+          "normal_exit": true,
+          "worker_pid": 474,
+          "publish": {
+            "completed": 6997,
+            "begin_us": 69621.422,
+            "work_us": 1627106.132,
+            "commit_us": 131685.465
+          },
+          "claim_empty": {
+            "completed": 14244,
+            "begin_us": 133596.904,
+            "work_us": 1192019.394,
+            "commit_us": 79953.172
+          },
+          "claim_success": {
+            "completed": 6997,
+            "begin_us": 45218.927,
+            "work_us": 1003940.432,
+            "commit_us": 95944.578
+          },
+          "settle": {
+            "completed": 6997,
+            "begin_us": 57346.711,
+            "work_us": 1060038.352,
+            "commit_us": 113966.608
+          },
+          "started": {
+            "publish": 6997,
+            "claim": 21241,
+            "settle": 6997
+          },
+          "settle_outcome": {
+            "applied": 6997,
+            "not_applied": 0
+          },
+          "errors": {
+            "publish": {
+              "begin": 0,
+              "work": 0,
+              "commit": 0
+            },
+            "claim": {
+              "begin": 0,
+              "work": 0,
+              "commit": 0
+            },
+            "settle": {
+              "begin": 0,
+              "work": 0,
+              "commit": 0
+            }
+          },
+          "authorization_excluded": {
+            "completed": 2,
+            "errors": 0
+          },
+          "counter_saturated": false
+        },
+        "categories": {
+          "publish": {
+            "completed": 6997,
+            "total_measured_us": 1828413.019,
+            "mean_us_per_completed_call": {
+              "begin_us": 9.950181792196657,
+              "work_us": 232.5433945976847,
+              "commit_us": 18.820275117907673
+            },
+            "fraction_of_category_measured_time": {
+              "begin_us": 0.03807751382019666,
+              "work_us": 0.8899007582487575,
+              "commit_us": 0.07202172793104575
+            }
+          },
+          "claim_empty": {
+            "completed": 14244,
+            "total_measured_us": 1405569.4700000002,
+            "mean_us_per_completed_call": {
+              "begin_us": 9.379170457736592,
+              "work_us": 83.68571988205561,
+              "commit_us": 5.6131123279977535
+            },
+            "fraction_of_category_measured_time": {
+              "begin_us": 0.09504823977145718,
+              "work_us": 0.8480686436651188,
+              "commit_us": 0.05688311656342393
+            }
+          },
+          "claim_success": {
+            "completed": 6997,
+            "total_measured_us": 1145103.937,
+            "mean_us_per_completed_call": {
+              "begin_us": 6.462616407031585,
+              "work_us": 143.4815538087752,
+              "commit_us": 13.712244962126626
+            },
+            "fraction_of_category_measured_time": {
+              "begin_us": 0.039488928069243034,
+              "work_us": 0.8767242863823986,
+              "commit_us": 0.08378678554835849
+            }
+          },
+          "settle": {
+            "completed": 6997,
+            "total_measured_us": 1231351.6709999999,
+            "mean_us_per_completed_call": {
+              "begin_us": 8.195899814206088,
+              "work_us": 151.49897841932255,
+              "commit_us": 16.28792453908818
+            },
+            "fraction_of_category_measured_time": {
+              "begin_us": 0.04657216321753788,
+              "work_us": 0.8608737673934582,
+              "commit_us": 0.09255406938900398
+            }
+          }
+        },
+        "all_completed_call_phases_us": {
+          "begin_us": 305783.96400000004,
+          "work_us": 4883104.3100000005,
+          "commit_us": 421549.823
+        },
+        "all_completed_call_phases_total_us": 5610438.097000001,
+        "all_completed_call_phase_shares": {
+          "begin_us": 0.05450268922198929,
+          "work_us": 0.8703606074204938,
+          "commit_us": 0.07513670335751677
+        },
+        "all_category_measured_time_shares": {
+          "publish": 0.32589487440877113,
+          "claim_empty": 0.2505275783635475,
+          "claim_success": 0.20410241004393345,
+          "settle": 0.21947513718374775
+        },
+        "begin_plus_commit_share": 0.12963939257950605,
+        "work_share": 0.8703606074204938,
+        "aggregate_elapsed_not_cpu": true,
+        "per_event_trace_present": false,
+        "whole_lifetime_not_30s_client_cohort": true,
+        "all_lifecycle_client_accepted": 6997,
+        "all_lifecycle_client_received": 6997,
+        "all_lifecycle_count_reconciliation": true,
+        "measured_client_cohort_count_not_phase_denominator": 5999,
+        "empty_claims_per_success": 2.035729598399314,
+        "measured_bridge_elapsed_us_per_all_lifecycle_receipt": 801.8348002000859,
+        "begin_commit_us_per_all_lifecycle_receipt": 103.94937644704873,
+        "nonempty_three_operation_stage_means_sum_us": {
+          "begin_us": 24.60869801343433,
+          "work_us": 527.5239268257825,
+          "commit_us": 48.82044461912248
+        },
+        "interpretation": "All-lifecycle amortization only, not latency of a message, CPU, removable work or 30-second-window metric. Empty polling spans worker lifetime."
+      },
+      "fixed_load_eligible": true,
+      "cohort_count": 5999,
+      "all_phase_ids": 6997,
+      "exact_once_client_id_sets_equal": true,
+      "id_set_sha256": "16aabdf7906f520ce61fd3bd762d49d99be10f7330b5acb72326e53d19377723",
+      "confirm_ms": {
+        "n": 5999,
+        "min": 0.582859,
+        "p50": 0.88875,
+        "p95": 1.294432,
+        "p99": 2.2016,
+        "max": 7.681016,
+        "mean": 0.9528005589264877,
+        "sum": 5715.850553
+      },
+      "e2e_ms": {
+        "n": 5999,
+        "min": 0.795074,
+        "p50": 0.996192,
+        "p95": 3.280546,
+        "p99": 3.839965,
+        "max": 8.882102,
+        "mean": 1.321937831138523,
+        "sum": 7930.305049
+      },
+      "confirmed_per_s": 199.96666666666667,
+      "completed_per_s": 199.96666666666667,
+      "attempted_per_s": 199.96666666666667,
+      "offered_load_fraction": 0.9998333333333334,
+      "publish_scheduling_lateness_ms": {
+        "n": 5999,
+        "min": 0.056451,
+        "p50": 0.086272,
+        "p95": 0.111998,
+        "p99": 0.222649,
+        "max": 2.746488,
+        "mean": 0.09563072095349225,
+        "sum": 573.688695
+      },
+      "received_before_confirm": 427,
+      "cohort_late_confirms": 0,
+      "cohort_late_receipts": 0,
+      "confirm_max_raw_row": {
+        "id": "c0398cd6-b172-4568-94d8-1550b5f03bd2/0/6855",
+        "start_ns": 33829849169268,
+        "schedule_lateness_ms": 0.081547,
+        "complete_ns": 33829856850284,
+        "delivery_tag_hex": "36383536",
+        "latency_ms": 7.681016,
+        "accepted": true
+      },
+      "e2e_max_raw_row": {
+        "id": "c0398cd6-b172-4568-94d8-1550b5f03bd2/0/6838",
+        "received_ns": 33829773051011,
+        "delivery_tag_hex": "363833393a31",
+        "sent_ns": 33829764168909,
+        "valid": true,
+        "latency_ms": 8.882102
+      },
+      "id_backlog_reconstruction_matches": true,
+      "measurement_end_confirmed_not_received": 0,
+      "max_sampled_confirmed_not_received": 1,
+      "max_sampled_client_outstanding": 1,
+      "mapped_worker_witness": {
+        "pid": 474,
+        "created": 1790795904.49,
+        "selected_realpath": "/workspace/shared/bridge-phase-mechanism/adapter/private-one/P2-B/selected/echoo_pgmq.so",
+        "inode": 549908,
+        "device": [
+          0,
+          27
+        ],
+        "mappings": [
+          "7f39dad17000-7f39dad1b000 r--p 00000000 00:1b 549908                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P2-B/selected/echoo_pgmq.so",
+          "7f39dad1b000-7f39dad20000 r-xp 00004000 00:1b 549908                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P2-B/selected/echoo_pgmq.so",
+          "7f39dad20000-7f39dad23000 r--p 00009000 00:1b 549908                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P2-B/selected/echoo_pgmq.so",
+          "7f39dad23000-7f39dad24000 r--p 0000b000 00:1b 549908                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P2-B/selected/echoo_pgmq.so",
+          "7f39dad24000-7f39dad25000 rw-p 0000c000 00:1b 549908                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P2-B/selected/echoo_pgmq.so"
+        ],
+        "sha256": "13da451342c73b971cf8986b3919de24625d62373c7c2bad6e4f42cc75abe9b0"
+      },
+      "resources": {
+        "n": 60,
+        "sample_window_ns": [
+          33800890642651,
+          33830536060951
+        ],
+        "sample_span_seconds": 29.6454183,
+        "owned_cpu_seconds_aggregate_delta": 7.34,
+        "owned_cpu_seconds_matched_identity_delta": 7.34,
+        "owned_cpu_cores": 0.24759306567112935,
+        "worker_cpu_seconds": 6.01,
+        "worker_cpu_cores": 0.20272947202772307,
+        "owned_cpu_ms_per_delivered_in_sample_span": 1.238191632928475,
+        "worker_cpu_ms_per_delivered_in_sample_span": 1.0138326585695008,
+        "delivered_in_sample_span": 5928,
+        "raw_received_matches_sampled_counter_delta": true,
+        "client_cpu_cores": 0.261423196042405,
+        "endpoint_process_sets_equal": true,
+        "all_sampled_process_sets_equal": true,
+        "unique_process_identities": 12,
+        "persistent_process_identities": 12,
+        "process_count_range": [
+          12,
+          12
+        ],
+        "observed_transient_process_identities": [],
+        "rss_sum_mib": {
+          "n": 60,
+          "min": 167.74609375,
+          "p50": 184.4375,
+          "p95": 197.2421875,
+          "p99": 197.328125,
+          "max": 197.35546875,
+          "mean": 184.4087890625,
+          "sum": 11064.52734375
+        },
+        "worker_rss_mib": {
+          "n": 60,
+          "min": 26.5859375,
+          "p50": 34.75390625,
+          "p95": 40.25,
+          "p99": 40.2734375,
+          "max": 40.2890625,
+          "mean": 34.60182291666667,
+          "sum": 2076.109375
+        },
+        "client_rss_sum_mib": {
+          "n": 60,
+          "min": 168.93359375,
+          "p50": 169.125,
+          "p95": 169.359375,
+          "p99": 169.375,
+          "max": 169.3828125,
+          "mean": 169.1416015625,
+          "sum": 10148.49609375
+        },
+        "cpu_scope": "Matched CPU endpoints of persistent owned identities only; transient CPU omitted from these deltas",
+        "transient_process_caveat": "Observed transient identities listed separately; their entire CPU is not accounted by endpoint deltas. Processes existing only between samples and CPU after last observation can also be missed; not total cgroup CPU",
+        "transient_observations": [],
+        "per_process_cpu_seconds": [
+          {
+            "pid": 465,
+            "created": 1790795904.47,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 466,
+            "created": 1790795904.49,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 467,
+            "created": 1790795904.49,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 468,
+            "created": 1790795904.49,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 469,
+            "created": 1790795904.49,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 470,
+            "created": 1790795904.49,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 472,
+            "created": 1790795904.49,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 473,
+            "created": 1790795904.49,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 474,
+            "created": 1790795904.49,
+            "delta_seconds": 6.01
+          },
+          {
+            "pid": 475,
+            "created": 1790795904.49,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 500,
+            "created": 1790795905.03,
+            "delta_seconds": 1.32
+          },
+          {
+            "pid": 506,
+            "created": 1790795905.36,
+            "delta_seconds": 0.01
+          }
+        ]
+      }
+    },
+    "P2-A": {
+      "run_id": "75ebcb93-ac01-4f57-bb59-ed22dd34b4b5",
+      "measurement_window_ns": [
+        33839551136986,
+        33869551136986
+      ],
+      "duration_s": 30,
+      "db_all_phase_rows": 6989,
+      "db_ms": {
+        "n": 5989,
+        "min": 0.283888,
+        "p50": 0.480915,
+        "p95": 0.870182,
+        "p99": 1.931672,
+        "max": 16.26266,
+        "mean": 0.554838602103857,
+        "sum": 3322.928388
+      },
+      "db_client_spans_ms": {
+        "begin_ms": {
+          "n": 5989,
+          "min": 0.056254,
+          "p50": 0.129445,
+          "p95": 0.232576,
+          "p99": 0.539033,
+          "max": 8.259488,
+          "mean": 0.15313769661045248,
+          "sum": 917.141665
+        },
+        "sql_ms": {
+          "n": 5989,
+          "min": 0.144708,
+          "p50": 0.269306,
+          "p95": 0.472432,
+          "p99": 1.07408,
+          "max": 9.395255,
+          "mean": 0.3137263736850893,
+          "sum": 1878.907252
+        },
+        "commit_ms": {
+          "n": 5989,
+          "min": 0.042965,
+          "p50": 0.063946,
+          "p95": 0.152359,
+          "p99": 0.453905,
+          "max": 15.940965,
+          "mean": 0.08797453180831524,
+          "sum": 526.879471
+        }
+      },
+      "db_start_per_s": 199.63333333333333,
+      "db_complete_per_s": 199.6,
+      "db_over_20ms": 0,
+      "db_scheduling_lateness_ms": {
+        "n": 5989,
+        "min": 0.03804,
+        "p50": 0.087722,
+        "p95": 0.183563,
+        "p99": 0.723143,
+        "max": 8.990107,
+        "mean": 0.12000767790950075,
+        "sum": 718.725983
+      },
+      "db_max_raw_row": {
+        "start_ns": 33844098224842,
+        "complete_ns": 33844114487502,
+        "sql_start_ns": 33844098323070,
+        "sql_end_ns": 33844098546537,
+        "begin_ms": 0.098228,
+        "sql_ms": 0.223467,
+        "commit_ms": 15.940965,
+        "latency_ms": 16.26266,
+        "schedule_lateness_ms": 2.771293
+      },
+      "cleanup": {
+        "normal_stop_confirmed": true,
+        "supervisor_exit": 0
+      },
+      "private_unit_absent_at_audit": true,
+      "postgres_last_log_line": "2026-09-30 14:19:42.219 CDT [573] LOG:  database system is shut down",
+      "boundary_queue_depths": [
+        0,
+        0
+      ],
+      "fixed_load_eligible": true,
+      "cohort_count": 5990,
+      "all_phase_ids": 6990,
+      "exact_once_client_id_sets_equal": true,
+      "id_set_sha256": "b1b18b7a37eeb1c8a82de4393e5fef68275c10b22992dbf750c946cad1b3d90e",
+      "confirm_ms": {
+        "n": 5990,
+        "min": 0.560936,
+        "p50": 0.862861,
+        "p95": 1.372039,
+        "p99": 2.672423,
+        "max": 27.575988,
+        "mean": 0.9498061060100167,
+        "sum": 5689.338575
+      },
+      "e2e_ms": {
+        "n": 5990,
+        "min": 0.766155,
+        "p50": 1.000593,
+        "p95": 3.169158,
+        "p99": 4.264635,
+        "max": 27.664131,
+        "mean": 1.260266592821369,
+        "sum": 7548.996891
+      },
+      "confirmed_per_s": 199.63333333333333,
+      "completed_per_s": 199.63333333333333,
+      "attempted_per_s": 199.66666666666666,
+      "offered_load_fraction": 0.9983333333333333,
+      "publish_scheduling_lateness_ms": {
+        "n": 5990,
+        "min": 0.024172,
+        "p50": 0.087933,
+        "p95": 0.135308,
+        "p99": 0.309677,
+        "max": 6.841645,
+        "mean": 0.1055872348914858,
+        "sum": 632.467537
+      },
+      "received_before_confirm": 402,
+      "cohort_late_confirms": 1,
+      "cohort_late_receipts": 1,
+      "confirm_max_raw_row": {
+        "id": "75ebcb93-ac01-4f57-bb59-ed22dd34b4b5/0/1358",
+        "start_ns": 33841343657241,
+        "schedule_lateness_ms": 0.099488,
+        "complete_ns": 33841371233229,
+        "delivery_tag_hex": "31333539",
+        "latency_ms": 27.575988,
+        "accepted": true
+      },
+      "e2e_max_raw_row": {
+        "id": "75ebcb93-ac01-4f57-bb59-ed22dd34b4b5/0/1358",
+        "received_ns": 33841371321372,
+        "delivery_tag_hex": "313335393a31",
+        "sent_ns": 33841343657241,
+        "valid": true,
+        "latency_ms": 27.664131
+      },
+      "id_backlog_reconstruction_matches": true,
+      "measurement_end_confirmed_not_received": 0,
+      "max_sampled_confirmed_not_received": 1,
+      "max_sampled_client_outstanding": 1,
+      "mapped_worker_witness": {
+        "pid": 582,
+        "created": 1790795943.54,
+        "selected_realpath": "/workspace/shared/bridge-phase-mechanism/adapter/private-one/P2-A/selected/echoo_pgmq.so",
+        "inode": 549911,
+        "device": [
+          0,
+          27
+        ],
+        "mappings": [
+          "7fca7705a000-7fca7705e000 r--p 00000000 00:1b 549911                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P2-A/selected/echoo_pgmq.so",
+          "7fca7705e000-7fca77063000 r-xp 00004000 00:1b 549911                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P2-A/selected/echoo_pgmq.so",
+          "7fca77063000-7fca77065000 r--p 00009000 00:1b 549911                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P2-A/selected/echoo_pgmq.so",
+          "7fca77065000-7fca77066000 r--p 0000b000 00:1b 549911                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P2-A/selected/echoo_pgmq.so",
+          "7fca77066000-7fca77067000 rw-p 0000c000 00:1b 549911                     /workspace/shared/bridge-phase-mechanism/adapter/private-one/P2-A/selected/echoo_pgmq.so"
+        ],
+        "sha256": "98804dff6e6abafa81a931d69360141d79729ff4e60edccfdaf32b9bf52e7684"
+      },
+      "resources": {
+        "n": 60,
+        "sample_window_ns": [
+          33839882142353,
+          33869535960081
+        ],
+        "sample_span_seconds": 29.653817728,
+        "owned_cpu_seconds_aggregate_delta": 7.340000000000001,
+        "owned_cpu_seconds_matched_identity_delta": 7.34,
+        "owned_cpu_cores": 0.24752293506779594,
+        "worker_cpu_seconds": 6.0200000000000005,
+        "worker_cpu_cores": 0.2030092737204539,
+        "owned_cpu_ms_per_delivered_in_sample_span": 1.239864864864865,
+        "worker_cpu_ms_per_delivered_in_sample_span": 1.0168918918918919,
+        "delivered_in_sample_span": 5920,
+        "raw_received_matches_sampled_counter_delta": true,
+        "client_cpu_cores": 0.2684308669127596,
+        "endpoint_process_sets_equal": true,
+        "all_sampled_process_sets_equal": true,
+        "unique_process_identities": 12,
+        "persistent_process_identities": 12,
+        "process_count_range": [
+          12,
+          12
+        ],
+        "observed_transient_process_identities": [],
+        "rss_sum_mib": {
+          "n": 60,
+          "min": 166.42578125,
+          "p50": 183.0625,
+          "p95": 196.58203125,
+          "p99": 196.66796875,
+          "max": 196.69140625,
+          "mean": 183.21744791666666,
+          "sum": 10993.046875
+        },
+        "worker_rss_mib": {
+          "n": 60,
+          "min": 26.796875,
+          "p50": 34.90234375,
+          "p95": 40.47265625,
+          "p99": 40.49609375,
+          "max": 40.51953125,
+          "mean": 34.78984375,
+          "sum": 2087.390625
+        },
+        "client_rss_sum_mib": {
+          "n": 60,
+          "min": 167.32421875,
+          "p50": 167.51171875,
+          "p95": 167.74609375,
+          "p99": 167.765625,
+          "max": 167.76953125,
+          "mean": 167.53131510416668,
+          "sum": 10051.87890625
+        },
+        "cpu_scope": "Matched CPU endpoints of persistent owned identities only; transient CPU omitted from these deltas",
+        "transient_process_caveat": "Observed transient identities listed separately; their entire CPU is not accounted by endpoint deltas. Processes existing only between samples and CPU after last observation can also be missed; not total cgroup CPU",
+        "transient_observations": [],
+        "per_process_cpu_seconds": [
+          {
+            "pid": 573,
+            "created": 1790795943.52,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 574,
+            "created": 1790795943.54,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 575,
+            "created": 1790795943.54,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 576,
+            "created": 1790795943.54,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 577,
+            "created": 1790795943.54,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 578,
+            "created": 1790795943.54,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 580,
+            "created": 1790795943.54,
+            "delta_seconds": 0.01
+          },
+          {
+            "pid": 581,
+            "created": 1790795943.54,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 582,
+            "created": 1790795943.54,
+            "delta_seconds": 6.0200000000000005
+          },
+          {
+            "pid": 583,
+            "created": 1790795943.54,
+            "delta_seconds": 0.0
+          },
+          {
+            "pid": 608,
+            "created": 1790795944.01,
+            "delta_seconds": 1.2999999999999998
+          },
+          {
+            "pid": 614,
+            "created": 1790795944.34,
+            "delta_seconds": 0.01
+          }
+        ]
+      }
+    }
+  },
+  "pairs": {
+    "1": {
+      "order": "BA",
+      "status": "valid_fixed_load_pair",
+      "eligible_for_paired_effect_conclusion": true,
+      "metrics": {
+        "confirm_ms.mean": {
+          "A": 0.9091800016672225,
+          "B": 0.8943905580386925,
+          "absolute_change": -0.014789443628529964,
+          "change_pct": -1.6266793815756575
+        },
+        "confirm_ms.p50": {
+          "A": 0.844283,
+          "B": 0.854108,
+          "absolute_change": 0.009824999999999973,
+          "change_pct": 1.1637093249538433
+        },
+        "confirm_ms.p95": {
+          "A": 1.322935,
+          "B": 1.256645,
+          "absolute_change": -0.06628999999999996,
+          "change_pct": -5.010828196396644
+        },
+        "confirm_ms.p99": {
+          "A": 2.06919,
+          "B": 1.832944,
+          "absolute_change": -0.23624599999999996,
+          "change_pct": -11.417317887675848
+        },
+        "confirm_ms.max": {
+          "A": 13.998877,
+          "B": 8.330832,
+          "absolute_change": -5.668045000000001,
+          "change_pct": -40.48928353324342
+        },
+        "e2e_ms.mean": {
+          "A": 1.3150827130710236,
+          "B": 1.1589174276184122,
+          "absolute_change": -0.15616528545261144,
+          "change_pct": -11.874940176799164
+        },
+        "e2e_ms.p50": {
+          "A": 1.042081,
+          "B": 0.969902,
+          "absolute_change": -0.072179,
+          "change_pct": -6.926428943623386
+        },
+        "e2e_ms.p95": {
+          "A": 3.120846,
+          "B": 3.069743,
+          "absolute_change": -0.0511029999999999,
+          "change_pct": -1.6374726596570244
+        },
+        "e2e_ms.p99": {
+          "A": 3.946239,
+          "B": 3.692202,
+          "absolute_change": -0.25403699999999985,
+          "change_pct": -6.437445882015758
+        },
+        "e2e_ms.max": {
+          "A": 14.445901,
+          "B": 15.081395,
+          "absolute_change": 0.6354940000000013,
+          "change_pct": 4.39913024462788
+        },
+        "db_ms.mean": {
+          "A": 0.5584301950975488,
+          "B": 0.591327549533022,
+          "absolute_change": 0.03289735443547326,
+          "change_pct": 5.891041480972681
+        },
+        "db_ms.p50": {
+          "A": 0.460014,
+          "B": 0.524421,
+          "absolute_change": 0.06440700000000005,
+          "change_pct": 14.001095618829007
+        },
+        "db_ms.p95": {
+          "A": 1.018641,
+          "B": 0.92155,
+          "absolute_change": -0.09709099999999993,
+          "change_pct": -9.531424711944636
+        },
+        "db_ms.p99": {
+          "A": 1.80393,
+          "B": 1.769578,
+          "absolute_change": -0.03435199999999994,
+          "change_pct": -1.9042867517032214
+        },
+        "db_ms.max": {
+          "A": 13.535065,
+          "B": 14.095348,
+          "absolute_change": 0.5602830000000001,
+          "change_pct": 4.139492495972497
+        },
+        "publish_scheduling_lateness_ms.mean": {
+          "A": 0.09596074258086029,
+          "B": 0.09841349983322215,
+          "absolute_change": 0.0024527572523618535,
+          "change_pct": 2.5560007002812357
+        },
+        "publish_scheduling_lateness_ms.p50": {
+          "A": 0.085957,
+          "B": 0.087082,
+          "absolute_change": 0.001125000000000001,
+          "change_pct": 1.3087939318496389
+        },
+        "publish_scheduling_lateness_ms.p95": {
+          "A": 0.114566,
+          "B": 0.121914,
+          "absolute_change": 0.007347999999999993,
+          "change_pct": 6.41377022851457
+        },
+        "publish_scheduling_lateness_ms.p99": {
+          "A": 0.316639,
+          "B": 0.208183,
+          "absolute_change": -0.108456,
+          "change_pct": -34.252255723394775
+        },
+        "publish_scheduling_lateness_ms.max": {
+          "A": 2.416055,
+          "B": 12.999935,
+          "absolute_change": 10.58388,
+          "change_pct": 438.0645308157306
+        },
+        "db_scheduling_lateness_ms.mean": {
+          "A": 0.1071867832249458,
+          "B": 0.11361377768512342,
+          "absolute_change": 0.00642699446017761,
+          "change_pct": 5.996069913479629
+        },
+        "db_scheduling_lateness_ms.p50": {
+          "A": 0.086864,
+          "B": 0.087246,
+          "absolute_change": 0.00038200000000000733,
+          "change_pct": 0.4397679130595078
+        },
+        "db_scheduling_lateness_ms.p95": {
+          "A": 0.141384,
+          "B": 0.191118,
+          "absolute_change": 0.049734,
+          "change_pct": 35.17654048548633
+        },
+        "db_scheduling_lateness_ms.p99": {
+          "A": 0.567183,
+          "B": 0.485851,
+          "absolute_change": -0.08133200000000002,
+          "change_pct": -14.339639939843051
+        },
+        "db_scheduling_lateness_ms.max": {
+          "A": 4.317469,
+          "B": 14.872878,
+          "absolute_change": 10.555409000000001,
+          "change_pct": 244.4814079730509
+        },
+        "resources.owned_cpu_cores": {
+          "A": 0.23976049819225717,
+          "B": 0.23444110611714675,
+          "absolute_change": -0.005319392075110424,
+          "change_pct": -2.2186273865868245
+        },
+        "resources.worker_cpu_cores": {
+          "A": 0.19794572776210262,
+          "B": 0.19058881288660132,
+          "absolute_change": -0.0073569148755013025,
+          "change_pct": -3.7166323106215593
+        },
+        "resources.client_cpu_cores": {
+          "A": 0.262691178750729,
+          "B": 0.261764458053102,
+          "absolute_change": -0.0009267206976270037,
+          "change_pct": -0.35277952690843106
+        },
+        "resources.owned_cpu_ms_per_delivered_in_sample_span": {
+          "A": 1.1993927125506074,
+          "B": 1.1727978400269996,
+          "absolute_change": -0.026594872523607815,
+          "change_pct": -2.2173615234873045
+        },
+        "resources.worker_cpu_ms_per_delivered_in_sample_span": {
+          "A": 0.9902159244264508,
+          "B": 0.9534255821802227,
+          "absolute_change": -0.036790342246228125,
+          "change_pct": -3.715385840470875
+        },
+        "resources.rss_sum_mib.mean": {
+          "A": 184.19680989583333,
+          "B": 186.3162109375,
+          "absolute_change": 2.119401041666663,
+          "change_pct": 1.1506176696899573
+        },
+        "resources.rss_sum_mib.max": {
+          "A": 197.41796875,
+          "B": 199.21875,
+          "absolute_change": 1.80078125,
+          "change_pct": 0.912166841449169
+        },
+        "resources.worker_rss_mib.mean": {
+          "A": 34.705859375,
+          "B": 34.75123697916667,
+          "absolute_change": 0.04537760416666714,
+          "change_pct": 0.13074911552068968
+        },
+        "resources.worker_rss_mib.max": {
+          "A": 40.38671875,
+          "B": 40.3359375,
+          "absolute_change": -0.05078125,
+          "change_pct": -0.12573749879098983
+        },
+        "resources.client_rss_sum_mib.mean": {
+          "A": 167.43776041666666,
+          "B": 166.62688802083332,
+          "absolute_change": -0.8108723958333428,
+          "change_pct": -0.48428287252260116
+        },
+        "resources.client_rss_sum_mib.max": {
+          "A": 167.67578125,
+          "B": 166.84375,
+          "absolute_change": -0.83203125,
+          "change_pct": -0.49621432731508097
+        }
+      },
+      "unfavorable_B_higher_metrics": [
+        "confirm_ms.p50",
+        "e2e_ms.max",
+        "db_ms.mean",
+        "db_ms.p50",
+        "db_ms.max",
+        "publish_scheduling_lateness_ms.mean",
+        "publish_scheduling_lateness_ms.p50",
+        "publish_scheduling_lateness_ms.p95",
+        "publish_scheduling_lateness_ms.max",
+        "db_scheduling_lateness_ms.mean",
+        "db_scheduling_lateness_ms.p50",
+        "db_scheduling_lateness_ms.p95",
+        "db_scheduling_lateness_ms.max",
+        "resources.rss_sum_mib.mean",
+        "resources.rss_sum_mib.max",
+        "resources.worker_rss_mib.mean"
+      ]
+    },
+    "2": {
+      "order": "BA",
+      "status": "invalid_gate_or_drift",
+      "eligible_for_paired_effect_conclusion": false,
+      "metrics": {
+        "confirm_ms.mean": {
+          "A": 0.9498061060100167,
+          "B": 0.9528005589264877,
+          "absolute_change": 0.0029944529164710465,
+          "change_pct": 0.31526991640959956
+        },
+        "confirm_ms.p50": {
+          "A": 0.862861,
+          "B": 0.88875,
+          "absolute_change": 0.02588900000000005,
+          "change_pct": 3.000367382463698
+        },
+        "confirm_ms.p95": {
+          "A": 1.372039,
+          "B": 1.294432,
+          "absolute_change": -0.07760699999999998,
+          "change_pct": -5.656326095686781
+        },
+        "confirm_ms.p99": {
+          "A": 2.672423,
+          "B": 2.2016,
+          "absolute_change": -0.4708230000000002,
+          "change_pct": -17.61783220695228
+        },
+        "confirm_ms.max": {
+          "A": 27.575988,
+          "B": 7.681016,
+          "absolute_change": -19.894972,
+          "change_pct": -72.14599890310367
+        },
+        "e2e_ms.mean": {
+          "A": 1.260266592821369,
+          "B": 1.321937831138523,
+          "absolute_change": 0.06167123831715404,
+          "change_pct": 4.893507347448622
+        },
+        "e2e_ms.p50": {
+          "A": 1.000593,
+          "B": 0.996192,
+          "absolute_change": -0.004401000000000099,
+          "change_pct": -0.43983917536901673
+        },
+        "e2e_ms.p95": {
+          "A": 3.169158,
+          "B": 3.280546,
+          "absolute_change": 0.11138800000000026,
+          "change_pct": 3.5147506056813826
+        },
+        "e2e_ms.p99": {
+          "A": 4.264635,
+          "B": 3.839965,
+          "absolute_change": -0.4246700000000003,
+          "change_pct": -9.95794481825526
+        },
+        "e2e_ms.max": {
+          "A": 27.664131,
+          "B": 8.882102,
+          "absolute_change": -18.782029,
+          "change_pct": -67.89307424838323
+        },
+        "db_ms.mean": {
+          "A": 0.554838602103857,
+          "B": 0.5379156495498499,
+          "absolute_change": -0.01692295255400711,
+          "change_pct": -3.0500676214376687
+        },
+        "db_ms.p50": {
+          "A": 0.480915,
+          "B": 0.495712,
+          "absolute_change": 0.014797000000000005,
+          "change_pct": 3.0768431011717334
+        },
+        "db_ms.p95": {
+          "A": 0.870182,
+          "B": 0.784873,
+          "absolute_change": -0.08530899999999997,
+          "change_pct": -9.803581319769883
+        },
+        "db_ms.p99": {
+          "A": 1.931672,
+          "B": 1.445059,
+          "absolute_change": -0.48661299999999996,
+          "change_pct": -25.191285062888525
+        },
+        "db_ms.max": {
+          "A": 16.26266,
+          "B": 7.852424,
+          "absolute_change": -8.410236000000001,
+          "change_pct": -51.71500849184574
+        },
+        "publish_scheduling_lateness_ms.mean": {
+          "A": 0.1055872348914858,
+          "B": 0.09563072095349225,
+          "absolute_change": -0.009956513937993558,
+          "change_pct": -9.429656859776724
+        },
+        "publish_scheduling_lateness_ms.p50": {
+          "A": 0.087933,
+          "B": 0.086272,
+          "absolute_change": -0.0016609999999999958,
+          "change_pct": -1.8889381688330875
+        },
+        "publish_scheduling_lateness_ms.p95": {
+          "A": 0.135308,
+          "B": 0.111998,
+          "absolute_change": -0.02331000000000001,
+          "change_pct": -17.227362757560538
+        },
+        "publish_scheduling_lateness_ms.p99": {
+          "A": 0.309677,
+          "B": 0.222649,
+          "absolute_change": -0.08702799999999997,
+          "change_pct": -28.102829722581912
+        },
+        "publish_scheduling_lateness_ms.max": {
+          "A": 6.841645,
+          "B": 2.746488,
+          "absolute_change": -4.095157,
+          "change_pct": -59.85632110406196
+        },
+        "db_scheduling_lateness_ms.mean": {
+          "A": 0.12000767790950075,
+          "B": 0.10389009053017673,
+          "absolute_change": -0.01611758737932402,
+          "change_pct": -13.430463500409108
+        },
+        "db_scheduling_lateness_ms.p50": {
+          "A": 0.087722,
+          "B": 0.086274,
+          "absolute_change": -0.001447999999999991,
+          "change_pct": -1.6506691593898837
+        },
+        "db_scheduling_lateness_ms.p95": {
+          "A": 0.183563,
+          "B": 0.118021,
+          "absolute_change": -0.065542,
+          "change_pct": -35.70545262389479
+        },
+        "db_scheduling_lateness_ms.p99": {
+          "A": 0.723143,
+          "B": 0.501078,
+          "absolute_change": -0.22206499999999996,
+          "change_pct": -30.708310804363727
+        },
+        "db_scheduling_lateness_ms.max": {
+          "A": 8.990107,
+          "B": 5.190371,
+          "absolute_change": -3.7997360000000002,
+          "change_pct": -42.26574833870165
+        },
+        "resources.owned_cpu_cores": {
+          "A": 0.24752293506779594,
+          "B": 0.24759306567112935,
+          "absolute_change": 7.013060333341259e-05,
+          "change_pct": 0.028332971776623417
+        },
+        "resources.worker_cpu_cores": {
+          "A": 0.2030092737204539,
+          "B": 0.20272947202772307,
+          "absolute_change": -0.0002798016927308411,
+          "change_pct": -0.13782704977119975
+        },
+        "resources.client_cpu_cores": {
+          "A": 0.2684308669127596,
+          "B": 0.261423196042405,
+          "absolute_change": -0.007007670870354588,
+          "change_pct": -2.610605460895854
+        },
+        "resources.owned_cpu_ms_per_delivered_in_sample_span": {
+          "A": 1.239864864864865,
+          "B": 1.238191632928475,
+          "absolute_change": -0.0016732319363899073,
+          "change_pct": -0.13495276653171517
+        },
+        "resources.worker_cpu_ms_per_delivered_in_sample_span": {
+          "A": 1.0168918918918919,
+          "B": 1.0138326585695008,
+          "absolute_change": -0.0030592333223911083,
+          "change_pct": -0.30084154931154794
+        },
+        "resources.rss_sum_mib.mean": {
+          "A": 183.21744791666666,
+          "B": 184.4087890625,
+          "absolute_change": 1.1913411458333485,
+          "change_pct": 0.6502334572279445
+        },
+        "resources.rss_sum_mib.max": {
+          "A": 196.69140625,
+          "B": 197.35546875,
+          "absolute_change": 0.6640625,
+          "change_pct": 0.3376164280181948
+        },
+        "resources.worker_rss_mib.mean": {
+          "A": 34.78984375,
+          "B": 34.60182291666667,
+          "absolute_change": -0.18802083333333286,
+          "change_pct": -0.5404474785355551
+        },
+        "resources.worker_rss_mib.max": {
+          "A": 40.51953125,
+          "B": 40.2890625,
+          "absolute_change": -0.23046875,
+          "change_pct": -0.5687843439699192
+        },
+        "resources.client_rss_sum_mib.mean": {
+          "A": 167.53131510416668,
+          "B": 169.1416015625,
+          "absolute_change": 1.61028645833332,
+          "change_pct": 0.9611853505310908
+        },
+        "resources.client_rss_sum_mib.max": {
+          "A": 167.76953125,
+          "B": 169.3828125,
+          "absolute_change": 1.61328125,
+          "change_pct": 0.961605625276496
+        }
+      },
+      "unfavorable_B_higher_metrics": [
+        "confirm_ms.mean",
+        "confirm_ms.p50",
+        "e2e_ms.mean",
+        "e2e_ms.p95",
+        "db_ms.p50",
+        "resources.owned_cpu_cores",
+        "resources.rss_sum_mib.mean",
+        "resources.rss_sum_mib.max",
+        "resources.client_rss_sum_mib.mean",
+        "resources.client_rss_sum_mib.max"
+      ]
+    },
+    "3": {
+      "order": "AB",
+      "status": "unrun",
+      "metrics": {},
+      "missing_cells": [
+        "P3-A",
+        "P3-B"
+      ]
+    }
+  },
+  "terminal": {
+    "terminal_status": "environment_insufficient",
+    "reason": "G2 failed PG stability or drift gate",
+    "pairs": {
+      "1": {
+        "status": "valid_fixed_load_pair",
+        "cells": [
+          {
+            "label": "P1-B",
+            "fixed_load_eligible": true
+          },
+          {
+            "label": "P1-A",
+            "fixed_load_eligible": true
+          }
+        ]
+      },
+      "2": {
+        "status": "invalid_gate_or_drift",
+        "cells": [
+          {
+            "label": "P2-B",
+            "fixed_load_eligible": true
+          },
+          {
+            "label": "P2-A",
+            "fixed_load_eligible": true
+          }
+        ]
+      },
+      "3": {
+        "status": "unrun",
+        "cells": []
+      }
+    },
+    "unrun_units": [
+      {
+        "label": "P3-A",
+        "kind": "cell",
+        "arm": "A",
+        "pair": 3
+      },
+      {
+        "label": "P3-B",
+        "kind": "cell",
+        "arm": "B",
+        "pair": 3
+      },
+      {
+        "label": "G3",
+        "kind": "gate",
+        "arm": "A",
+        "pair": 3
+      }
+    ],
+    "automatic_retries": 0,
+    "scope": "Ordinary diagnostic perturbation comparison: A has no phase instrumentation; B has cumulative bridge phases. B phases cover the whole worker lifetime including warmup/drain, not the 30-second client cohort. Per-event native traces remain uncollected by design. Client timing, ID/checksum accounting, psutil resource sampling and PostgreSQL I/O timing remain enabled. Volatile storage: /tmp tmpfs and workspace overlay fsync=volatile. Not SSD, durability, capacity, ERP, reliability or product performance qualification. CPU affinity only; no enforceable cgroup CPU quota, memory ceiling or swap limit. RSS sums double-count shared pages; CPU sums cover currently live owned processes.",
+    "cleanup_may_be_incomplete": false,
+    "private_session_state_removed": true,
+    "controller_elapsed_seconds": 242.64286684599938,
+    "hard_budget_seconds": 600,
+    "work_cutoff_seconds": 550,
+    "interpretation": "Ordinary diagnostic perturbation comparison: A has no phase instrumentation; B has cumulative bridge phases. B phases cover the whole worker lifetime including warmup/drain, not the 30-second client cohort. Per-event native traces remain uncollected by design. Client timing, ID/checksum accounting, psutil resource sampling and PostgreSQL I/O timing remain enabled. Volatile storage: /tmp tmpfs and workspace overlay fsync=volatile. Not SSD, durability, capacity, ERP, reliability or product performance qualification. CPU affinity only; no enforceable cgroup CPU quota, memory ceiling or swap limit. RSS sums double-count shared pages; CPU sums cover currently live owned processes.",
+    "native_stage_timing_collected": true,
+    "native_stage_timing_by_arm": {
+      "A": "absent_by_design",
+      "B": "whole_worker_lifetime_when_validated"
+    },
+    "native_traces_collected": false
+  },
+  "same_executor_cleanup": {
+    "wrapper": {
+      "controller_exit_code": 0,
+      "terminal_status": "environment_insufficient",
+      "elapsed_seconds": 242.7550492286682,
+      "known_pg_identities": 81,
+      "same_executor_known_pg_still_live": [],
+      "private_state_exists": false,
+      "normal_recovery": [],
+      "wrapper_pid": 5,
+      "direct_remaining_children": []
+    },
+    "recomputed_recorded_identity_count": 81,
+    "recorded_identities": [
+      {
+        "pid": 72,
+        "created": 1790795768.87
+      },
+      {
+        "pid": 73,
+        "created": 1790795768.9
+      },
+      {
+        "pid": 74,
+        "created": 1790795768.9
+      },
+      {
+        "pid": 75,
+        "created": 1790795768.9
+      },
+      {
+        "pid": 76,
+        "created": 1790795768.9
+      },
+      {
+        "pid": 77,
+        "created": 1790795768.9
+      },
+      {
+        "pid": 79,
+        "created": 1790795768.91
+      },
+      {
+        "pid": 80,
+        "created": 1790795768.91
+      },
+      {
+        "pid": 81,
+        "created": 1790795768.91
+      },
+      {
+        "pid": 100,
+        "created": 1790795769.4
+      },
+      {
+        "pid": 102,
+        "created": 1790795769.4
+      },
+      {
+        "pid": 161,
+        "created": 1790795797.34
+      },
+      {
+        "pid": 162,
+        "created": 1790795797.36
+      },
+      {
+        "pid": 163,
+        "created": 1790795797.36
+      },
+      {
+        "pid": 164,
+        "created": 1790795797.36
+      },
+      {
+        "pid": 165,
+        "created": 1790795797.36
+      },
+      {
+        "pid": 166,
+        "created": 1790795797.36
+      },
+      {
+        "pid": 168,
+        "created": 1790795797.36
+      },
+      {
+        "pid": 169,
+        "created": 1790795797.36
+      },
+      {
+        "pid": 170,
+        "created": 1790795797.36
+      },
+      {
+        "pid": 171,
+        "created": 1790795797.36
+      },
+      {
+        "pid": 196,
+        "created": 1790795797.97
+      },
+      {
+        "pid": 202,
+        "created": 1790795798.31
+      },
+      {
+        "pid": 269,
+        "created": 1790795836.75
+      },
+      {
+        "pid": 270,
+        "created": 1790795836.78
+      },
+      {
+        "pid": 271,
+        "created": 1790795836.78
+      },
+      {
+        "pid": 272,
+        "created": 1790795836.78
+      },
+      {
+        "pid": 273,
+        "created": 1790795836.78
+      },
+      {
+        "pid": 274,
+        "created": 1790795836.78
+      },
+      {
+        "pid": 276,
+        "created": 1790795836.78
+      },
+      {
+        "pid": 277,
+        "created": 1790795836.78
+      },
+      {
+        "pid": 278,
+        "created": 1790795836.78
+      },
+      {
+        "pid": 279,
+        "created": 1790795836.78
+      },
+      {
+        "pid": 304,
+        "created": 1790795837.36
+      },
+      {
+        "pid": 310,
+        "created": 1790795837.69
+      },
+      {
+        "pid": 376,
+        "created": 1790795875.99
+      },
+      {
+        "pid": 377,
+        "created": 1790795876.01
+      },
+      {
+        "pid": 378,
+        "created": 1790795876.01
+      },
+      {
+        "pid": 379,
+        "created": 1790795876.01
+      },
+      {
+        "pid": 380,
+        "created": 1790795876.01
+      },
+      {
+        "pid": 381,
+        "created": 1790795876.01
+      },
+      {
+        "pid": 383,
+        "created": 1790795876.02
+      },
+      {
+        "pid": 384,
+        "created": 1790795876.02
+      },
+      {
+        "pid": 385,
+        "created": 1790795876.02
+      },
+      {
+        "pid": 404,
+        "created": 1790795876.5
+      },
+      {
+        "pid": 406,
+        "created": 1790795876.5
+      },
+      {
+        "pid": 465,
+        "created": 1790795904.47
+      },
+      {
+        "pid": 466,
+        "created": 1790795904.49
+      },
+      {
+        "pid": 467,
+        "created": 1790795904.49
+      },
+      {
+        "pid": 468,
+        "created": 1790795904.49
+      },
+      {
+        "pid": 469,
+        "created": 1790795904.49
+      },
+      {
+        "pid": 470,
+        "created": 1790795904.49
+      },
+      {
+        "pid": 472,
+        "created": 1790795904.49
+      },
+      {
+        "pid": 473,
+        "created": 1790795904.49
+      },
+      {
+        "pid": 474,
+        "created": 1790795904.49
+      },
+      {
+        "pid": 475,
+        "created": 1790795904.49
+      },
+      {
+        "pid": 500,
+        "created": 1790795905.03
+      },
+      {
+        "pid": 506,
+        "created": 1790795905.36
+      },
+      {
+        "pid": 573,
+        "created": 1790795943.52
+      },
+      {
+        "pid": 574,
+        "created": 1790795943.54
+      },
+      {
+        "pid": 575,
+        "created": 1790795943.54
+      },
+      {
+        "pid": 576,
+        "created": 1790795943.54
+      },
+      {
+        "pid": 577,
+        "created": 1790795943.54
+      },
+      {
+        "pid": 578,
+        "created": 1790795943.54
+      },
+      {
+        "pid": 580,
+        "created": 1790795943.54
+      },
+      {
+        "pid": 581,
+        "created": 1790795943.54
+      },
+      {
+        "pid": 582,
+        "created": 1790795943.54
+      },
+      {
+        "pid": 583,
+        "created": 1790795943.54
+      },
+      {
+        "pid": 608,
+        "created": 1790795944.01
+      },
+      {
+        "pid": 614,
+        "created": 1790795944.34
+      },
+      {
+        "pid": 680,
+        "created": 1790795982.44
+      },
+      {
+        "pid": 681,
+        "created": 1790795982.46
+      },
+      {
+        "pid": 682,
+        "created": 1790795982.46
+      },
+      {
+        "pid": 683,
+        "created": 1790795982.46
+      },
+      {
+        "pid": 684,
+        "created": 1790795982.46
+      },
+      {
+        "pid": 685,
+        "created": 1790795982.46
+      },
+      {
+        "pid": 687,
+        "created": 1790795982.47
+      },
+      {
+        "pid": 688,
+        "created": 1790795982.47
+      },
+      {
+        "pid": 689,
+        "created": 1790795982.47
+      },
+      {
+        "pid": 708,
+        "created": 1790795982.91
+      },
+      {
+        "pid": 710,
+        "created": 1790795982.91
+      }
+    ],
+    "scope": "Historical same-executor witness; separate audit namespace does not recheck PIDs as live process identities"
+  },
+  "checksum_evidence": {
+    "expected_1024_byte_payload_sha256": "785b0751fc2c53dc14a4ce3d800e69ef9ce1009eb327ccf458afe09c242c26c9",
+    "client_semantics": "Raw valid flag records same run property plus SHA256(received body)==SHA256(expected deterministic payload). Validity is checked after receipt timestamp and before manual ACCEPTED.",
+    "audit_limit": "Wire/body bytes and computed received digests are not retained. This audit verifies pinned validation code, all valid flags and ID/send timestamp joins; cannot independently rehash actual received bytes."
+  },
+  "interpretation": {
+    "eligible_pairs": [
+      "1"
+    ],
+    "invalid_or_unrun_pairs": {
+      "2": "invalid_gate_or_drift",
+      "3": "unrun"
+    },
+    "instrumentation_perturbation": "P1 observed A/B absolute and relative differences characterize this pair only. One pair cannot establish a causal instrumentation cost, a worst-case bound, statistical significance or negligible overhead. P2 retained but ineligible.",
+    "native_evidence": "Pinned source semantics plus aggregate log elapsed fields and count reconciliation. Not independently timestamped per-event native evidence; no phase quantiles or phase/client event join possible.",
+    "priority": "Investigate work/query/data path first because its elapsed share is dominant, without equating all work to removable overhead. Begin/commit envelope only describes measured spans, not achievable savings.",
+    "empty_claim": "No usable message returned is not universally side-effect-free; expired-lease dead-lettering and poison-message rejection may commit inside claim.",
+    "qualification": "Volatile overlay/tmpfs; affinity only, no cgroup cap. Not SSD/ERP, actual durable storage cost, reliability, capacity or production qualification."
+  }
+}

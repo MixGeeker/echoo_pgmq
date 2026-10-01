@@ -1,0 +1,48 @@
+{
+  "source_commit": "450681d71c2fefef0a92e57098643701dabcf4f5",
+  "files": [
+    {
+      "path": "scripts/install_candidate.py",
+      "source_path": "scripts/install_candidate.py",
+      "sha256": "4b0f8562f29c9fd320ded5ddb182d05ca54bbfb13dabdc4b6d01bd918262851f"
+    },
+    {
+      "path": "scripts/make_test_certs.py",
+      "source_path": "scripts/make_test_certs.py",
+      "sha256": "d38eb66074060f4299fef04b99203bde5a1a1759194794b9e290fff133f8170a"
+    },
+    {
+      "path": "scripts/fetch_dependency.py",
+      "source_path": "scripts/fetch_dependency.py",
+      "sha256": "e656a77070af8828bc32fccf4e9152d63cf3fd733b524497c2849087943d93c2"
+    },
+    {
+      "path": "scripts/check_windows_runtime.py",
+      "source_path": "scripts/check_windows_runtime.py",
+      "sha256": "73e3dfc4a560e20d4d5107d2b743e8d0324a013ddb395087c42cfce51ac785ab"
+    },
+    {
+      "path": "interop/rhea_client.js",
+      "source_path": "tests/interop/rhea_client.js",
+      "sha256": "882d6758dd124293a42e22a744ed5e69ed517af6a30d57271a7f8f9487f34267",
+      "source_sha256": "25406337bf0ecd89fe1e3c873d83fe61f4f9db28e1449854cbfdfc707baecdd3",
+      "preview_modification": "Add ordinary sql-binary receive mode for the fixed SQL message_binary envelope using a 12-byte synthetic binary fixture; retain existing TLS/manual SECOND settlement path."
+    },
+    {
+      "path": "interop/verify_dependencies.js",
+      "source_path": "tests/interop/verify_dependencies.js",
+      "sha256": "6813ac1a39d82babd91d72ab447c0ea1d38a22e86563e81464fbcb4de36c9184"
+    },
+    {
+      "path": "interop/package.json",
+      "source_path": "tests/interop/package.json",
+      "sha256": "1b47fb33332b826d4e0e985e3d24d5a68c697b2d0607ac9f6c9a2b070ccaf804"
+    },
+    {
+      "path": "interop/package-lock.json",
+      "source_path": "tests/interop/package-lock.json",
+      "sha256": "d7a27f9650204b01abf22d00460080d41197652f1974ba9e8bb9d53a53e1dc18"
+    }
+  ],
+  "preview_label": "preview-20260930.2"
+}

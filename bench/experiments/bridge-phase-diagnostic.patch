@@ -1,0 +1,319 @@
+--- a/src/storage.c
++++ b/src/storage.c
+@@ -11,6 +11,7 @@
+ #include "utils/snapmgr.h"
+ #include "utils/timeout.h"
+ #include "echoo_pgmq.h"
++#include "bridge_phase_diag.h"
+ 
+ #include <stdlib.h>
+ #include <string.h>
+@@ -18,6 +19,9 @@
+ /* Seven fixed, process-local plans survive SPI_finish and transaction aborts.
+  * PostgreSQL still revalidates their dependencies and executes each function;
+  * neither authorization decisions nor query results are cached here. */
++/* Fixed process-local lifetime totals; this diagnostic is never a product build. */
++static EchooBridgeDiagnostic bridge_diagnostic;
++
+ static SPIPlanPtr authorize_plan = NULL;
+ static SPIPlanPtr publish_plan = NULL;
+ static SPIPlanPtr claim_plan = NULL;
+@@ -129,9 +133,13 @@
+                                              SPI_tuptable->tupdesc, 1, &isnull));
+         allowed = allowed && !isnull;
+         commit_operation();
++        echoo_bridge_diag_increment(&bridge_diagnostic,
++                                     &bridge_diagnostic.authorization_completed);
+     }
+     PG_CATCH();
+     {
++        echoo_bridge_diag_increment(&bridge_diagnostic,
++                                     &bridge_diagnostic.authorization_errors);
+         abort_operation(context);
+         allowed = false;
+     }
+@@ -144,13 +152,21 @@
+                  const unsigned char *body, size_t size)
+ {
+     MemoryContext context = CurrentMemoryContext;
++    /* Only this volatile phase marker is inspected after PG_TRY longjmp. */
++    volatile EchooBridgePhase phase = ECHOO_BRIDGE_BEGIN;
+     volatile bool success = false;
++    echoo_bridge_diag_increment(&bridge_diagnostic,
++                                 &bridge_diagnostic.started[ECHOO_BRIDGE_OP_PUBLISH]);
+     PG_TRY();
+     {
++        instr_time stamps[4];
+         Oid types[] = {TEXTOID, BYTEAOID, TEXTOID};
+         Datum args[3];
+         bytea *payload;
++        INSTR_TIME_SET_CURRENT(stamps[0]);
+         begin_operation();
++        INSTR_TIME_SET_CURRENT(stamps[1]);
++        phase = ECHOO_BRIDGE_WORK;
+         if (size == 0 || size > (size_t) echoo_max_message_bytes)
+             elog(ERROR, "echoo_pgmq: invalid message size");
+         payload = palloc(VARHDRSZ + size);
+@@ -163,11 +179,17 @@
+                                  3, types, args) != SPI_OK_SELECT ||
+             SPI_processed != 1)
+             elog(ERROR, "echoo_pgmq: publish returned no result");
++        phase = ECHOO_BRIDGE_COMMIT;
++        INSTR_TIME_SET_CURRENT(stamps[2]);
+         commit_operation();
++        INSTR_TIME_SET_CURRENT(stamps[3]);
++        echoo_bridge_diag_complete(&bridge_diagnostic,
++                                   ECHOO_BRIDGE_PUBLISH, stamps);
+         success = true;
+     }
+     PG_CATCH();
+     {
++        echoo_bridge_diag_error(&bridge_diagnostic, ECHOO_BRIDGE_OP_PUBLISH, phase);
+         abort_operation(context);
+     }
+     PG_END_TRY();
+@@ -200,14 +222,22 @@
+                EchooMessage *message)
+ {
+     MemoryContext context = CurrentMemoryContext;
++    /* Only this volatile phase marker is inspected after PG_TRY longjmp. */
++    volatile EchooBridgePhase phase = ECHOO_BRIDGE_BEGIN;
+     volatile int result = -1;
+     memset(message, 0, sizeof(*message));
++    echoo_bridge_diag_increment(&bridge_diagnostic,
++                                 &bridge_diagnostic.started[ECHOO_BRIDGE_OP_CLAIM]);
+     PG_TRY();
+     {
++        instr_time stamps[4];
+         Oid types[] = {TEXTOID, TEXTOID, UUIDOID, INT4OID};
+         Datum args[4];
+         int inspected;
++        INSTR_TIME_SET_CURRENT(stamps[0]);
+         begin_operation();
++        INSTR_TIME_SET_CURRENT(stamps[1]);
++        phase = ECHOO_BRIDGE_WORK;
+         args[0] = CStringGetTextDatum(queue);
+         args[1] = CStringGetTextDatum(identity);
+         args[2] = PointerGetDatum(owner);
+@@ -250,10 +280,16 @@
+             result = 1;
+             break;
+         }
++        phase = ECHOO_BRIDGE_COMMIT;
++        INSTR_TIME_SET_CURRENT(stamps[2]);
+         commit_operation();
++        INSTR_TIME_SET_CURRENT(stamps[3]);
++        echoo_bridge_diag_complete(&bridge_diagnostic,
++                                   result == 1 ? ECHOO_BRIDGE_CLAIM_SUCCESS : ECHOO_BRIDGE_CLAIM_EMPTY, stamps);
+     }
+     PG_CATCH();
+     {
++        echoo_bridge_diag_error(&bridge_diagnostic, ECHOO_BRIDGE_OP_CLAIM, phase);
+         abort_operation(context);
+         free(message->body);
+         memset(message, 0, sizeof(*message));
+@@ -269,14 +305,22 @@
+                 const char *outcome)
+ {
+     MemoryContext context = CurrentMemoryContext;
++    /* Only this volatile phase marker is inspected after PG_TRY longjmp. */
++    volatile EchooBridgePhase phase = ECHOO_BRIDGE_BEGIN;
+     volatile bool success = false;
++    echoo_bridge_diag_increment(&bridge_diagnostic,
++                                 &bridge_diagnostic.started[ECHOO_BRIDGE_OP_SETTLE]);
+     PG_TRY();
+     {
++        instr_time stamps[4];
+         Oid types[] = {TEXTOID, INT8OID, INT8OID, UUIDOID, TEXTOID, TEXTOID};
+         Datum args[6];
+         bool isnull;
+         bool applied;
++        INSTR_TIME_SET_CURRENT(stamps[0]);
+         begin_operation();
++        INSTR_TIME_SET_CURRENT(stamps[1]);
++        phase = ECHOO_BRIDGE_WORK;
+         args[0] = CStringGetTextDatum(queue);
+         args[1] = Int64GetDatum(id);
+         args[2] = Int64GetDatum(generation);
+@@ -294,14 +338,77 @@
+         if (echoo_test_fail_settle_before_commit)
+             elog(ERROR, "echoo_pgmq: test-injected failure before settlement commit");
+ #endif
++        phase = ECHOO_BRIDGE_COMMIT;
++        INSTR_TIME_SET_CURRENT(stamps[2]);
+         commit_operation();
++        INSTR_TIME_SET_CURRENT(stamps[3]);
++        echoo_bridge_diag_complete(&bridge_diagnostic,
++                                   ECHOO_BRIDGE_SETTLE, stamps);
++        echoo_bridge_diag_increment(&bridge_diagnostic, applied ?
++                                     &bridge_diagnostic.settle_applied :
++                                     &bridge_diagnostic.settle_not_applied);
+         success = applied;
+     }
+     PG_CATCH();
+     {
++        echoo_bridge_diag_error(&bridge_diagnostic, ECHOO_BRIDGE_OP_SETTLE, phase);
+         abort_operation(context);
+         success = false;
+     }
+     PG_END_TRY();
+     return success;
+ }
++
++/* Called once, only after the worker loop and its normal cleanup. Not an exit
++ * callback: crashes, FATAL exits and postmaster-death exits need not report. */
++void
++echoo_db_report_bridge_diagnostic(void)
++{
++#define COMPLETE_FORMAT "{\"completed\":" UINT64_FORMAT ",\"begin_us\":%.6f,\"work_us\":%.6f,\"commit_us\":%.6f}"
++#define COMPLETE_ARGS(category) \
++    bridge_diagnostic.complete[category].completed, \
++    INSTR_TIME_GET_DOUBLE(bridge_diagnostic.complete[category].begin) * 1000000.0, \
++    INSTR_TIME_GET_DOUBLE(bridge_diagnostic.complete[category].work) * 1000000.0, \
++    INSTR_TIME_GET_DOUBLE(bridge_diagnostic.complete[category].commit) * 1000000.0
++#define ERROR_FORMAT "{\"begin\":" UINT64_FORMAT ",\"work\":" UINT64_FORMAT ",\"commit\":" UINT64_FORMAT "}"
++#define ERROR_ARGS(operation) \
++    bridge_diagnostic.errors[operation][ECHOO_BRIDGE_BEGIN], \
++    bridge_diagnostic.errors[operation][ECHOO_BRIDGE_WORK], \
++    bridge_diagnostic.errors[operation][ECHOO_BRIDGE_COMMIT]
++    ereport(LOG,
++            (errmsg("echoo_pgmq bridge_phase_diag_v1 {"
++                    "\"scope\":\"worker_lifetime_including_warmup_and_drain\","
++                    "\"normal_exit\":true,\"worker_pid\":%d,"
++                    "\"publish\":" COMPLETE_FORMAT ","
++                    "\"claim_empty\":" COMPLETE_FORMAT ","
++                    "\"claim_success\":" COMPLETE_FORMAT ","
++                    "\"settle\":" COMPLETE_FORMAT ","
++                    "\"started\":{\"publish\":" UINT64_FORMAT
++                    ",\"claim\":" UINT64_FORMAT ",\"settle\":" UINT64_FORMAT "},"
++                    "\"settle_outcome\":{\"applied\":" UINT64_FORMAT
++                    ",\"not_applied\":" UINT64_FORMAT "},"
++                    "\"errors\":{\"publish\":" ERROR_FORMAT ","
++                    "\"claim\":" ERROR_FORMAT ",\"settle\":" ERROR_FORMAT "},"
++                    "\"authorization_excluded\":{\"completed\":" UINT64_FORMAT
++                    ",\"errors\":" UINT64_FORMAT "},\"counter_saturated\":%s}",
++                    MyProcPid,
++                    COMPLETE_ARGS(ECHOO_BRIDGE_PUBLISH),
++                    COMPLETE_ARGS(ECHOO_BRIDGE_CLAIM_EMPTY),
++                    COMPLETE_ARGS(ECHOO_BRIDGE_CLAIM_SUCCESS),
++                    COMPLETE_ARGS(ECHOO_BRIDGE_SETTLE),
++                    bridge_diagnostic.started[ECHOO_BRIDGE_OP_PUBLISH],
++                    bridge_diagnostic.started[ECHOO_BRIDGE_OP_CLAIM],
++                    bridge_diagnostic.started[ECHOO_BRIDGE_OP_SETTLE],
++                    bridge_diagnostic.settle_applied,
++                    bridge_diagnostic.settle_not_applied,
++                    ERROR_ARGS(ECHOO_BRIDGE_OP_PUBLISH),
++                    ERROR_ARGS(ECHOO_BRIDGE_OP_CLAIM),
++                    ERROR_ARGS(ECHOO_BRIDGE_OP_SETTLE),
++                    bridge_diagnostic.authorization_completed,
++                    bridge_diagnostic.authorization_errors,
++                    bridge_diagnostic.counter_saturated ? "true" : "false")));
++#undef COMPLETE_FORMAT
++#undef COMPLETE_ARGS
++#undef ERROR_FORMAT
++#undef ERROR_ARGS
++}
+--- a/src/echoo_pgmq.c
++++ b/src/echoo_pgmq.c
+@@ -887,6 +887,7 @@
+         connections = next;
+     }
+     pn_ssl_domain_free(tls_domain);
++    echoo_db_report_bridge_diagnostic();
+     proc_exit(0);
+ }
+ 
+--- a/include/echoo_pgmq.h
++++ b/include/echoo_pgmq.h
+@@ -32,4 +32,7 @@
+                      const pg_uuid_t *owner, int64 id, int64 generation,
+                      const char *outcome);
+ 
++/* Isolated diagnostic: one summary only on normal worker cleanup. */
++void echoo_db_report_bridge_diagnostic(void);
++
+ #endif
+--- /dev/null
++++ b/include/bridge_phase_diag.h
+@@ -0,0 +1,81 @@
++/* Isolated diagnostic only. No shared state, allocation or per-call logging. */
++#ifndef ECHOO_BRIDGE_PHASE_DIAG_H
++#define ECHOO_BRIDGE_PHASE_DIAG_H
++
++#include "portability/instr_time.h"
++
++typedef enum EchooBridgeCategory
++{
++    ECHOO_BRIDGE_PUBLISH,
++    ECHOO_BRIDGE_CLAIM_EMPTY,
++    ECHOO_BRIDGE_CLAIM_SUCCESS,
++    ECHOO_BRIDGE_SETTLE,
++    ECHOO_BRIDGE_CATEGORY_COUNT
++} EchooBridgeCategory;
++
++typedef enum EchooBridgeOperation
++{
++    ECHOO_BRIDGE_OP_PUBLISH,
++    ECHOO_BRIDGE_OP_CLAIM,
++    ECHOO_BRIDGE_OP_SETTLE,
++    ECHOO_BRIDGE_OPERATION_COUNT
++} EchooBridgeOperation;
++
++typedef enum EchooBridgePhase
++{
++    ECHOO_BRIDGE_BEGIN,
++    ECHOO_BRIDGE_WORK,
++    ECHOO_BRIDGE_COMMIT,
++    ECHOO_BRIDGE_PHASE_COUNT
++} EchooBridgePhase;
++
++typedef struct EchooBridgeTotals
++{
++    uint64 completed;
++    instr_time begin;
++    instr_time work;
++    instr_time commit;
++} EchooBridgeTotals;
++
++typedef struct EchooBridgeDiagnostic
++{
++    EchooBridgeTotals complete[ECHOO_BRIDGE_CATEGORY_COUNT];
++    uint64 started[ECHOO_BRIDGE_OPERATION_COUNT];
++    uint64 errors[ECHOO_BRIDGE_OPERATION_COUNT][ECHOO_BRIDGE_PHASE_COUNT];
++    uint64 settle_applied;
++    uint64 settle_not_applied;
++    uint64 authorization_completed;
++    uint64 authorization_errors;
++    bool counter_saturated;
++} EchooBridgeDiagnostic;
++
++static inline void
++echoo_bridge_diag_increment(EchooBridgeDiagnostic *diagnostic, uint64 *counter)
++{
++    if (*counter == PG_UINT64_MAX)
++        diagnostic->counter_saturated = true;
++    else
++        ++*counter;
++}
++
++/* All four timestamps are read only after successful commit, never in CATCH.
++ * Keep native ticks during collection; convert only in the exit summary. */
++static inline void
++echoo_bridge_diag_complete(EchooBridgeDiagnostic *diagnostic,
++                           EchooBridgeCategory category, const instr_time stamps[4])
++{
++    EchooBridgeTotals *totals = &diagnostic->complete[category];
++    echoo_bridge_diag_increment(diagnostic, &totals->completed);
++    INSTR_TIME_ACCUM_DIFF(totals->begin, stamps[1], stamps[0]);
++    INSTR_TIME_ACCUM_DIFF(totals->work, stamps[2], stamps[1]);
++    INSTR_TIME_ACCUM_DIFF(totals->commit, stamps[3], stamps[2]);
++}
++
++static inline void
++echoo_bridge_diag_error(EchooBridgeDiagnostic *diagnostic,
++                        EchooBridgeOperation operation, EchooBridgePhase phase)
++{
++    echoo_bridge_diag_increment(diagnostic, &diagnostic->errors[operation][phase]);
++}
++
++#endif

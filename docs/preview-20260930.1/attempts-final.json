@@ -1,0 +1,98 @@
+[
+  {
+    "run_id": 36752216453,
+    "github_conclusion": "failure",
+    "artifact_sha256": "68af9d627e820287c44cef5537d7ce94dfb5e0783dae6c8e8d940eeced019b70",
+    "uploaded_result_status": "failed",
+    "uploaded_error": "RuntimeError: ECHOO_TEST_OPENSSL must name the existing runner OpenSSL executable",
+    "preview_exit_codes": {
+      "install": null,
+      "init": null,
+      "start": null,
+      "sql-demo": null,
+      "amqp-demo": null,
+      "stop": null
+    },
+    "checks": {
+      "sql_demo_marker": false,
+      "rhea_scenarios": [],
+      "clean_pg_status_exit_code": null
+    },
+    "normal_complete_workflow": false,
+    "qualification": "ordinary only; failed/cancelled runs are not passes or fault qualification"
+  },
+  {
+    "run_id": 36752745701,
+    "github_conclusion": "cancelled",
+    "artifact_sha256": "500c73eefd59ef118ada48e70e3bf60194131a21348271d3cebe198edf16d0a5",
+    "uploaded_result_status": "running",
+    "uploaded_error": null,
+    "preview_exit_codes": {
+      "install": 0,
+      "init": 0,
+      "start": null,
+      "sql-demo": null,
+      "amqp-demo": null,
+      "stop": null
+    },
+    "checks": {
+      "sql_demo_marker": false,
+      "rhea_scenarios": [],
+      "clean_pg_status_exit_code": 3
+    },
+    "normal_complete_workflow": false,
+    "qualification": "ordinary only; failed/cancelled runs are not passes or fault qualification"
+  },
+  {
+    "run_id": 36754039681,
+    "github_conclusion": "success",
+    "artifact_sha256": "20fcda126249e13d0aac9d0c5293303bda46d9f6ca43157ace35e4bb51b715ed",
+    "uploaded_result_status": "passed",
+    "uploaded_error": null,
+    "preview_exit_codes": {
+      "install": 0,
+      "init": 0,
+      "start": 0,
+      "sql-demo": 0,
+      "amqp-demo": 0,
+      "stop": 0
+    },
+    "checks": {
+      "sql_demo_marker": true,
+      "rhea_scenarios": [
+        "roundtrip",
+        "release",
+        "reconnect"
+      ],
+      "clean_pg_status_exit_code": 3
+    },
+    "normal_complete_workflow": true,
+    "qualification": "ordinary only; failed/cancelled runs are not passes or fault qualification"
+  },
+  {
+    "run_id": 36754291541,
+    "github_conclusion": "success",
+    "artifact_sha256": "214b11307e9ecae9717c28c2150c5ba06dc171815c431adab6261a343b4f751f",
+    "uploaded_result_status": "passed",
+    "uploaded_error": null,
+    "preview_exit_codes": {
+      "install": 0,
+      "init": 0,
+      "start": 0,
+      "sql-demo": 0,
+      "amqp-demo": 0,
+      "stop": 0
+    },
+    "checks": {
+      "sql_demo_marker": true,
+      "rhea_scenarios": [
+        "roundtrip",
+        "release",
+        "reconnect"
+      ],
+      "clean_pg_status_exit_code": 3
+    },
+    "normal_complete_workflow": true,
+    "qualification": "ordinary only; failed/cancelled runs are not passes or fault qualification"
+  }
+]

@@ -1,0 +1,113 @@
+diff --git a/scripts/run_integration.py b/scripts/run_integration.py
+index 10f6759..f0459ae 100644
+--- a/scripts/run_integration.py
++++ b/scripts/run_integration.py
+@@ -50,6 +50,7 @@ ORDINARY_TESTS = [
+     "tests/test_spi_plan_cache.py::test_repeated_worker_operations_and_empty_claims",
+     "tests/test_spi_plan_cache.py::test_capacity_rejection_then_recovery_uses_same_worker",
+     "tests/test_spi_plan_cache.py::test_function_cost_change_revalidates_worker_plans",
++    "tests/test_spi_plan_cache.py::test_lock_timeout_then_recovery_reuses_settings_plan",
+ ]
+ 
+ 
+diff --git a/src/storage.c b/src/storage.c
+index 9d43f8a..c0fbae5 100644
+--- a/src/storage.c
++++ b/src/storage.c
+@@ -15,16 +15,14 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
+-/* Seven fixed, process-local plans survive SPI_finish and transaction aborts.
++/* Fixed process-local SPI plans survive SPI_finish and transaction aborts.
+  * PostgreSQL still revalidates their dependencies and executes each function;
+  * neither authorization decisions nor query results are cached here. */
+ static SPIPlanPtr authorize_plan = NULL;
+ static SPIPlanPtr publish_plan = NULL;
+ static SPIPlanPtr claim_plan = NULL;
+ static SPIPlanPtr settle_plan = NULL;
+-static SPIPlanPtr sync_commit_plan = NULL;
+-static SPIPlanPtr search_path_plan = NULL;
+-static SPIPlanPtr lock_timeout_plan = NULL;
++static SPIPlanPtr transaction_settings_plan = NULL;
+ 
+ static SPIPlanPtr
+ get_cached_plan(SPIPlanPtr *slot, const char *query, int nargs, Oid *types)
+@@ -76,9 +74,12 @@ begin_operation(void)
+         elog(ERROR, "echoo_pgmq: SPI connection failed");
+     /* Publisher acceptance and consumer settlement are never sent before
+      * the WAL commit record has been synchronously flushed. */
+-    execute_cached_setting(&sync_commit_plan, "SET LOCAL synchronous_commit = on");
+-    execute_cached_setting(&search_path_plan, "SET LOCAL search_path = pg_catalog");
+-    execute_cached_setting(&lock_timeout_plan, "SET LOCAL lock_timeout = '1000ms'");
++    /* One SPI invocation still executes all three utility statements in order.
++     * Each SET keeps normal permissions/hooks and transaction-local scope. */
++    execute_cached_setting(&transaction_settings_plan,
++                           "SET LOCAL synchronous_commit = on;"
++                           "SET LOCAL search_path = pg_catalog;"
++                           "SET LOCAL lock_timeout = '1000ms'");
+     enable_timeout_after(STATEMENT_TIMEOUT, echoo_statement_timeout_ms);
+ }
+ 
+diff --git a/tests/test_spi_plan_cache.py b/tests/test_spi_plan_cache.py
+index a424e6c..a23ccc1 100644
+--- a/tests/test_spi_plan_cache.py
++++ b/tests/test_spi_plan_cache.py
+@@ -1,5 +1,7 @@
+ """Ordinary worker-plan reuse across transactions, quota errors and benign DDL."""
+ import uuid
++import os
++from pathlib import Path
+ 
+ from proton import Delivery, Message
+ from proton.utils import SendException
+@@ -53,7 +55,7 @@ def test_repeated_worker_operations_and_empty_claims(admin, queue, connect_amqp)
+     connection = connect_amqp()
+     pid = worker_pid(admin)
+     # Exceed PostgreSQL's initial five custom-plan executions, varying queue
+-    # and payload parameters while the same process retains only four plans.
++    # and payload parameters while the same process retains its fixed query plans.
+     for index in range(8):
+         target = (queue, other)[index % 2]
+         roundtrip(admin, connection, target, f"cycle-{index}".encode(), empty_claim=True)
+@@ -130,3 +132,40 @@ def test_function_cost_change_revalidates_worker_plans(admin, queue, connect_amq
+                     sql.SQL(signature), sql.Literal(cost)))
+     roundtrip(admin, connection, queue, b"after-cost-restoration", empty_claim=True)
+     assert worker_pid(admin) == pid
++
++
++def test_lock_timeout_then_recovery_reuses_settings_plan(admin, queue, connect_amqp):
++    """Normal queue-lock contention must honor SET LOCAL and recover after abort."""
++    connection = connect_amqp()
++    pid = worker_pid(admin)
++    for index in range(8):
++        roundtrip(admin, connection, queue, f"settings-warm-{index}".encode(), empty_claim=True)
++    sender = connection.create_sender(queue)
++    log = Path(os.environ["ECHOO_TEST_LOG"])
++    log_offset = log.stat().st_size
++    # Keep this administrative row lock until send has returned. The worker's
++    # appended SQLSTATE proves the 1s lock_timeout took effect. The 4s client
++    # timeout only bounds waiting; no timing sleeps or injection are used.
++    with admin.transaction():
++        admin.execute("SELECT queue_id FROM echoo_pgmq.queues WHERE name=%s FOR NO KEY UPDATE",
++                      (queue,)).fetchone()
++        with pytest.raises(SendException) as rejected:
++            sender.send(Message(body=b"ordinary-lock-contention"), timeout=4)
++        assert rejected.value.state == Delivery.REJECTED
++        assert retained(admin, queue) == (0, 0)
++        with log.open("rb") as stream:
++            stream.seek(log_offset)
++            appended = stream.read().decode("utf-8", errors="replace")
++        assert any(f"[{pid}]" in line and "SQLSTATE 55P03" in line
++                   for line in appended.splitlines()), appended
++    # The very same sender and worker must execute all settings again after the
++    # SQL transaction abort, then publish and settle a normal durable message.
++    message = Message(body=b"after-normal-lock-release")
++    assert sender.send(message, timeout=5).remote_state == Delivery.ACCEPTED
++    receiver = connection.create_receiver(queue, credit=1)
++    assert receiver.receive(timeout=5).body == message.body
++    receiver.accept()
++    receiver.close()
++    sender.close()
++    eventually(lambda: retained(admin, queue) == (0, 0))
++    assert worker_pid(admin) == pid

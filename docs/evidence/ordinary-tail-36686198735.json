@@ -1,0 +1,180 @@
+{
+  "run_id": 36686198735,
+  "job_id": 109792524595,
+  "commit": "8b333f130b7da8f4a99c5a866d4cb7829e181d56",
+  "branch": "diagnostics/ordinary-tail-20260930",
+  "artifact_id": 11083589716,
+  "artifact_url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36686198735/artifacts/11083589716",
+  "artifact_size_bytes": 283793,
+  "artifact_sha256": "401a5a51a9679c8bc7623064e50ab8d5d06a80a15c07d236a2487dd16cca4b64",
+  "artifact_expires_at": "2026-10-30T07:56:11Z",
+  "archive_file_count": 33,
+  "original_manifest_verified_files": 29,
+  "all_file_hashes": {
+    "ordinary-tail/G0/accounting.json": "8f1fd4adf8ef4ef681d015a369b0fece1b23d9a44a86bfd4d3d74e7205dd082a",
+    "ordinary-tail/G0/backlog.json": "08e9f77b5a40529b4f6641368c46c309711c8d32233fd531e26d739d148eb52a",
+    "ordinary-tail/G0/clocks.json": "a9b5b1dcc78a3fe66e0f81605a6ab8706afb7e5a126a825c7ff64e63d1092f36",
+    "ordinary-tail/G0/db-0.jsonl.gz": "698aa38e7aeb1037720f41b4920831dea9857a1003b85b08ba0288f1a4df466b",
+    "ordinary-tail/G0/db-0.ready.json": "02eedc2512f7125f11f26da027dcb3a29629a8e3b352f9014b3034a2239637d6",
+    "ordinary-tail/G0/db-0.status.json": "3331fdb36fb3c31302d2f483cee1c660c18b1dba1f83f8f54eea5a99380a77b7",
+    "ordinary-tail/G0/readiness-order.json": "ad8cfc3e0336b49ff0b0d07d7df229d19aaa49429184f0c89e63cd42c0d0f466",
+    "ordinary-tail/G0/resources.jsonl.gz": "13b9b381d61e5b23ae7a96dea1665732a98ec5dce111a9636a761d03f9d04e5f",
+    "ordinary-tail/G0/summary.json": "4885587db2c4a1d29f022836b230ef0e0429b47a1e9760280ef90892b8275c00",
+    "ordinary-tail/G0.stack/after.json": "05915da74cd11d8111acec5421f90da1891f7ce4dd29bcf09a7c0f2132b60ccf",
+    "ordinary-tail/G0.stack/before.json": "c314e227d00ec12d6219e67fd5a51184c0ac177cd81d4b02e6398c38c898a540",
+    "ordinary-tail/G0.stack/build-packages.txt": "3e5750150e6801b83736cc9a04ca9638c25710a2d3a3c8dcc86fe16e74d5898d",
+    "ordinary-tail/G0.stack/client.log": "96f60637f68233d1e12ca2029710239a4ef15069e87fecdd91ade821c07440f6",
+    "ordinary-tail/G0.stack/container-after.json": "4147b7bbcb941a320f9f6e1f1ef765d2fa74d86526929f305edd5c4c3aa44bbe",
+    "ordinary-tail/G0.stack/container-before.json": "be2c3a88c00cf53e33922437aed47466a9c3f3e71aad68e5646267cb87512744",
+    "ordinary-tail/G0.stack/instr_time.h": "3c229a12c5103f8e103b00f3ccf2880231ef9e09a3466ac3050457ac40e5e70d",
+    "ordinary-tail/G0.stack/lifecycle.json": "044893f4f49e070c962543ae3c01c6ade6ff7448861b8311a3b211790e7ed446",
+    "ordinary-tail/G0.stack/native-binaries.sha256": "654127f61822337efeac678af0a0d42c671ed0daa00dacf37cd1d4e61fe5f956",
+    "ordinary-tail/G0.stack/postgres.log": "3469acad47f44f18ab270d250991288c3ea96d710b463ec1142fdaf9f11563ae",
+    "ordinary-tail/G0.stack/postgresql.conf": "e26069e2ffbd3040238dfa76facfcc114679e039c5c0d129e08b9ba8cfa674c8",
+    "ordinary-tail/G0.stack/server.log": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "ordinary-tail/G0.stack/source-manifest.json": "14f1ff20797c513876c7e0d4ac1626dd68f15810024ee48f365d5b231d46f42a",
+    "ordinary-tail/G0.stack/status.json": "6b2b1aec891de1f5cef98763264e34bac2624d6f96be8ea7c6f0ca00b8fe48d8",
+    "ordinary-tail/G0.stack/storage-delta.json": "c4e138f45c87c4ec897a9ce9eb3153d8b723e7b38ec04ecabe0601caea9bf265",
+    "ordinary-tail/MANIFEST.json": "51dc98a335b87f7e280b65375ec73707dadf520e204ae741dea70241bc869daf",
+    "ordinary-tail/active-unit.json": "144fda9d81d7f41c57156903212c1301b892edbc95f1aa9843d5d58220cf93eb",
+    "ordinary-tail/environment.json": "5ce47894a9649b6cf4c0e6dfbc1f893dade429406eabbc3a15a7c3bd6ec379bd",
+    "ordinary-tail/plan.json": "b8a725896710a014dbcece875b460a72250b05f498adce7bb35b4434cc1e8ce2",
+    "ordinary-tail/python-inputs.txt": "0e77fbe2c0ddd404b8a75af835cc49107675f6b5d88f1e857a49bce65b98a3e6",
+    "ordinary-tail/terminal-status.json": "4d085e217f318a056ef8476bbd69e9cdc71d0bc45a5028adb873945f983df6e9",
+    "tail-build/build-status.json": "7941ccbc06145577bd10b8aabdc562fd449ea1ee5331f21d75db50a46a6bb137",
+    "tail-build/build.log": "ce2b2b0b430830df7c9c7664b6e7a9540f4bc0179524c0d244e643fc3b153a62",
+    "tail-build/source-manifest.json": "14f1ff20797c513876c7e0d4ac1626dd68f15810024ee48f365d5b231d46f42a"
+  },
+  "build": {
+    "build_budget_seconds": 900,
+    "excluded_from_measurement": true,
+    "started_unix_seconds": 1790754751.5015113,
+    "tag": "echoo-tail:8b333f130b7da8f4a99c5a866d4cb7829e181d56",
+    "automatic_retries": 0,
+    "image_id": "sha256:63a6c669967cd7941a37bbf25b48024f8feacdcc20068d4f1b6917cc23d068bf",
+    "status": "built",
+    "elapsed_seconds": 187.189176235
+  },
+  "environment": {
+    "image_id": "sha256:63a6c669967cd7941a37bbf25b48024f8feacdcc20068d4f1b6917cc23d068bf",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "host_cpu_ids": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "server_cpu_ids": [
+      0,
+      1
+    ],
+    "client_cpu_ids": [
+      2,
+      3
+    ],
+    "server_cpu_quota": 2,
+    "server_memory_bytes": 4294967296,
+    "server_swap_bytes": 0,
+    "clients_outside_budget": true,
+    "python": "3.12.14",
+    "runner_image_version": "20260927.320.1",
+    "commit": "8b333f130b7da8f4a99c5a866d4cb7829e181d56",
+    "dirty_worktree": "",
+    "clock_comparison": "Server stages only CLOCK_MONOTONIC elapsed; correlate by IDs. Never subtract server and Python timestamps.",
+    "storage": "Fresh volumes on same GitHub VM/session; no cache clearing, physical SSD or host isolation claim"
+  },
+  "terminal_status": "environment_insufficient",
+  "automatic_retries": 0,
+  "controller_elapsed_seconds": 32.69352336200001,
+  "only_run_unit": "G0",
+  "unrun_units": [
+    "P1-B",
+    "P1-A",
+    "G1",
+    "P2-B",
+    "P2-A",
+    "G2",
+    "P3-A",
+    "P3-B",
+    "G3"
+  ],
+  "gate": {
+    "passed": false,
+    "errors": [],
+    "windows": [
+      {
+        "start_tps": 137.1,
+        "completed_tps": 137.15
+      },
+      {
+        "start_tps": 137.5,
+        "completed_tps": 137.6
+      },
+      {
+        "start_tps": 136.7,
+        "completed_tps": 136.7
+      }
+    ],
+    "tps": 137.15,
+    "count": 2742,
+    "p99_ms": 96.808377,
+    "above_20ms_fraction": 0.028081692195477754,
+    "excess_over_5ms_seconds": 6.2490522959999995
+  },
+  "raw_recomputation": {
+    "all_phase_db_rows": 3507,
+    "measurement_start_cohort_rows": 2742,
+    "measurement_completed_rows": 2743,
+    "quantile_definition": "sorted_values[floor((n-1)*p)], start-time cohort",
+    "distributions": {
+      "latency_ms": {
+        "p50_ms": 0.71173,
+        "p95_ms": 3.087636,
+        "p99_ms": 96.808377,
+        "sum_ms": 8922.633371
+      },
+      "begin_ms": {
+        "p50_ms": 0.124594,
+        "p95_ms": 0.174558,
+        "p99_ms": 0.307784,
+        "sum_ms": 364.76447
+      },
+      "sql_ms": {
+        "p50_ms": 0.333962,
+        "p95_ms": 0.450875,
+        "p99_ms": 0.668887,
+        "sum_ms": 971.431675
+      },
+      "commit_ms": {
+        "p50_ms": 0.245352,
+        "p95_ms": 2.314245,
+        "p99_ms": 96.272246,
+        "sum_ms": 7586.437226
+      }
+    },
+    "above_20ms_count": 77,
+    "negative_latency_rows": 0,
+    "measured_pg_wait_samples": 39,
+    "synthetic_client_walsync_samples": 17
+  },
+  "cleanup": {
+    "errors": [],
+    "normal_cleanup_required": false,
+    "elapsed_end": 32.689356652000015
+  },
+  "container_final_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-09-30T07:55:40.697260115Z",
+    "FinishedAt": "2026-09-30T07:56:10.714275775Z"
+  },
+  "interpretation": "PG-only prerequisite failed. No A/B, no MQ performance or security/failure qualification. Product runtime unchanged.",
+  "independent_read_only_verification": "Second reviewer independently verified ZIP CRC/hash, all 29 manifest entries, raw transaction windows/quantiles, budget, disabled MQ worker, normal shutdown and exact unrun plan. No new workload."
+}

@@ -1,0 +1,394 @@
+{
+  "run_id": 36720731289,
+  "pr_number": 2,
+  "head": "450681d71c2fefef0a92e57098643701dabcf4f5",
+  "actual_checkout": "191d9947d181aab14667562513eae54109a7ea54",
+  "verified_equal_tree": "d0abc20c68ce627015ba2934b38d0a600b812844",
+  "tests": 464,
+  "rounds": 12,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "core_sql_completion_markers": 12,
+  "candidate_packages": 6,
+  "outer_artifacts": 12,
+  "results": [
+    {
+      "id": 11100485057,
+      "name": "linux-pg16-evidence",
+      "bytes": 8588,
+      "sha256": "2abb3b9c64af1858b6f8e2b0cf3b2ccccabb0bce5d7dca2eb97a0f3e6e502e58",
+      "outer_verified": true,
+      "rounds": [
+        {
+          "prefix": "evidence",
+          "tests": 36,
+          "spi_cases": 4,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 16.15 (Ubuntu 16.15-1.pgdg24.04+2)",
+          "platform": "linux",
+          "core_sql": true,
+          "qualification_status": "blocked_security_review"
+        },
+        {
+          "prefix": "candidate-evidence",
+          "tests": 36,
+          "spi_cases": 4,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 16.15 (Ubuntu 16.15-1.pgdg24.04+2)",
+          "platform": "linux",
+          "core_sql": true,
+          "qualification_status": "blocked_security_review"
+        }
+      ]
+    },
+    {
+      "id": 11100470312,
+      "name": "native-windows-server2022-pg17-evidence",
+      "bytes": 8751,
+      "sha256": "dd908cddbd10f7632bf1fbc055e2080ff790696a344e594190c2a194ca6ea780",
+      "outer_verified": true,
+      "rounds": [
+        {
+          "prefix": "evidence",
+          "tests": 36,
+          "spi_cases": 4,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 17.11",
+          "platform": "win32",
+          "core_sql": true,
+          "qualification_status": "blocked_security_review"
+        },
+        {
+          "prefix": "candidate-evidence",
+          "tests": 36,
+          "spi_cases": 4,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 17.11",
+          "platform": "win32",
+          "core_sql": true,
+          "qualification_status": "blocked_security_review"
+        }
+      ]
+    },
+    {
+      "id": 11100380270,
+      "name": "native-windows-server2022-pg17-candidate",
+      "bytes": 500195,
+      "sha256": "7ed38afe499b4d5b522551fdf63aa6b3d03a541cce2b63754f9469b1b5c8f9ab",
+      "outer_verified": true,
+      "package": {
+        "inner_name": "echoo-pgmq-0.1.0-candidate-pg17-windows-amd64.zip",
+        "inner_sha256": "8876e6e7396e365d497d7ec13f223b026be215388770cae5632a6b0a0e7e956f",
+        "file_hashes_verified": 39,
+        "commit": "191d9947d181aab14667562513eae54109a7ea54",
+        "postgres": "PostgreSQL 17.11",
+        "system": "Windows",
+        "qualification_status": "blocked_security_review",
+        "project_license": "pending-owner-decision",
+        "manifest_sha256": "ad203abf97293b177194aa6db1a2ddae5d9e8b063a680402327a45e3ab5bab12"
+      }
+    },
+    {
+      "id": 11099970193,
+      "name": "linux-pg16-candidate",
+      "bytes": 5701732,
+      "sha256": "1879d808f31589a328eb66a1533cf08ef9539b4410a4fcee9dc433b4b69e8f35",
+      "outer_verified": true,
+      "package": {
+        "inner_name": "echoo-pgmq-0.1.0-candidate-pg16-linux-x86_64.zip",
+        "inner_sha256": "f48af4e507bd44d59dfcec3aea60a690c4753e6f31905eb33517539222746472",
+        "file_hashes_verified": 44,
+        "commit": "191d9947d181aab14667562513eae54109a7ea54",
+        "postgres": "PostgreSQL 16.15 (Ubuntu 16.15-1.pgdg24.04+2)",
+        "system": "Linux",
+        "qualification_status": "blocked_security_review",
+        "project_license": "pending-owner-decision",
+        "manifest_sha256": "909d37a65479fcd4580f63ae6ff86ef44f478c704bd6bf2a038491fa659be153"
+      }
+    },
+    {
+      "id": 11099316253,
+      "name": "native-windows-server2022-pg16-evidence",
+      "bytes": 8730,
+      "sha256": "1938e29a1ffb584120b8f0a8408743c5127ab662e855d349f80c3171a3ae9557",
+      "outer_verified": true,
+      "rounds": [
+        {
+          "prefix": "evidence",
+          "tests": 36,
+          "spi_cases": 4,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 16.15",
+          "platform": "win32",
+          "core_sql": true,
+          "qualification_status": "blocked_security_review"
+        },
+        {
+          "prefix": "candidate-evidence",
+          "tests": 36,
+          "spi_cases": 4,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 16.15",
+          "platform": "win32",
+          "core_sql": true,
+          "qualification_status": "blocked_security_review"
+        }
+      ]
+    },
+    {
+      "id": 11099301285,
+      "name": "native-windows-server2022-pg18-candidate",
+      "bytes": 500189,
+      "sha256": "b9a42d4f7d3116b923f400d2aac178e322ba8a5fa782f040e8fec03aa8083c12",
+      "outer_verified": true,
+      "package": {
+        "inner_name": "echoo-pgmq-0.1.0-candidate-pg18-windows-amd64.zip",
+        "inner_sha256": "a8107211653c966dca2792726a84e4013bd7c1eb010e40700f755d3d425ff164",
+        "file_hashes_verified": 39,
+        "commit": "191d9947d181aab14667562513eae54109a7ea54",
+        "postgres": "PostgreSQL 18.6",
+        "system": "Windows",
+        "qualification_status": "blocked_security_review",
+        "project_license": "pending-owner-decision",
+        "manifest_sha256": "6f4f7885f8a320236703c2128d3de6563b68cc10c73120a8a6c3dbbc0df0df5c"
+      }
+    },
+    {
+      "id": 11099011264,
+      "name": "linux-pg18-candidate",
+      "bytes": 5701655,
+      "sha256": "88481f14925acbee8396962a8213de705bc323988751427c9e120ac66133d781",
+      "outer_verified": true,
+      "package": {
+        "inner_name": "echoo-pgmq-0.1.0-candidate-pg18-linux-x86_64.zip",
+        "inner_sha256": "e73ba411f3957b8a28bca00e1c9104353f19645160c650dad03b6f8df8083052",
+        "file_hashes_verified": 44,
+        "commit": "191d9947d181aab14667562513eae54109a7ea54",
+        "postgres": "PostgreSQL 18.6 (Ubuntu 18.6-1.pgdg24.04+2)",
+        "system": "Linux",
+        "qualification_status": "blocked_security_review",
+        "project_license": "pending-owner-decision",
+        "manifest_sha256": "6f11613e0e6d17614348f9e7e2dd62557f116dc118baeafbe3101bf15a4ebe8c"
+      }
+    },
+    {
+      "id": 11098961483,
+      "name": "native-windows-server2022-pg16-candidate",
+      "bytes": 500320,
+      "sha256": "529f86055b49216baf126f622bfa8c46c53503dea9a59e09e3f097fd3da6421e",
+      "outer_verified": true,
+      "package": {
+        "inner_name": "echoo-pgmq-0.1.0-candidate-pg16-windows-amd64.zip",
+        "inner_sha256": "5da2e0e069e605a0c90d9ba008592d1be7b50e73f8324f032bfa0010e55e0c40",
+        "file_hashes_verified": 39,
+        "commit": "191d9947d181aab14667562513eae54109a7ea54",
+        "postgres": "PostgreSQL 16.15",
+        "system": "Windows",
+        "qualification_status": "blocked_security_review",
+        "project_license": "pending-owner-decision",
+        "manifest_sha256": "1aa50edcb8a9ebdc45ae18f7be9ececa97155180b018d5cf27e917fb89a3b3e3"
+      }
+    },
+    {
+      "id": 11098886228,
+      "name": "linux-pg17-candidate",
+      "bytes": 5701337,
+      "sha256": "4d3efdb5a82a87025938824d000dc1f4edc0528c8095c654d52c0990a15b6062",
+      "outer_verified": true,
+      "package": {
+        "inner_name": "echoo-pgmq-0.1.0-candidate-pg17-linux-x86_64.zip",
+        "inner_sha256": "37adcd594270a0ed8466e2a1f9b9f9fa89e0ddcadbbf17d362700f96497ad029",
+        "file_hashes_verified": 44,
+        "commit": "191d9947d181aab14667562513eae54109a7ea54",
+        "postgres": "PostgreSQL 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+        "system": "Linux",
+        "qualification_status": "blocked_security_review",
+        "project_license": "pending-owner-decision",
+        "manifest_sha256": "ad08d229eeabf5588781427caba235def2d1dd1c11d21b64a64f3a5a3acc5b84"
+      }
+    },
+    {
+      "id": 11098846364,
+      "name": "linux-pg18-evidence",
+      "bytes": 11662,
+      "sha256": "878f73efe2b655f35a701472896c93e0c0a7d5c3430ba89a1807e483fd94b93c",
+      "outer_verified": true,
+      "rounds": [
+        {
+          "prefix": "evidence",
+          "tests": 44,
+          "spi_cases": 4,
+          "rhea_cases": 8,
+          "postgres": "postgres (PostgreSQL) 18.6 (Ubuntu 18.6-1.pgdg24.04+2)",
+          "platform": "linux",
+          "core_sql": true,
+          "qualification_status": "blocked_security_review"
+        },
+        {
+          "prefix": "candidate-evidence",
+          "tests": 44,
+          "spi_cases": 4,
+          "rhea_cases": 8,
+          "postgres": "postgres (PostgreSQL) 18.6 (Ubuntu 18.6-1.pgdg24.04+2)",
+          "platform": "linux",
+          "core_sql": true,
+          "qualification_status": "blocked_security_review"
+        }
+      ]
+    },
+    {
+      "id": 11098771627,
+      "name": "native-windows-server2022-pg18-evidence",
+      "bytes": 11828,
+      "sha256": "6923fbb697ec6831cce543cef7df1d7c0a95f62977a8f7ba71f37b802003df8f",
+      "outer_verified": true,
+      "rounds": [
+        {
+          "prefix": "evidence",
+          "tests": 44,
+          "spi_cases": 4,
+          "rhea_cases": 8,
+          "postgres": "postgres (PostgreSQL) 18.6",
+          "platform": "win32",
+          "core_sql": true,
+          "qualification_status": "blocked_security_review"
+        },
+        {
+          "prefix": "candidate-evidence",
+          "tests": 44,
+          "spi_cases": 4,
+          "rhea_cases": 8,
+          "postgres": "postgres (PostgreSQL) 18.6",
+          "platform": "win32",
+          "core_sql": true,
+          "qualification_status": "blocked_security_review"
+        }
+      ]
+    },
+    {
+      "id": 11098771290,
+      "name": "linux-pg17-evidence",
+      "bytes": 8612,
+      "sha256": "9f6bb5104eb3dca2270e6e374a5d16e93286097ebd4644a4abd4fa1befb17c8f",
+      "outer_verified": true,
+      "rounds": [
+        {
+          "prefix": "evidence",
+          "tests": 36,
+          "spi_cases": 4,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+          "platform": "linux",
+          "core_sql": true,
+          "qualification_status": "blocked_security_review"
+        },
+        {
+          "prefix": "candidate-evidence",
+          "tests": 36,
+          "spi_cases": 4,
+          "rhea_cases": 0,
+          "postgres": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+          "platform": "linux",
+          "core_sql": true,
+          "qualification_status": "blocked_security_review"
+        }
+      ]
+    }
+  ],
+  "logs": [
+    {
+      "id": 109904878598,
+      "name": "Native Windows Server 2022 PG18 (not Windows 11 certification)",
+      "conclusion": "success",
+      "core_marker_lines": [
+        "2026-09-30T13:22:25.4766079Z core SQL tests passed\r",
+        "2026-09-30T13:23:07.2331462Z core SQL tests passed\r"
+      ],
+      "core_completion_count": 2,
+      "ignored_argument_warnings": false,
+      "lock_timeout_55P03_lines": [
+        "2026-09-30T13:22:25.6021789Z 2026-09-30 13:22:17.766 UTC [964] echoo_pgmq AMQP listener LOG:  echoo_pgmq: database operation failed (SQLSTATE 55P03)\r",
+        "2026-09-30T13:23:07.3556430Z 2026-09-30 13:22:59.291 UTC [7340] echoo_pgmq AMQP listener LOG:  echoo_pgmq: database operation failed (SQLSTATE 55P03)\r"
+      ]
+    },
+    {
+      "id": 109904879017,
+      "name": "Native Windows Server 2022 PG16 (not Windows 11 certification)",
+      "conclusion": "success",
+      "core_marker_lines": [
+        "2026-09-30T13:22:00.6080275Z core SQL tests passed\r",
+        "2026-09-30T13:22:35.6713485Z core SQL tests passed\r"
+      ],
+      "core_completion_count": 2,
+      "ignored_argument_warnings": false,
+      "lock_timeout_55P03_lines": [
+        "2026-09-30T13:22:00.7302033Z 2026-09-30 13:21:59.357 UTC [3144] echoo_pgmq AMQP listener LOG:  echoo_pgmq: database operation failed (SQLSTATE 55P03)\r",
+        "2026-09-30T13:22:35.7935522Z 2026-09-30 13:22:34.418 UTC [7028] echoo_pgmq AMQP listener LOG:  echoo_pgmq: database operation failed (SQLSTATE 55P03)\r"
+      ]
+    },
+    {
+      "id": 109904879019,
+      "name": "Linux PG16 / native AMQP 1.0",
+      "conclusion": "success",
+      "core_marker_lines": [
+        "2026-09-30T13:21:11.5528551Z core SQL tests passed",
+        "2026-09-30T13:21:22.5653744Z core SQL tests passed"
+      ],
+      "core_completion_count": 2,
+      "ignored_argument_warnings": false,
+      "lock_timeout_55P03_lines": [
+        "2026-09-30T13:21:11.6581925Z 2026-09-30 13:21:10.409 UTC [4647] echoo_pgmq AMQP listener LOG:  echoo_pgmq: database operation failed (SQLSTATE 55P03)",
+        "2026-09-30T13:21:22.6635834Z 2026-09-30 13:21:21.426 UTC [4877] echoo_pgmq AMQP listener LOG:  echoo_pgmq: database operation failed (SQLSTATE 55P03)"
+      ]
+    },
+    {
+      "id": 109904879032,
+      "name": "Native Windows Server 2022 PG17 (not Windows 11 certification)",
+      "conclusion": "success",
+      "core_marker_lines": [
+        "2026-09-30T13:22:22.5474268Z core SQL tests passed\r",
+        "2026-09-30T13:22:57.4292287Z core SQL tests passed\r"
+      ],
+      "core_completion_count": 2,
+      "ignored_argument_warnings": false,
+      "lock_timeout_55P03_lines": [
+        "2026-09-30T13:22:22.6693409Z 2026-09-30 13:22:21.315 UTC [2668] echoo_pgmq AMQP listener LOG:  echoo_pgmq: database operation failed (SQLSTATE 55P03)\r",
+        "2026-09-30T13:22:57.5513539Z 2026-09-30 13:22:56.213 UTC [5516] echoo_pgmq AMQP listener LOG:  echoo_pgmq: database operation failed (SQLSTATE 55P03)\r"
+      ]
+    },
+    {
+      "id": 109904879113,
+      "name": "Linux PG17 / native AMQP 1.0",
+      "conclusion": "success",
+      "core_marker_lines": [
+        "2026-09-30T13:20:57.9624016Z core SQL tests passed",
+        "2026-09-30T13:21:09.0684510Z core SQL tests passed"
+      ],
+      "core_completion_count": 2,
+      "ignored_argument_warnings": false,
+      "lock_timeout_55P03_lines": [
+        "2026-09-30T13:20:58.0715198Z 2026-09-30 13:20:56.805 UTC [6104] echoo_pgmq AMQP listener LOG:  echoo_pgmq: database operation failed (SQLSTATE 55P03)",
+        "2026-09-30T13:21:09.1603194Z 2026-09-30 13:21:07.898 UTC [6330] echoo_pgmq AMQP listener LOG:  echoo_pgmq: database operation failed (SQLSTATE 55P03)"
+      ]
+    },
+    {
+      "id": 109904879149,
+      "name": "Linux PG18 / native AMQP 1.0",
+      "conclusion": "success",
+      "core_marker_lines": [
+        "2026-09-30T13:21:21.9274187Z core SQL tests passed",
+        "2026-09-30T13:21:39.7968315Z core SQL tests passed"
+      ],
+      "core_completion_count": 2,
+      "ignored_argument_warnings": false,
+      "lock_timeout_55P03_lines": [
+        "2026-09-30T13:21:22.0383184Z 2026-09-30 13:21:15.409 UTC [6466] echoo_pgmq AMQP listener LOG:  echoo_pgmq: database operation failed (SQLSTATE 55P03)",
+        "2026-09-30T13:21:39.9114418Z 2026-09-30 13:21:33.320 UTC [6914] echoo_pgmq AMQP listener LOG:  echoo_pgmq: database operation failed (SQLSTATE 55P03)"
+      ]
+    }
+  ],
+  "qualification_status": "blocked_security_review",
+  "scope": "Ordinary source install and candidate re-install only; not Windows11 or full security/failure qualification",
+  "workflow_url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36720731289"
+}

@@ -1,0 +1,1449 @@
+{
+  "schema_version": 1,
+  "verified_at_utc": "2026-09-30T06:52:49.758188+00:00",
+  "repository": "MixGeeker/echoo_pgmq",
+  "pull_request_url": "https://github.com/MixGeeker/echoo_pgmq/pull/1",
+  "branch": "feat/native-amqp-initial",
+  "run_id": 36679556956,
+  "run_url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956",
+  "run_conclusion": "success",
+  "scope": "ordinary-regression-with-independent-client-on-PG18; not full qualification",
+  "source_identity": {
+    "pull_request_head_commit": "37fc0153e1cf84a5a0c1fd84caec06342270b1fb",
+    "pull_request_head_url": "https://github.com/MixGeeker/echoo_pgmq/commit/37fc0153e1cf84a5a0c1fd84caec06342270b1fb",
+    "tested_checkout_and_candidate_manifest_commit": "537d2f042a334516bd34872fe39895843f70af88",
+    "tested_checkout_url": "https://github.com/MixGeeker/echoo_pgmq/commit/537d2f042a334516bd34872fe39895843f70af88",
+    "checkout_kind": "GitHub pull_request synthetic merge refs/pull/1/merge",
+    "merge_parents": [
+      "bb13ec7d469d13e542c92d86afaf3965c5d6b1c6",
+      "37fc0153e1cf84a5a0c1fd84caec06342270b1fb"
+    ],
+    "pull_request_head_tree": "2ba52d8d16cad797207fb2a2678e7659d4d0ea75",
+    "tested_checkout_tree": "2ba52d8d16cad797207fb2a2678e7659d4d0ea75",
+    "exact_tree_equivalence_verified": true,
+    "compare_changed_files": [],
+    "verification_sources": [
+      "https://api.github.com/repos/MixGeeker/echoo_pgmq/git/commits/37fc0153e1cf84a5a0c1fd84caec06342270b1fb",
+      "https://api.github.com/repos/MixGeeker/echoo_pgmq/git/commits/537d2f042a334516bd34872fe39895843f70af88",
+      "https://api.github.com/repos/MixGeeker/echoo_pgmq/compare/37fc0153e1cf84a5a0c1fd84caec06342270b1fb...537d2f042a334516bd34872fe39895843f70af88"
+    ],
+    "note": "Results associate with the exact PR-head tree. Candidate manifests retain the literal synthetic-merge checkout commit, not the PR-head commit.",
+    "native_baseline_equivalence": {
+      "baseline_commits": [
+        "96c18dbd2a078f941e5d153b32bbcd19cea2f186",
+        "a501852e2137f3f46e710384a8ada9c4315f9939"
+      ],
+      "scope": [
+        "native/",
+        "src/",
+        "include/",
+        "sql/",
+        "CMakeLists.txt",
+        "echoo_pgmq.control"
+      ],
+      "files_verified": 9,
+      "all_remote_git_blob_ids_identical": true,
+      "files_git_blob_sha1": {
+        "CMakeLists.txt": "9646ec8506605fa624189c22cfa4e23b87523b5b",
+        "echoo_pgmq.control": "582ce0c38b89462f580ea587373bb3bc0cffd657",
+        "include/echoo_pgmq.h": "c8b246114bb3c904425e99c61afd06a1a70404cf",
+        "sql/echoo_pgmq--0.1.0--0.1.1.sql": "314b6647bf19721f4192a66067f1bd177f223b86",
+        "sql/echoo_pgmq--0.1.0.sql": "15d4a4710335d59e3023318b41756fb3ed286626",
+        "sql/echoo_pgmq--0.1.1.sql": "3254f84353ec461d63ab53ce7f0ae471c8d9bc5c",
+        "src/echoo_pgmq.c": "84d5f1effda3df95fea2602bcbd4f0fcd30405af",
+        "src/message.c": "ccf56240d22bf61d9e57c8ba526f29bd6e5c9bcf",
+        "src/storage.c": "5e464c2fb60e3dc8598971f181ea8124977f980f"
+      },
+      "verification_sources": [
+        "https://api.github.com/repos/MixGeeker/echoo_pgmq/git/trees/37fc0153e1cf84a5a0c1fd84caec06342270b1fb",
+        "https://api.github.com/repos/MixGeeker/echoo_pgmq/git/trees/96c18dbd2a078f941e5d153b32bbcd19cea2f186",
+        "https://api.github.com/repos/MixGeeker/echoo_pgmq/git/trees/a501852e2137f3f46e710384a8ada9c4315f9939"
+      ]
+    },
+    "ordinary_test_workflow_and_script_blobs_match_prior_verified_head": true,
+    "ordinary_test_workflow_and_script_blob_count": 26
+  },
+  "totals": {
+    "successful_jobs": 6,
+    "rounds": 12,
+    "pytest_cases_passed": 416,
+    "existing_cases_passed": 384,
+    "independent_rhea_cases_passed": 32,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "core_sql_explicit_completions": 12,
+    "outer_artifact_archives_sha256_verified": 12,
+    "inner_candidate_archives_sha256_verified": 6,
+    "candidate_file_manifests_verified": 6
+  },
+  "round_definitions": {
+    "evidence": "Fresh build and installation",
+    "candidate-evidence": "Checksummed candidate archive reinstallation, then same ordinary allowlist with build-tree library search paths removed"
+  },
+  "ordinary_counts": {
+    "PG18": {
+      "cases_per_round": 40,
+      "existing_cases_per_round": 32,
+      "independent_cases_per_round": 8
+    },
+    "PG16_PG17": {
+      "cases_per_round": 32,
+      "existing_cases_per_round": 32,
+      "independent_cases_per_round": 0
+    }
+  },
+  "independent_client_scope": {
+    "client": "rhea",
+    "version": "3.0.5",
+    "actual_node": "v24.21.0",
+    "implementation": "Independent JavaScript AMQP 1.0 codec; no Proton client binding",
+    "platforms_tested": [
+      "Ubuntu 24.04 x86_64 / PostgreSQL 18.6",
+      "native Windows Server 2022 AMD64 / PostgreSQL 18.6"
+    ],
+    "cases_per_round": {
+      "binary_metadata_roundtrip": 4,
+      "release_redelivery": 2,
+      "graceful_close_new_connection_redelivery": 2
+    },
+    "addresses": {
+      "roundtrip": [
+        "Exact precreated queue name rhea_<unique_suffix>",
+        "Exact precreated queue name erp/orders.store-17_<unique_suffix>"
+      ],
+      "release_and_reconnect": "Exact precreated disposable test queue name; no broker address syntax interpretation"
+    },
+    "publisher": {
+      "sender_configuration": "rhea open_sender(address) defaults; MIXED proposal negotiated by server to UNSETTLED",
+      "confirmation": "Remote Accepted and remote settlement verified before closing",
+      "messages_per_case": 1
+    },
+    "receiver": {
+      "FIRST_roundtrip": "rhea open_receiver(address) defaults, autoaccept enabled, locked rhea default credit window 1000; only one message published",
+      "SECOND_roundtrip": "rcv_settle_mode=1, autoaccept=false, credit_window=0, explicit one credit; wait for matching Accepted remote settlement",
+      "release_and_reconnect_both_modes": "Manual one-credit control; FIRST and SECOND; SECOND additionally confirms Released/Accepted remote settlement",
+      "server_delivery": "Asserted unsettled"
+    },
+    "payload": {
+      "binary": "All byte values 0-255 plus additional 0x00/0xff bytes",
+      "metadata": [
+        "UTF-8 subject",
+        "message_id",
+        "correlation_id",
+        "durable",
+        "priority",
+        "ttl",
+        "to",
+        "reply_to",
+        "content_type",
+        "content_encoding",
+        "creation_time",
+        "absolute_expiry_time",
+        "group_id",
+        "group_sequence",
+        "reply_to_group_id",
+        "application_properties",
+        "message_annotations"
+      ],
+      "storage": "SQL verifies exact stored encoded wire bytes before any receiver; accepted consumption eventually clears queue count and message rows"
+    },
+    "redelivery": {
+      "release": "Release once, receive same message twice, then Accepted",
+      "reconnect": "AMQP Close handshake without acknowledgement, fresh connection and link, redelivery after lease expiry, then Accepted",
+      "automatic_reconnect": false,
+      "durable_link_resumption": false
+    },
+    "tls": {
+      "configured_minimum": "TLSv1.2",
+      "observed": [
+        "TLSv1.3"
+      ],
+      "rejectUnauthorized": true,
+      "servername": "localhost",
+      "authorized": true,
+      "pki": "Disposable test CA and PEM client certificate/key",
+      "separate_forced_TLS12_TLS13_matrix": false
+    },
+    "sasl": {
+      "publish_and_roundtrip": "direct AMQP",
+      "release": "ANONYMOUS",
+      "graceful_reconnect": "EXTERNAL"
+    },
+    "not_established": [
+      "Arbitrary AMQP client compatibility",
+      "Production ERP integration",
+      "Broker-specific topology, selectors, dynamic nodes or address extensions",
+      "Automatic transport recovery or durable link resumption",
+      "Windows 11 certification",
+      "Performance or resource-capacity qualification",
+      "Security/parser/fuzz/fault qualification",
+      "Physical power-loss recovery"
+    ],
+    "dependency_lock_line_endings": {
+      "linux": "LF",
+      "windows": "CRLF from checkout; hashes verified against the same tracked lock bytes with only newline conversion"
+    }
+  },
+  "qualification_status": "blocked_security_review",
+  "security_parser_fuzz_fault_qualification_run": false,
+  "benchmark_included_in_this_verification": false,
+  "artifacts": [
+    {
+      "id": 11080898305,
+      "name": "linux-pg16-candidate",
+      "digest": "sha256:a7c88ff9bb02911b848a0b055edd6560f2b0b3561d63f3051b95ac1f948852bd",
+      "size_in_bytes": 5641185,
+      "created_at": "2026-09-30T06:43:09Z",
+      "expires_at": "2026-10-14T06:43:08Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11080898305",
+      "downloaded_archive_sha256_verified": true,
+      "candidate_archive": {
+        "filename": "echoo-pgmq-0.1.0-candidate-pg16-linux-x86_64.zip",
+        "sha256": "d6c8a27a87a5da865f8527a2e574bda1b6286b0b8bb2d0d00d88ff7069f1acc1",
+        "sidecar_sha256_verified": true,
+        "manifest_sha256": "895da6572272baeabb341c42d7f1e1b6d645d56122a144e3c4ccdb79aeace3e9",
+        "manifest_file_count": 35,
+        "all_manifest_file_sha256_values_verified": true,
+        "manifest_commit": "537d2f042a334516bd34872fe39895843f70af88",
+        "postgres_build": "PostgreSQL 16.15 (Ubuntu 16.15-1.pgdg24.04+2)",
+        "os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "architecture": "x86_64",
+        "proton": "0.40.0",
+        "proton_windows_openssl_patch": false,
+        "runtime_dependencies": {
+          "bundled": "Apache Qpid Proton 0.40.0",
+          "external": [
+            "matching PostgreSQL major and architecture",
+            "OpenSSL 3.x from trusted PostgreSQL/system distribution",
+            "platform C runtime (Microsoft Visual C++/UCRT on Windows)"
+          ],
+          "openssl_bundled": false,
+          "test_python_runtime_required_for_service": false
+        },
+        "qualification_status": "blocked_security_review",
+        "status": "candidate-not-production-release"
+      }
+    },
+    {
+      "id": 11081042736,
+      "name": "linux-pg16-evidence",
+      "digest": "sha256:3d30b4db7c2b1f89d0250ff55b23a459ca9838fddc6b6ef0e04e3f08f9f64f7e",
+      "size_in_bytes": 8052,
+      "created_at": "2026-09-30T06:43:08Z",
+      "expires_at": "2026-10-14T06:43:07Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11081042736",
+      "downloaded_archive_sha256_verified": true
+    },
+    {
+      "id": 11081152359,
+      "name": "linux-pg17-candidate",
+      "digest": "sha256:328feba093f6282ccaa2e015485d480dca398265b56f1481508b728f540bdf82",
+      "size_in_bytes": 5640871,
+      "created_at": "2026-09-30T06:43:20Z",
+      "expires_at": "2026-10-14T06:43:19Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11081152359",
+      "downloaded_archive_sha256_verified": true,
+      "candidate_archive": {
+        "filename": "echoo-pgmq-0.1.0-candidate-pg17-linux-x86_64.zip",
+        "sha256": "0ab214c1919fef5ca321db7cec758dd04a7f84dd417d10979b0136e852fad97b",
+        "sidecar_sha256_verified": true,
+        "manifest_sha256": "b6f1e0cd74bb1a0eb96f9f7ce498b855e48336e6cf58e4b712963ca796a96671",
+        "manifest_file_count": 35,
+        "all_manifest_file_sha256_values_verified": true,
+        "manifest_commit": "537d2f042a334516bd34872fe39895843f70af88",
+        "postgres_build": "PostgreSQL 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+        "os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "architecture": "x86_64",
+        "proton": "0.40.0",
+        "proton_windows_openssl_patch": false,
+        "runtime_dependencies": {
+          "bundled": "Apache Qpid Proton 0.40.0",
+          "external": [
+            "matching PostgreSQL major and architecture",
+            "OpenSSL 3.x from trusted PostgreSQL/system distribution",
+            "platform C runtime (Microsoft Visual C++/UCRT on Windows)"
+          ],
+          "openssl_bundled": false,
+          "test_python_runtime_required_for_service": false
+        },
+        "qualification_status": "blocked_security_review",
+        "status": "candidate-not-production-release"
+      }
+    },
+    {
+      "id": 11081292171,
+      "name": "linux-pg17-evidence",
+      "digest": "sha256:9163621adb50c6d75917ec8ac7daba713b4e2d82831636f33a555c933205e30d",
+      "size_in_bytes": 8122,
+      "created_at": "2026-09-30T06:43:19Z",
+      "expires_at": "2026-10-14T06:43:19Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11081292171",
+      "downloaded_archive_sha256_verified": true
+    },
+    {
+      "id": 11080927974,
+      "name": "linux-pg18-candidate",
+      "digest": "sha256:c05868e0cb3989fae4bd53947e78a0ef0eeeafde71bfee4cc52e5d1eab84ae78",
+      "size_in_bytes": 5641483,
+      "created_at": "2026-09-30T06:43:27Z",
+      "expires_at": "2026-10-14T06:43:26Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11080927974",
+      "downloaded_archive_sha256_verified": true,
+      "candidate_archive": {
+        "filename": "echoo-pgmq-0.1.0-candidate-pg18-linux-x86_64.zip",
+        "sha256": "ad83f5b6ad519106d9b7ae639e5d44831c6a346eacfd898ad3f23fdb79449ef9",
+        "sidecar_sha256_verified": true,
+        "manifest_sha256": "759f13645c6f7e4412b58a6be3735dcf7a29480fb1bc564966ce0de654634a33",
+        "manifest_file_count": 35,
+        "all_manifest_file_sha256_values_verified": true,
+        "manifest_commit": "537d2f042a334516bd34872fe39895843f70af88",
+        "postgres_build": "PostgreSQL 18.6 (Ubuntu 18.6-1.pgdg24.04+2)",
+        "os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+        "architecture": "x86_64",
+        "proton": "0.40.0",
+        "proton_windows_openssl_patch": false,
+        "runtime_dependencies": {
+          "bundled": "Apache Qpid Proton 0.40.0",
+          "external": [
+            "matching PostgreSQL major and architecture",
+            "OpenSSL 3.x from trusted PostgreSQL/system distribution",
+            "platform C runtime (Microsoft Visual C++/UCRT on Windows)"
+          ],
+          "openssl_bundled": false,
+          "test_python_runtime_required_for_service": false
+        },
+        "qualification_status": "blocked_security_review",
+        "status": "candidate-not-production-release"
+      }
+    },
+    {
+      "id": 11080863418,
+      "name": "linux-pg18-evidence",
+      "digest": "sha256:7d0be3cc11b2c1a0dbff0aaf50824430cd137aa2362860c454c7b0a33db68bea",
+      "size_in_bytes": 11151,
+      "created_at": "2026-09-30T06:43:26Z",
+      "expires_at": "2026-10-14T06:43:25Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11080863418",
+      "downloaded_archive_sha256_verified": true
+    },
+    {
+      "id": 11081482095,
+      "name": "native-windows-server2022-pg16-candidate",
+      "digest": "sha256:281292e1feeb4b80cc3fa55038e5391f97955ca4246e589274920fe4f5ee49b5",
+      "size_in_bytes": 441894,
+      "created_at": "2026-09-30T06:45:03Z",
+      "expires_at": "2026-10-14T06:45:01Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11081482095",
+      "downloaded_archive_sha256_verified": true,
+      "candidate_archive": {
+        "filename": "echoo-pgmq-0.1.0-candidate-pg16-windows-amd64.zip",
+        "sha256": "6547ada3a19169ae4eb440dac43c02d1a151abc967b6d73333414a577aa1b88c",
+        "sidecar_sha256_verified": true,
+        "manifest_sha256": "813649e0129a0809d0f1cc84a9923e519e727411876ef38b1e77805535afbecf",
+        "manifest_file_count": 30,
+        "all_manifest_file_sha256_values_verified": true,
+        "manifest_commit": "537d2f042a334516bd34872fe39895843f70af88",
+        "postgres_build": "PostgreSQL 16.15",
+        "os": "Windows-2022Server-10.0.20348-SP0",
+        "architecture": "AMD64",
+        "proton": "0.40.0",
+        "proton_windows_openssl_patch": true,
+        "runtime_dependencies": {
+          "bundled": "Apache Qpid Proton 0.40.0",
+          "external": [
+            "matching PostgreSQL major and architecture",
+            "OpenSSL 3.x from trusted PostgreSQL/system distribution",
+            "platform C runtime (Microsoft Visual C++/UCRT on Windows)"
+          ],
+          "openssl_bundled": false,
+          "test_python_runtime_required_for_service": false
+        },
+        "qualification_status": "blocked_security_review",
+        "status": "candidate-not-production-release"
+      }
+    },
+    {
+      "id": 11081940336,
+      "name": "native-windows-server2022-pg16-evidence",
+      "digest": "sha256:d35d66176a870476cc3fec005ac4b3c56507a22ade176a9afc85861e8a5fa89b",
+      "size_in_bytes": 8182,
+      "created_at": "2026-09-30T06:45:01Z",
+      "expires_at": "2026-10-14T06:45:00Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11081940336",
+      "downloaded_archive_sha256_verified": true
+    },
+    {
+      "id": 11080973118,
+      "name": "native-windows-server2022-pg17-candidate",
+      "digest": "sha256:4c1a3ee833f6a09f69c432541fb22ccd4e5980a74c8d677bcc22c1766d69570f",
+      "size_in_bytes": 441800,
+      "created_at": "2026-09-30T06:44:34Z",
+      "expires_at": "2026-10-14T06:44:34Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11080973118",
+      "downloaded_archive_sha256_verified": true,
+      "candidate_archive": {
+        "filename": "echoo-pgmq-0.1.0-candidate-pg17-windows-amd64.zip",
+        "sha256": "67b019dfc2badbcd810f16d64e57bfde345f2ac85db2d8629f945ce3308bc082",
+        "sidecar_sha256_verified": true,
+        "manifest_sha256": "00bf1795a8485af88a80b95955faecf68692e73682f11509ad2efe28a8f1f13f",
+        "manifest_file_count": 30,
+        "all_manifest_file_sha256_values_verified": true,
+        "manifest_commit": "537d2f042a334516bd34872fe39895843f70af88",
+        "postgres_build": "PostgreSQL 17.11",
+        "os": "Windows-2022Server-10.0.20348-SP0",
+        "architecture": "AMD64",
+        "proton": "0.40.0",
+        "proton_windows_openssl_patch": true,
+        "runtime_dependencies": {
+          "bundled": "Apache Qpid Proton 0.40.0",
+          "external": [
+            "matching PostgreSQL major and architecture",
+            "OpenSSL 3.x from trusted PostgreSQL/system distribution",
+            "platform C runtime (Microsoft Visual C++/UCRT on Windows)"
+          ],
+          "openssl_bundled": false,
+          "test_python_runtime_required_for_service": false
+        },
+        "qualification_status": "blocked_security_review",
+        "status": "candidate-not-production-release"
+      }
+    },
+    {
+      "id": 11080987923,
+      "name": "native-windows-server2022-pg17-evidence",
+      "digest": "sha256:6f348e1e101f0e45b3bd854c515b723730e513949a42e6e1d965db91a3c586ba",
+      "size_in_bytes": 8208,
+      "created_at": "2026-09-30T06:44:33Z",
+      "expires_at": "2026-10-14T06:44:32Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11080987923",
+      "downloaded_archive_sha256_verified": true
+    },
+    {
+      "id": 11080837919,
+      "name": "native-windows-server2022-pg18-candidate",
+      "digest": "sha256:7f752c7d9561d4d492de37103487b54d9e50ace8f8c00ce50827bb986900bb68",
+      "size_in_bytes": 441800,
+      "created_at": "2026-09-30T06:45:14Z",
+      "expires_at": "2026-10-14T06:45:13Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11080837919",
+      "downloaded_archive_sha256_verified": true,
+      "candidate_archive": {
+        "filename": "echoo-pgmq-0.1.0-candidate-pg18-windows-amd64.zip",
+        "sha256": "2e8027ac9a33c333544c1606b81cfe1b0c98a4f46270903821e1f8e9d1c6c83a",
+        "sidecar_sha256_verified": true,
+        "manifest_sha256": "e7fdebd040d3f7b7be98d628927b504c69e0c1d5ee186b7d41e228e66cd84b33",
+        "manifest_file_count": 30,
+        "all_manifest_file_sha256_values_verified": true,
+        "manifest_commit": "537d2f042a334516bd34872fe39895843f70af88",
+        "postgres_build": "PostgreSQL 18.6",
+        "os": "Windows-2022Server-10.0.20348-SP0",
+        "architecture": "AMD64",
+        "proton": "0.40.0",
+        "proton_windows_openssl_patch": true,
+        "runtime_dependencies": {
+          "bundled": "Apache Qpid Proton 0.40.0",
+          "external": [
+            "matching PostgreSQL major and architecture",
+            "OpenSSL 3.x from trusted PostgreSQL/system distribution",
+            "platform C runtime (Microsoft Visual C++/UCRT on Windows)"
+          ],
+          "openssl_bundled": false,
+          "test_python_runtime_required_for_service": false
+        },
+        "qualification_status": "blocked_security_review",
+        "status": "candidate-not-production-release"
+      }
+    },
+    {
+      "id": 11081805822,
+      "name": "native-windows-server2022-pg18-evidence",
+      "digest": "sha256:78f6bb18d441a59f63cd06b3ed21efb86252e0677d8f9ff4c04b7c27dac54f0c",
+      "size_in_bytes": 11307,
+      "created_at": "2026-09-30T06:45:13Z",
+      "expires_at": "2026-10-14T06:45:12Z",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/artifacts/11081805822",
+      "downloaded_archive_sha256_verified": true
+    }
+  ],
+  "jobs": [
+    {
+      "id": 109771814384,
+      "name": "Linux PG16 / native AMQP 1.0",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/job/109771814384",
+      "conclusion": "success",
+      "core_sql_completion_marker_count": 2,
+      "core_sql_completion_log_lines": [
+        "2026-09-30T06:42:57.2272766Z core SQL tests passed",
+        "2026-09-30T06:43:07.3690959Z core SQL tests passed"
+      ],
+      "rounds": [
+        {
+          "phase": "evidence",
+          "postgres_version": "postgres (PostgreSQL) 16.15 (Ubuntu 16.15-1.pgdg24.04+2)",
+          "python": "3.12.14 (main, Aug 13 2026, 02:47:42) [GCC 13.3.0]",
+          "platform": "linux",
+          "junit": {
+            "tests": 32,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "timestamp": "2026-09-30T06:42:50.447420+00:00",
+            "time_seconds": 5.627
+          },
+          "core_sql_explicitly_passed": true,
+          "files_sha256": {
+            "environment.json": "6fd6aaba0b21bf7a7c74cabac1a5ef1e3e1d2f3d2b10c2955e961a2de75bb319",
+            "junit.xml": "6501431de7aa69137ab7b567900040b65d191cba16f4ddeff82f5811564788a0",
+            "postgres.log": "33fc27566a50e7262ef9a61d4f01a7feb46ee189c9d1ae197d69a32ea14e5fc7"
+          },
+          "independent_client": null,
+          "ordinary_allowlist_matches_prior_verified_run": true,
+          "ordinary_testcase_names_match_prior_verified_run": true
+        },
+        {
+          "phase": "candidate-evidence",
+          "postgres_version": "postgres (PostgreSQL) 16.15 (Ubuntu 16.15-1.pgdg24.04+2)",
+          "python": "3.12.14 (main, Aug 13 2026, 02:47:42) [GCC 13.3.0]",
+          "platform": "linux",
+          "junit": {
+            "tests": 32,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "timestamp": "2026-09-30T06:43:00.808934+00:00",
+            "time_seconds": 5.403
+          },
+          "core_sql_explicitly_passed": true,
+          "files_sha256": {
+            "environment.json": "6fd6aaba0b21bf7a7c74cabac1a5ef1e3e1d2f3d2b10c2955e961a2de75bb319",
+            "junit.xml": "050ad06373a799e9e81e53ea37e4581da323ef79f3601f1d2eb47e8557928fcf",
+            "postgres.log": "a71b041b680caefdc96d4e48019b4594541c1cb7c7b85673d3f132b24d261f63"
+          },
+          "independent_client": null,
+          "ordinary_allowlist_matches_prior_verified_run": true,
+          "ordinary_testcase_names_match_prior_verified_run": true
+        }
+      ],
+      "candidate_reinstall_build_library_paths_removed_verified": true
+    },
+    {
+      "id": 109771814363,
+      "name": "Linux PG17 / native AMQP 1.0",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/job/109771814363",
+      "conclusion": "success",
+      "core_sql_completion_marker_count": 2,
+      "core_sql_completion_log_lines": [
+        "2026-09-30T06:43:07.2983910Z core SQL tests passed",
+        "2026-09-30T06:43:18.7079272Z core SQL tests passed"
+      ],
+      "rounds": [
+        {
+          "phase": "evidence",
+          "postgres_version": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+          "python": "3.12.14 (main, Aug 13 2026, 02:47:42) [GCC 13.3.0]",
+          "platform": "linux",
+          "junit": {
+            "tests": 32,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "timestamp": "2026-09-30T06:43:00.029748+00:00",
+            "time_seconds": 6.038
+          },
+          "core_sql_explicitly_passed": true,
+          "files_sha256": {
+            "environment.json": "bcd0d2af72f65b601ca38541027f386fa2f0e21a002e1bf41af5ef7ecdacbfa1",
+            "junit.xml": "4f73d637cb0ecbcbb57ce5d47ce8bb15e48f49b5afa874089d6056ef73d685a8",
+            "postgres.log": "fa2c59ed45ce752a726be91b9c461cea4c80b10d666baeb7dff667f880468d03"
+          },
+          "independent_client": null,
+          "ordinary_allowlist_matches_prior_verified_run": true,
+          "ordinary_testcase_names_match_prior_verified_run": true
+        },
+        {
+          "phase": "candidate-evidence",
+          "postgres_version": "postgres (PostgreSQL) 17.11 (Ubuntu 17.11-1.pgdg24.04+2)",
+          "python": "3.12.14 (main, Aug 13 2026, 02:47:42) [GCC 13.3.0]",
+          "platform": "linux",
+          "junit": {
+            "tests": 32,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "timestamp": "2026-09-30T06:43:11.481896+00:00",
+            "time_seconds": 5.976
+          },
+          "core_sql_explicitly_passed": true,
+          "files_sha256": {
+            "environment.json": "bcd0d2af72f65b601ca38541027f386fa2f0e21a002e1bf41af5ef7ecdacbfa1",
+            "junit.xml": "6dbf2f9e383886b56682b3204dcd920425f78a527dc6aaad914238ae231e22eb",
+            "postgres.log": "a1e5a2a6fd0ba787797fe28811e7a2c8d040626e4841c18e997d6d0d10b3170c"
+          },
+          "independent_client": null,
+          "ordinary_allowlist_matches_prior_verified_run": true,
+          "ordinary_testcase_names_match_prior_verified_run": true
+        }
+      ],
+      "candidate_reinstall_build_library_paths_removed_verified": true
+    },
+    {
+      "id": 109771814209,
+      "name": "Linux PG18 / native AMQP 1.0",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/job/109771814209",
+      "conclusion": "success",
+      "core_sql_completion_marker_count": 2,
+      "core_sql_completion_log_lines": [
+        "2026-09-30T06:43:09.0811781Z core SQL tests passed",
+        "2026-09-30T06:43:25.1744356Z core SQL tests passed"
+      ],
+      "rounds": [
+        {
+          "phase": "evidence",
+          "postgres_version": "postgres (PostgreSQL) 18.6 (Ubuntu 18.6-1.pgdg24.04+2)",
+          "python": "3.12.14 (main, Aug 13 2026, 02:47:42) [GCC 13.3.0]",
+          "platform": "linux",
+          "junit": {
+            "tests": 40,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "timestamp": "2026-09-30T06:42:57.115267+00:00",
+            "time_seconds": 10.821
+          },
+          "core_sql_explicitly_passed": true,
+          "files_sha256": {
+            "environment.json": "a22cdeefc1801f31b2b8765b735eb76247fd2da90984f5ce4a1106fd9b4e73fa",
+            "independent-client.jsonl": "bab89e618e4f258d036fcb4ae0dd47ce0d269acf74ad12ed4b40e3461c012339",
+            "junit.xml": "0c0c06e29414763de0495ceeace78789a4823d1d80921ad7b4d5dd4a553705f9",
+            "postgres.log": "9f5f8d67ac3cdeb6eebbecc645db553fe938bbed6e0d7762121e5a3cfcbcc5be"
+          },
+          "independent_client": {
+            "implementation": "independent JavaScript AMQP codec; no Proton client bindings",
+            "node": "v24.21.0",
+            "dependencies": {
+              "rhea": {
+                "version": "3.0.5",
+                "license": "Apache-2.0",
+                "resolved": "https://registry.npmjs.org/rhea/-/rhea-3.0.5.tgz",
+                "integrity": "sha512-Ye1gzqH9DoCGMTaSfLfGmDdoderMshyVU5rdFES+D3N1U5PASZcNCKqhWJJUOOj8INtdrIPOfDALrRcoRRL7jw=="
+              },
+              "debug": {
+                "version": "4.4.3",
+                "license": "MIT",
+                "resolved": "https://registry.npmjs.org/debug/-/debug-4.4.3.tgz",
+                "integrity": "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA=="
+              },
+              "ms": {
+                "version": "2.1.3",
+                "license": "MIT",
+                "resolved": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz",
+                "integrity": "sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA=="
+              }
+            },
+            "lock_sha256": "d7a27f9650204b01abf22d00460080d41197652f1974ba9e8bb9d53a53e1dc18"
+          },
+          "independent_evidence": {
+            "case_names": [
+              "test_rhea_binary_metadata_roundtrip[default-first-plain]",
+              "test_rhea_binary_metadata_roundtrip[default-first-path]",
+              "test_rhea_binary_metadata_roundtrip[manual-second-plain]",
+              "test_rhea_binary_metadata_roundtrip[manual-second-path]",
+              "test_rhea_release_redelivers[default-first]",
+              "test_rhea_release_redelivers[manual-second]",
+              "test_rhea_graceful_reconnect_redelivers[default-first]",
+              "test_rhea_graceful_reconnect_redelivers[manual-second]"
+            ],
+            "jsonl_records": 16,
+            "operation_counts": {
+              "publish": 8,
+              "roundtrip": 4,
+              "release": 2,
+              "reconnect": 2
+            },
+            "tls_sasl_observations": [
+              {
+                "authorized": true,
+                "negotiated_sasl": "ANONYMOUS",
+                "protocol": "TLSv1.3",
+                "sasl": "anonymous",
+                "servername": "localhost",
+                "count": 2
+              },
+              {
+                "authorized": true,
+                "negotiated_sasl": "EXTERNAL",
+                "protocol": "TLSv1.3",
+                "sasl": "external",
+                "servername": "localhost",
+                "count": 4
+              },
+              {
+                "authorized": true,
+                "negotiated_sasl": "direct",
+                "protocol": "TLSv1.3",
+                "sasl": "direct",
+                "servername": "localhost",
+                "count": 12
+              }
+            ],
+            "operation_profile_outcomes": [
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "reconnect",
+                "profile": "default-first",
+                "received": 2,
+                "reconnected": true,
+                "released": 0,
+                "remote_settlement_confirmed": false,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "reconnect",
+                "profile": "manual-second",
+                "received": 2,
+                "reconnected": true,
+                "released": 0,
+                "remote_settlement_confirmed": true,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "release",
+                "profile": "default-first",
+                "received": 2,
+                "reconnected": false,
+                "released": 1,
+                "remote_settlement_confirmed": false,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "release",
+                "profile": "manual-second",
+                "received": 2,
+                "reconnected": false,
+                "released": 1,
+                "remote_settlement_confirmed": true,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "roundtrip",
+                "profile": "default-first",
+                "received": 1,
+                "reconnected": false,
+                "released": 0,
+                "remote_settlement_confirmed": false,
+                "count": 2
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "roundtrip",
+                "profile": "manual-second",
+                "received": 1,
+                "reconnected": false,
+                "released": 0,
+                "remote_settlement_confirmed": true,
+                "count": 2
+              },
+              {
+                "accepted": 1,
+                "operation": "publish",
+                "profile": "default-first",
+                "published": 1,
+                "count": 4
+              },
+              {
+                "accepted": 1,
+                "operation": "publish",
+                "profile": "manual-second",
+                "published": 1,
+                "count": 4
+              }
+            ],
+            "lock_hash_matches_tracked_bytes_with_platform_line_endings": true,
+            "dependency_versions_licenses_resolved_urls_and_integrity_match_fixed_head_lock": true
+          },
+          "ordinary_allowlist_matches_prior_verified_run": true,
+          "ordinary_testcase_names_match_prior_verified_run": true
+        },
+        {
+          "phase": "candidate-evidence",
+          "postgres_version": "postgres (PostgreSQL) 18.6 (Ubuntu 18.6-1.pgdg24.04+2)",
+          "python": "3.12.14 (main, Aug 13 2026, 02:47:42) [GCC 13.3.0]",
+          "platform": "linux",
+          "junit": {
+            "tests": 40,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "timestamp": "2026-09-30T06:43:13.331531+00:00",
+            "time_seconds": 10.698
+          },
+          "core_sql_explicitly_passed": true,
+          "files_sha256": {
+            "environment.json": "a22cdeefc1801f31b2b8765b735eb76247fd2da90984f5ce4a1106fd9b4e73fa",
+            "independent-client.jsonl": "45b9d30b1431142964b92ec435d818ee027ab7df15f3f8d412d11e065c590bbd",
+            "junit.xml": "52b1b8caa5427891d7db34de156777e10c6b398db814c8906c9fb5b2853bbafc",
+            "postgres.log": "b99db9bdb99f3559cd1d783255db21ef7d137a11fde6889b263b55e6f4022b74"
+          },
+          "independent_client": {
+            "implementation": "independent JavaScript AMQP codec; no Proton client bindings",
+            "node": "v24.21.0",
+            "dependencies": {
+              "rhea": {
+                "version": "3.0.5",
+                "license": "Apache-2.0",
+                "resolved": "https://registry.npmjs.org/rhea/-/rhea-3.0.5.tgz",
+                "integrity": "sha512-Ye1gzqH9DoCGMTaSfLfGmDdoderMshyVU5rdFES+D3N1U5PASZcNCKqhWJJUOOj8INtdrIPOfDALrRcoRRL7jw=="
+              },
+              "debug": {
+                "version": "4.4.3",
+                "license": "MIT",
+                "resolved": "https://registry.npmjs.org/debug/-/debug-4.4.3.tgz",
+                "integrity": "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA=="
+              },
+              "ms": {
+                "version": "2.1.3",
+                "license": "MIT",
+                "resolved": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz",
+                "integrity": "sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA=="
+              }
+            },
+            "lock_sha256": "d7a27f9650204b01abf22d00460080d41197652f1974ba9e8bb9d53a53e1dc18"
+          },
+          "independent_evidence": {
+            "case_names": [
+              "test_rhea_binary_metadata_roundtrip[default-first-plain]",
+              "test_rhea_binary_metadata_roundtrip[default-first-path]",
+              "test_rhea_binary_metadata_roundtrip[manual-second-plain]",
+              "test_rhea_binary_metadata_roundtrip[manual-second-path]",
+              "test_rhea_release_redelivers[default-first]",
+              "test_rhea_release_redelivers[manual-second]",
+              "test_rhea_graceful_reconnect_redelivers[default-first]",
+              "test_rhea_graceful_reconnect_redelivers[manual-second]"
+            ],
+            "jsonl_records": 16,
+            "operation_counts": {
+              "publish": 8,
+              "roundtrip": 4,
+              "release": 2,
+              "reconnect": 2
+            },
+            "tls_sasl_observations": [
+              {
+                "authorized": true,
+                "negotiated_sasl": "ANONYMOUS",
+                "protocol": "TLSv1.3",
+                "sasl": "anonymous",
+                "servername": "localhost",
+                "count": 2
+              },
+              {
+                "authorized": true,
+                "negotiated_sasl": "EXTERNAL",
+                "protocol": "TLSv1.3",
+                "sasl": "external",
+                "servername": "localhost",
+                "count": 4
+              },
+              {
+                "authorized": true,
+                "negotiated_sasl": "direct",
+                "protocol": "TLSv1.3",
+                "sasl": "direct",
+                "servername": "localhost",
+                "count": 12
+              }
+            ],
+            "operation_profile_outcomes": [
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "reconnect",
+                "profile": "default-first",
+                "received": 2,
+                "reconnected": true,
+                "released": 0,
+                "remote_settlement_confirmed": false,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "reconnect",
+                "profile": "manual-second",
+                "received": 2,
+                "reconnected": true,
+                "released": 0,
+                "remote_settlement_confirmed": true,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "release",
+                "profile": "default-first",
+                "received": 2,
+                "reconnected": false,
+                "released": 1,
+                "remote_settlement_confirmed": false,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "release",
+                "profile": "manual-second",
+                "received": 2,
+                "reconnected": false,
+                "released": 1,
+                "remote_settlement_confirmed": true,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "roundtrip",
+                "profile": "default-first",
+                "received": 1,
+                "reconnected": false,
+                "released": 0,
+                "remote_settlement_confirmed": false,
+                "count": 2
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "roundtrip",
+                "profile": "manual-second",
+                "received": 1,
+                "reconnected": false,
+                "released": 0,
+                "remote_settlement_confirmed": true,
+                "count": 2
+              },
+              {
+                "accepted": 1,
+                "operation": "publish",
+                "profile": "default-first",
+                "published": 1,
+                "count": 4
+              },
+              {
+                "accepted": 1,
+                "operation": "publish",
+                "profile": "manual-second",
+                "published": 1,
+                "count": 4
+              }
+            ],
+            "lock_hash_matches_tracked_bytes_with_platform_line_endings": true,
+            "dependency_versions_licenses_resolved_urls_and_integrity_match_fixed_head_lock": true
+          },
+          "ordinary_allowlist_matches_prior_verified_run": true,
+          "ordinary_testcase_names_match_prior_verified_run": true
+        }
+      ],
+      "candidate_reinstall_build_library_paths_removed_verified": true
+    },
+    {
+      "id": 109771814411,
+      "name": "Native Windows Server 2022 PG16 (not Windows 11 certification)",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/job/109771814411",
+      "conclusion": "success",
+      "core_sql_completion_marker_count": 2,
+      "core_sql_completion_log_lines": [
+        "2026-09-30T06:44:38.2977799Z core SQL tests passed",
+        "2026-09-30T06:45:00.2870961Z core SQL tests passed"
+      ],
+      "rounds": [
+        {
+          "phase": "evidence",
+          "postgres_version": "postgres (PostgreSQL) 16.15",
+          "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+          "platform": "win32",
+          "junit": {
+            "tests": 32,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "timestamp": "2026-09-30T06:44:19.949849+00:00",
+            "time_seconds": 17.159
+          },
+          "core_sql_explicitly_passed": true,
+          "files_sha256": {
+            "environment.json": "822a52fc53d6f111c2e3257d0be168228ee9cb0a7a0eda55796f212830c4b145",
+            "junit.xml": "823196b09c94fa0ce0a7d3dea0717e23db2f726f0e2c8203939b0b86e47c616c",
+            "postgres.log": "406ef8e06695a1fec001f655c998938e5c0678f7228de2bd8368b854bc35df5b"
+          },
+          "independent_client": null,
+          "ordinary_allowlist_matches_prior_verified_run": true,
+          "ordinary_testcase_names_match_prior_verified_run": true
+        },
+        {
+          "phase": "candidate-evidence",
+          "postgres_version": "postgres (PostgreSQL) 16.15",
+          "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+          "platform": "win32",
+          "junit": {
+            "tests": 32,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "timestamp": "2026-09-30T06:44:41.845098+00:00",
+            "time_seconds": 17.239
+          },
+          "core_sql_explicitly_passed": true,
+          "files_sha256": {
+            "environment.json": "822a52fc53d6f111c2e3257d0be168228ee9cb0a7a0eda55796f212830c4b145",
+            "junit.xml": "40320a9a871eca8f9afb5789b245c4668c4c36f58dbb460cd6eb36366f753658",
+            "postgres.log": "0291afacce4876b908197fcfc6f778227778a03d4fb00ee81b3874dc1d6ba13c"
+          },
+          "independent_client": null,
+          "ordinary_allowlist_matches_prior_verified_run": true,
+          "ordinary_testcase_names_match_prior_verified_run": true
+        }
+      ],
+      "candidate_reinstall_build_library_paths_removed_verified": true
+    },
+    {
+      "id": 109771814359,
+      "name": "Native Windows Server 2022 PG17 (not Windows 11 certification)",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/job/109771814359",
+      "conclusion": "success",
+      "core_sql_completion_marker_count": 2,
+      "core_sql_completion_log_lines": [
+        "2026-09-30T06:44:08.0159193Z core SQL tests passed",
+        "2026-09-30T06:44:32.6029785Z core SQL tests passed"
+      ],
+      "rounds": [
+        {
+          "phase": "evidence",
+          "postgres_version": "postgres (PostgreSQL) 17.11",
+          "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+          "platform": "win32",
+          "junit": {
+            "tests": 32,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "timestamp": "2026-09-30T06:43:47.423105+00:00",
+            "time_seconds": 19.337
+          },
+          "core_sql_explicitly_passed": true,
+          "files_sha256": {
+            "environment.json": "745a3a17589df25c9bcfbcd738c3370bf4a62a17326286da10745b06e44bf606",
+            "junit.xml": "e543dbc9a46a22d8684e6dcc48ee78debb8397a0521179285c6f95dcf5d0e562",
+            "postgres.log": "d0e85cac97ada01d3322818997e4ffbaa1e5ce9eee9c55358144caaa83db4887"
+          },
+          "independent_client": null,
+          "ordinary_allowlist_matches_prior_verified_run": true,
+          "ordinary_testcase_names_match_prior_verified_run": true
+        },
+        {
+          "phase": "candidate-evidence",
+          "postgres_version": "postgres (PostgreSQL) 17.11",
+          "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+          "platform": "win32",
+          "junit": {
+            "tests": 32,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "timestamp": "2026-09-30T06:44:12.632463+00:00",
+            "time_seconds": 18.655
+          },
+          "core_sql_explicitly_passed": true,
+          "files_sha256": {
+            "environment.json": "745a3a17589df25c9bcfbcd738c3370bf4a62a17326286da10745b06e44bf606",
+            "junit.xml": "22ead43796f34322aad14ce96314a3958e62bdc2026071aac49f987dc9f1189e",
+            "postgres.log": "8c3e9feed9c834865bb3f4bfae4bc891a80a43cb4e655f15b54cce6ce41b089e"
+          },
+          "independent_client": null,
+          "ordinary_allowlist_matches_prior_verified_run": true,
+          "ordinary_testcase_names_match_prior_verified_run": true
+        }
+      ],
+      "candidate_reinstall_build_library_paths_removed_verified": true
+    },
+    {
+      "id": 109771814356,
+      "name": "Native Windows Server 2022 PG18 (not Windows 11 certification)",
+      "url": "https://github.com/MixGeeker/echoo_pgmq/actions/runs/36679556956/job/109771814356",
+      "conclusion": "success",
+      "core_sql_completion_marker_count": 2,
+      "core_sql_completion_log_lines": [
+        "2026-09-30T06:44:41.0526839Z core SQL tests passed",
+        "2026-09-30T06:45:12.4600137Z core SQL tests passed"
+      ],
+      "rounds": [
+        {
+          "phase": "evidence",
+          "postgres_version": "postgres (PostgreSQL) 18.6",
+          "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+          "platform": "win32",
+          "junit": {
+            "tests": 40,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "timestamp": "2026-09-30T06:44:13.813972+00:00",
+            "time_seconds": 26.01
+          },
+          "core_sql_explicitly_passed": true,
+          "files_sha256": {
+            "environment.json": "034c5f72a8f40e787e64fd7632944363b4e9066a1e241b0bcc891dc6ae69a06a",
+            "independent-client.jsonl": "07809121285f6760c71bf13da6841be73be1e8d0b50f211978a8ef1e339ecae4",
+            "junit.xml": "100610b6e8b0bc9bdb49497317d02ad5ccde1d6a667dc6a64dc75aefdcf94856",
+            "postgres.log": "7968873116296336392af3b61e5bc31348989ddc71eda8789c5f7bd01a555394"
+          },
+          "independent_client": {
+            "implementation": "independent JavaScript AMQP codec; no Proton client bindings",
+            "node": "v24.21.0",
+            "dependencies": {
+              "rhea": {
+                "version": "3.0.5",
+                "license": "Apache-2.0",
+                "resolved": "https://registry.npmjs.org/rhea/-/rhea-3.0.5.tgz",
+                "integrity": "sha512-Ye1gzqH9DoCGMTaSfLfGmDdoderMshyVU5rdFES+D3N1U5PASZcNCKqhWJJUOOj8INtdrIPOfDALrRcoRRL7jw=="
+              },
+              "debug": {
+                "version": "4.4.3",
+                "license": "MIT",
+                "resolved": "https://registry.npmjs.org/debug/-/debug-4.4.3.tgz",
+                "integrity": "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA=="
+              },
+              "ms": {
+                "version": "2.1.3",
+                "license": "MIT",
+                "resolved": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz",
+                "integrity": "sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA=="
+              }
+            },
+            "lock_sha256": "6c34a5280f6e63fddcbe6258a0d65becc37daa1f985e58d0595c59aaf61be2be"
+          },
+          "independent_evidence": {
+            "case_names": [
+              "test_rhea_binary_metadata_roundtrip[default-first-plain]",
+              "test_rhea_binary_metadata_roundtrip[default-first-path]",
+              "test_rhea_binary_metadata_roundtrip[manual-second-plain]",
+              "test_rhea_binary_metadata_roundtrip[manual-second-path]",
+              "test_rhea_release_redelivers[default-first]",
+              "test_rhea_release_redelivers[manual-second]",
+              "test_rhea_graceful_reconnect_redelivers[default-first]",
+              "test_rhea_graceful_reconnect_redelivers[manual-second]"
+            ],
+            "jsonl_records": 16,
+            "operation_counts": {
+              "publish": 8,
+              "roundtrip": 4,
+              "release": 2,
+              "reconnect": 2
+            },
+            "tls_sasl_observations": [
+              {
+                "authorized": true,
+                "negotiated_sasl": "ANONYMOUS",
+                "protocol": "TLSv1.3",
+                "sasl": "anonymous",
+                "servername": "localhost",
+                "count": 2
+              },
+              {
+                "authorized": true,
+                "negotiated_sasl": "EXTERNAL",
+                "protocol": "TLSv1.3",
+                "sasl": "external",
+                "servername": "localhost",
+                "count": 4
+              },
+              {
+                "authorized": true,
+                "negotiated_sasl": "direct",
+                "protocol": "TLSv1.3",
+                "sasl": "direct",
+                "servername": "localhost",
+                "count": 12
+              }
+            ],
+            "operation_profile_outcomes": [
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "reconnect",
+                "profile": "default-first",
+                "received": 2,
+                "reconnected": true,
+                "released": 0,
+                "remote_settlement_confirmed": false,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "reconnect",
+                "profile": "manual-second",
+                "received": 2,
+                "reconnected": true,
+                "released": 0,
+                "remote_settlement_confirmed": true,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "release",
+                "profile": "default-first",
+                "received": 2,
+                "reconnected": false,
+                "released": 1,
+                "remote_settlement_confirmed": false,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "release",
+                "profile": "manual-second",
+                "received": 2,
+                "reconnected": false,
+                "released": 1,
+                "remote_settlement_confirmed": true,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "roundtrip",
+                "profile": "default-first",
+                "received": 1,
+                "reconnected": false,
+                "released": 0,
+                "remote_settlement_confirmed": false,
+                "count": 2
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "roundtrip",
+                "profile": "manual-second",
+                "received": 1,
+                "reconnected": false,
+                "released": 0,
+                "remote_settlement_confirmed": true,
+                "count": 2
+              },
+              {
+                "accepted": 1,
+                "operation": "publish",
+                "profile": "default-first",
+                "published": 1,
+                "count": 4
+              },
+              {
+                "accepted": 1,
+                "operation": "publish",
+                "profile": "manual-second",
+                "published": 1,
+                "count": 4
+              }
+            ],
+            "lock_hash_matches_tracked_bytes_with_platform_line_endings": true,
+            "dependency_versions_licenses_resolved_urls_and_integrity_match_fixed_head_lock": true
+          },
+          "ordinary_allowlist_matches_prior_verified_run": true,
+          "ordinary_testcase_names_match_prior_verified_run": true
+        },
+        {
+          "phase": "candidate-evidence",
+          "postgres_version": "postgres (PostgreSQL) 18.6",
+          "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+          "platform": "win32",
+          "junit": {
+            "tests": 40,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0,
+            "timestamp": "2026-09-30T06:44:46.331043+00:00",
+            "time_seconds": 24.893
+          },
+          "core_sql_explicitly_passed": true,
+          "files_sha256": {
+            "environment.json": "034c5f72a8f40e787e64fd7632944363b4e9066a1e241b0bcc891dc6ae69a06a",
+            "independent-client.jsonl": "f9a217366446d4a71245875fb48ced257734e31b2bad0556c70ba975db7c2263",
+            "junit.xml": "7dd722477de39c5856e3849ba6c715aedc3c6e48b391d823cc0c29a45a954ed3",
+            "postgres.log": "64e8f314b76504cd8bbefea2a25adaed314f25aeb90d19c784b41bfcf15dcff6"
+          },
+          "independent_client": {
+            "implementation": "independent JavaScript AMQP codec; no Proton client bindings",
+            "node": "v24.21.0",
+            "dependencies": {
+              "rhea": {
+                "version": "3.0.5",
+                "license": "Apache-2.0",
+                "resolved": "https://registry.npmjs.org/rhea/-/rhea-3.0.5.tgz",
+                "integrity": "sha512-Ye1gzqH9DoCGMTaSfLfGmDdoderMshyVU5rdFES+D3N1U5PASZcNCKqhWJJUOOj8INtdrIPOfDALrRcoRRL7jw=="
+              },
+              "debug": {
+                "version": "4.4.3",
+                "license": "MIT",
+                "resolved": "https://registry.npmjs.org/debug/-/debug-4.4.3.tgz",
+                "integrity": "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA=="
+              },
+              "ms": {
+                "version": "2.1.3",
+                "license": "MIT",
+                "resolved": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz",
+                "integrity": "sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA=="
+              }
+            },
+            "lock_sha256": "6c34a5280f6e63fddcbe6258a0d65becc37daa1f985e58d0595c59aaf61be2be"
+          },
+          "independent_evidence": {
+            "case_names": [
+              "test_rhea_binary_metadata_roundtrip[default-first-plain]",
+              "test_rhea_binary_metadata_roundtrip[default-first-path]",
+              "test_rhea_binary_metadata_roundtrip[manual-second-plain]",
+              "test_rhea_binary_metadata_roundtrip[manual-second-path]",
+              "test_rhea_release_redelivers[default-first]",
+              "test_rhea_release_redelivers[manual-second]",
+              "test_rhea_graceful_reconnect_redelivers[default-first]",
+              "test_rhea_graceful_reconnect_redelivers[manual-second]"
+            ],
+            "jsonl_records": 16,
+            "operation_counts": {
+              "publish": 8,
+              "roundtrip": 4,
+              "release": 2,
+              "reconnect": 2
+            },
+            "tls_sasl_observations": [
+              {
+                "authorized": true,
+                "negotiated_sasl": "ANONYMOUS",
+                "protocol": "TLSv1.3",
+                "sasl": "anonymous",
+                "servername": "localhost",
+                "count": 2
+              },
+              {
+                "authorized": true,
+                "negotiated_sasl": "EXTERNAL",
+                "protocol": "TLSv1.3",
+                "sasl": "external",
+                "servername": "localhost",
+                "count": 4
+              },
+              {
+                "authorized": true,
+                "negotiated_sasl": "direct",
+                "protocol": "TLSv1.3",
+                "sasl": "direct",
+                "servername": "localhost",
+                "count": 12
+              }
+            ],
+            "operation_profile_outcomes": [
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "reconnect",
+                "profile": "default-first",
+                "received": 2,
+                "reconnected": true,
+                "released": 0,
+                "remote_settlement_confirmed": false,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "reconnect",
+                "profile": "manual-second",
+                "received": 2,
+                "reconnected": true,
+                "released": 0,
+                "remote_settlement_confirmed": true,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "release",
+                "profile": "default-first",
+                "received": 2,
+                "reconnected": false,
+                "released": 1,
+                "remote_settlement_confirmed": false,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "release",
+                "profile": "manual-second",
+                "received": 2,
+                "reconnected": false,
+                "released": 1,
+                "remote_settlement_confirmed": true,
+                "count": 1
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "roundtrip",
+                "profile": "default-first",
+                "received": 1,
+                "reconnected": false,
+                "released": 0,
+                "remote_settlement_confirmed": false,
+                "count": 2
+              },
+              {
+                "accepted": 1,
+                "metadata_verified": true,
+                "operation": "roundtrip",
+                "profile": "manual-second",
+                "received": 1,
+                "reconnected": false,
+                "released": 0,
+                "remote_settlement_confirmed": true,
+                "count": 2
+              },
+              {
+                "accepted": 1,
+                "operation": "publish",
+                "profile": "default-first",
+                "published": 1,
+                "count": 4
+              },
+              {
+                "accepted": 1,
+                "operation": "publish",
+                "profile": "manual-second",
+                "published": 1,
+                "count": 4
+              }
+            ],
+            "lock_hash_matches_tracked_bytes_with_platform_line_endings": true,
+            "dependency_versions_licenses_resolved_urls_and_integrity_match_fixed_head_lock": true
+          },
+          "ordinary_allowlist_matches_prior_verified_run": true,
+          "ordinary_testcase_names_match_prior_verified_run": true
+        }
+      ],
+      "candidate_reinstall_build_library_paths_removed_verified": true
+    }
+  ],
+  "local_extra_harness_checks_included_in_ci_totals": false,
+  "local_extra_harness_checks_excluded_from_ci_totals": 5
+}
