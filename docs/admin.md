@@ -8,7 +8,7 @@
 - 确认 fsync/full_page_writes/synchronous_commit，检查 SSD/文件系统实际刷盘保证
 - 验证数据备份与完整恢复；保留原生库、SQL版本、角色/权限和外部证书配置
 - 设置磁盘、WAL、队列容量、死信、worker反复重启、等待锁与消息滞留告警
-- 按[v0.1.0发布说明](releases/v0.1.0.md)核对来源与散列；正式Release原样分发未签名的candidate ZIP，不能当作生产资格证明。项目已采用标准Apache-2.0；生产支持责任仍需明确
+- 按对应的[v0.1.1发布说明](releases/v0.1.1.md)或[v0.1.0历史说明](releases/v0.1.0.md)核对来源与散列；正式Release原样分发未签名的candidate ZIP，不能当作生产资格证明。项目已采用标准Apache-2.0；生产支持责任仍需明确
 
 ## 配置参考
 
@@ -79,3 +79,10 @@ SQL enqueue可以和业务更新同事务，但调用方自行承担事务长度
 ## 断电与硬件
 
 仓库保留SIGKILL/taskkill与immediate restart测试，但当前普通CI不执行这些场景，完整安全/故障资格仍为blocked_security_review。不能把保留的测试代码或历史覆盖当作本次二进制已通过的结果；即便执行进程强杀，也没有切断设备电源，不能证明磁盘控制器缓存、掉电保护或文件系统屏障行为。真实门店验收应在可牺牲硬件/数据上、经过授权的流程中断电，恢复后核对已Accepted记录、未提交事务和业务副作用；同时测试UPS与磁盘满场景。
+
+
+## 分发版本与SQL扩展版本
+
+v0.1.1原生分发不会自动迁移数据库。MANIFEST.version/distribution_version/native_build_version
+表示原生分发0.1.1，extensionVersion/sql_default_version仍为0.1.0；可选SQL0.1.1
+只能显式升级。已有数据库实际版本以pg_extension.extversion为准，不能由Release tag推断。

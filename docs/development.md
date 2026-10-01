@@ -65,3 +65,12 @@ Linux 从候选复制扩展、SQL 与 Proton 库，随后去掉 `LD_LIBRARY_PATH
 SHA256 用于发现文件损坏和清单不一致，不代表签名认证；不可信来源能够同时替换 ZIP 与散列。本次正式公开发行仍未签名，必须从可信来源获取；签名分发流程尚需建立。
 
 v0.1.0以ef12d35447c7783f75ca123467208eb100533311和[普通CI36854708200](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36854708200)为二进制依据：六组合源码与归档重装两轮共476次普通测试通过、12个core.sql完成标记。37fc015的416次执行、固定450二进制的464次执行、后续ad589825整合树的另一次464次执行及.2包装器烟测是[验证记录](validation.md)中的独立历史基线，不与本次混算。完整安全/故障资格、生产支持与第三方分发审查仍独立保留，不因合并或正式公开发行解除。
+
+
+## v0.1.1版本身份
+
+package_versions.json明确区分分发/原生构建0.1.1和SQL默认0.1.0；CMake构建缓存、
+control及可用SQL文件会在打包时交叉核对。MANIFEST.extensionVersion供机器消费者
+读取SQL默认，不要把version/distribution_version当作数据库extversion。新增兼容性
+测试证明旧0.1.0包可读，新原生包安装不执行SQL迁移。v0.1.1只会发布固定的成功main CI
+字节，实际来源、测试次数与资源散列以该Release的PROVENANCE为准；上述旧版本数字是历史记录。
