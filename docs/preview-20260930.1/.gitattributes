@@ -1,0 +1,2 @@
+# Preserve delivered bytes even when Windows has core.autocrlf enabled.
+guide/** -text

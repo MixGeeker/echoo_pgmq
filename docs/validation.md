@@ -59,4 +59,4 @@ GitHub归档当前保留至2026-10-14，下载可能需登录有访问权的账�
 - [51ca717首次固定预算实测](benchmark-results.md)：27单元，echoo12/12、Rabbit10/12未达暂定合成DB p95增幅≤10%
 - [472e626唤醒试验实测](benchmark-wake-results.md)：27单元，echoo明显未达到设定发送速率，24/24代理单元未达暂定DB目标；PG-only本身不稳定，跨共享runner不能作严格A/B
 - 两轮全部原始数据、慢轮次与失败目标保留。普通CI通过和数据采集成功都不能替代性能、故障或安全验收
-- [短机制诊断提案](performance-diagnosis.md)只有只读分析和未来设计，尚未执行新负载。先验证同机PG-only稳定性，再考虑随机交错配对；不立即第三轮长测
+- [短机制诊断](ordinary-tail-results.md)已在8b333f1执行一次，G0失败后正常停止，未运行A/B；此后独立同机普通实验见[最新进度](PROGRESS.md)。旧失败和未跑单元保留，没有重跑失败runner刷绿

@@ -1,0 +1,11 @@
+trial,scenario,contended,node_duration_ms,enqueue_to_commit_send_ms,observed_wait_to_commit_send_ms,commit_call_ms,commit_send_to_stdout_ack_observed_ms,commit_return_to_stdout_ack_observed_ms
+publish_baseline_1,publish,False,4.879919,5.075173,,0.199771,6.65132,6.451549
+publish_baseline_2,publish,False,2.268602,4.645145,,0.110266,3.839926,3.72966
+publish_contended_1,publish,True,157.926051,161.901275,150.121001,0.459864,2.067869,1.608005
+publish_contended_2,publish,True,157.563499,160.741417,150.117386,0.461376,2.435062,1.973686
+publish_contended_3,publish,True,157.941444,162.988094,150.178988,0.627967,2.151149,1.523182
+settle_baseline_1,settle,False,1.465871,5.680376,,0.154463,2.432183,2.27772
+settle_baseline_2,settle,False,1.254982,4.424793,,0.223687,2.229481,2.005794
+settle_contended_1,settle,True,157.892548,162.285247,150.149301,0.527345,2.005169,1.477824
+settle_contended_2,settle,True,157.50881,160.585079,150.13506,0.452943,2.022606,1.569663
+settle_contended_3,settle,True,157.099484,160.546612,150.125678,0.501021,2.074689,1.573668

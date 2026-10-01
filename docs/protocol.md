@@ -1,5 +1,7 @@
 # 协议、语义与兼容矩阵
 
+固定预览的配置、完整SQL公共签名及逐项已测/未测状态请先读[preview-20260930.1契约](preview-20260930.1-contract.md)。下文历史37fc015计数保持其原提交范围；当前450预览普通矩阵为每轮PG18 44项、PG16/17 36项，共464次执行。
+
 ## 支持范围
 
 | 项目 | 0.1.0 范围 |
@@ -42,7 +44,11 @@ PG18普通CI在源码安装、候选归档重装两轮各执行32项既有普通
 
 队列名最长128字节，数据库约束要求以字母/数字开始，其后为 ASCII 字母、数字、点、下划线、斜杠或短横线。地址本身不带 URL 编码、`queue://` 前缀或 exchange 路由语义。
 
-CN 必须是短的 ASCII 主体名（最多63字节），并精确匹配被授权数据库角色。客户端即使发送 SASL username、message user-id 或不同 container-id，也不会替换证书身份。SQL API 使用 session_user，SET ROLE 不能模拟另一个已授权登录主体。
+CN 仅允许`[A-Za-z0-9_-]{1,63}`，区分大小写（不是任意ASCII角色名），并精确匹配被授权数据库角色。客户端即使发送 SASL username、message user-id 或不同 container-id，也不会替换证书身份。SQL API 使用 session_user，SET ROLE 不能模拟另一个已授权登录主体。
+
+## metadata的功能边界
+
+TTL、absolute-expiry、priority、group字段仅保存/透传；没有到期删除、延迟投递、优先级或分组调度。message.to不覆盖link精确队列地址；重投不改header.delivery-count，并发/重试下不保证严格FIFO。目前这些字段不会触发逐消息“不支持该语义”告警；Accepted只确认持久接收，不能当作对应broker功能已执行。应用依赖这些功能时必须在接入检查中排除本预览。部分不支持或未授权attach会连同整个connection关闭。
 
 ## Accepted、租约与重试
 

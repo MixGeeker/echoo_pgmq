@@ -1,0 +1,63 @@
+{
+  "scope": "Existing six-cell seven-plan native trace retained-count reconstruction; no new workload",
+  "aggregate": {
+    "A": {
+      "all_claims": 52046,
+      "successful_claims": 17983,
+      "empty_claims": 34063,
+      "empty_at_retained_zero": 16033,
+      "empty_at_retained_positive": 18030,
+      "empty_unknown": 0,
+      "zero_share_of_empty_pct": 47.06866688195402,
+      "zero_empty_share_of_all_claims_pct": 30.805441340352765,
+      "positive_share_of_empty_pct": 52.93133311804598,
+      "empty_share_of_all_claims_pct": 65.44787303539177,
+      "retained_histogram_at_empty": {
+        "0": 16033,
+        "1": 17995,
+        "2": 32,
+        "3": 2,
+        "4": 1
+      },
+      "positive_empty_all_retained_already_claimed": 18030,
+      "empty_elapsed_ns_by_class": {
+        "zero": 2239444291,
+        "positive": 2340800073,
+        "unknown": 0
+      }
+    },
+    "B": {
+      "all_claims": 52697,
+      "successful_claims": 17988,
+      "empty_claims": 34709,
+      "empty_at_retained_zero": 16678,
+      "empty_at_retained_positive": 18031,
+      "empty_unknown": 0,
+      "zero_share_of_empty_pct": 48.05093779711314,
+      "zero_empty_share_of_all_claims_pct": 31.648860466440215,
+      "positive_share_of_empty_pct": 51.94906220288686,
+      "empty_share_of_all_claims_pct": 65.865229519707,
+      "retained_histogram_at_empty": {
+        "0": 16678,
+        "1": 18024,
+        "2": 7
+      },
+      "positive_empty_all_retained_already_claimed": 18031,
+      "empty_elapsed_ns_by_class": {
+        "zero": 1692565123,
+        "positive": 1672335622,
+        "unknown": 0
+      }
+    }
+  },
+  "settlement_outcome_evidence": "Inferred from fixed accept-only consumer source, exact message/tag/receipt/operation joins, client status, and zero retained boundaries; trace does not directly log outcome",
+  "source_native_full_zip_sha256": "51d329d1e7092ea33462ebf63b6b7dea59ffc716118793b3a75948026289081d",
+  "limitations": [
+    "Counts describe this recorded 1-producer/1-consumer 200-message/s setup, not other traffic mixes.",
+    "Outcome classification is corroborated inference, not a directly recorded outcome field.",
+    "Elapsed time is not CPU; this classification does not predict full-MQ speedup.",
+    "Do not substitute future-lease microbenchmark overhead for ready-message claim overhead.",
+    "Statement-trigger/reentry semantics and production qualification remain unresolved."
+  ],
+  "count_window": "Aggregates count claims within each verified native measurement envelope, not all-phase trace totals; all-phase ID/receipt matching supports the closed reconstruction model."
+}
