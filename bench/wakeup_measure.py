@@ -43,6 +43,8 @@ def summarize(row):
 def snapshot(db):
     db.execute('SELECT pg_stat_clear_snapshot()')
     return {
+        'wal_insert_lsn': str(db.execute('SELECT pg_current_wal_insert_lsn()').fetchone()[0]),
+        'wal_flush_lsn': str(db.execute('SELECT pg_current_wal_flush_lsn()').fetchone()[0]),
         'wal': db.execute('SELECT row_to_json(w) FROM pg_stat_wal w').fetchone()[0],
         'database': db.execute("SELECT row_to_json(d) FROM pg_stat_database d WHERE datname=current_database()").fetchone()[0],
         'lock_waiters': db.execute("SELECT count(*) FROM pg_stat_activity WHERE datname=current_database() AND wait_event_type='Lock'").fetchone()[0],
@@ -77,8 +79,11 @@ def main():
                 (output/f'{kind}-{window}.stdout.txt').write_text(proc.stdout)
                 (output/f'{kind}-{window}.stderr.txt').write_text(proc.stderr)
                 details={'kind':kind,'window':window,'client_exit':proc.returncode,'wall_seconds':elapsed,
+                         'worker_cpu_scope':'whole client cell including TLS/link lifecycle',
                          'worker_cpu_seconds':after_cpu.user+after_cpu.system-cpu.user-cpu.system,
                          'before':before,'after':snapshot(db)}
+                details['generated_wal_bytes_lsn']=int(db.execute('SELECT pg_wal_lsn_diff(%s::pg_lsn,%s::pg_lsn)',(details['after']['wal_insert_lsn'],before['wal_insert_lsn'])).fetchone()[0])
+                details['wal_statistics_usable_for_cell_attribution']=False
                 details['worker_one_core_cpu_pct']=100*details['worker_cpu_seconds']/elapsed
                 report['results'].append(details);save()
                 proc.check_returncode()

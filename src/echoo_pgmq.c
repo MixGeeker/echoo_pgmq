@@ -40,6 +40,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #endif
@@ -700,6 +701,25 @@ service_io(EchooConnection *connection, uint32 events)
     }
 }
 
+/* AMQP is a duplex request/disposition protocol. Avoid holding small TLS
+ * writes behind unacknowledged data (TCP_NODELAY is per accepted socket,
+ * for both IPv4 and IPv6; it does not change machine-wide TCP settings).
+ */
+static bool
+configure_client_socket(pgsocket socket_fd)
+{
+    int one = 1;
+    if (!pg_set_noblock(socket_fd))
+        return false;
+    if (setsockopt(socket_fd, IPPROTO_TCP, TCP_NODELAY,
+                   (const char *) &one, sizeof(one)) != 0)
+    {
+        ereport(LOG, (errmsg("echoo_pgmq: could not set TCP_NODELAY on accepted socket")));
+        return false;
+    }
+    return true;
+}
+
 static void
 accept_connections(pgsocket listener)
 {
@@ -710,7 +730,7 @@ accept_connections(pgsocket listener)
         EchooConnection *connection;
         if (socket_fd == PGINVALID_SOCKET)
             return;
-        if (connection_count >= max_connections || !pg_set_noblock(socket_fd))
+        if (connection_count >= max_connections || !configure_client_socket(socket_fd))
         {
             closesocket(socket_fd);
             continue;

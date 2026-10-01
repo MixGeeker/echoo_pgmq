@@ -9,8 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / 'src/echoo_pgmq.c'
 
 
-def function(source, name):
-    start = source.index('static void\n' + name + '(')
+def function(source, name, return_type="void"):
+    start = source.index('static ' + return_type + '\n' + name + '(')
     body = source.index('{', start)
     depth = 1
     end = body + 1

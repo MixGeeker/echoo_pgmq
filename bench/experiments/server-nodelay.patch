@@ -1,0 +1,29 @@
+diff --git a/src/echoo_pgmq.c b/src/echoo_pgmq.c
+index 84d5f1e..c7f7666 100644
+--- a/src/echoo_pgmq.c
++++ b/src/echoo_pgmq.c
+@@ -42,0 +43 @@
++#include <netinet/tcp.h>
+@@ -669,0 +671,19 @@ service_io(EchooConnection *connection, uint32 events)
++/* AMQP is a duplex request/disposition protocol. Avoid holding small TLS
++ * writes behind unacknowledged data (TCP_NODELAY is per accepted socket,
++ * for both IPv4 and IPv6; it does not change machine-wide TCP settings).
++ */
++static bool
++configure_client_socket(pgsocket socket_fd)
++{
++    int one = 1;
++    if (!pg_set_noblock(socket_fd))
++        return false;
++    if (setsockopt(socket_fd, IPPROTO_TCP, TCP_NODELAY,
++                   (const char *) &one, sizeof(one)) != 0)
++    {
++        ereport(LOG, (errmsg("echoo_pgmq: could not set TCP_NODELAY on accepted socket")));
++        return false;
++    }
++    return true;
++}
++
+@@ -680 +700 @@ accept_connections(pgsocket listener)
+-        if (connection_count >= max_connections || !pg_set_noblock(socket_fd))
++        if (connection_count >= max_connections || !configure_client_socket(socket_fd))

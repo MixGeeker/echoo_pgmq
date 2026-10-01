@@ -1,4 +1,4 @@
-name: Queue commit wakeup paired experiment (not capacity qualification)
+name: Queue wake and TCP_NODELAY factorial (not capacity qualification)
 'on':
   push:
     branches:
@@ -10,6 +10,8 @@ name: Queue commit wakeup paired experiment (not capacity qualification)
     - scripts/run_integration.py
     - tests/test_consumer_wakeup*
     - bench/test_wakeup_measure.py
+    - bench/experiments/server-nodelay.patch
+    - tests/test_socket_nodelay_unit.py
   workflow_dispatch: null
 permissions:
   contents: read
@@ -18,7 +20,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   linux:
-    name: Linux PG18 paired synthetic wakeup experiment
+    name: Linux PG18 wake/socket factorial
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     strategy:
@@ -93,11 +95,19 @@ jobs:
         ref: 115dcfe67c1dc2ebd2bfc004ed9ce0700947ce40
         path: baseline-source
         persist-credentials: false
-    - name: Build immutable baseline then run AB BA AB fresh-cluster pairs
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      with:
+        ref: 332c6afee1dab46132eabf77eacd42cd82305ec3
+        path: wake-source
+        persist-credentials: false
+    - name: Build isolated factorial variants then run matched fresh-cluster arms
       run: |
         set -euo pipefail
-        cmake -S baseline-source -B build-baseline -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPG_CONFIG="$PG_CONFIG" -DPROTON_ROOT="$PROTON_ROOT"
-        cmake --build build-baseline --parallel 2
+        python bench/wakeup_variants.py
+        for variant in baseline wake nodelay; do
+          cmake -S "$variant-source" -B "build-$variant" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DPG_CONFIG="$PG_CONFIG" -DPROTON_ROOT="$PROTON_ROOT"
+          cmake --build "build-$variant" --parallel 2
+        done
         python bench/wakeup_pairs.py --pg-config "$PG_CONFIG" --output "$RUNNER_TEMP/wakeup-pairs"
       shell: bash
     - name: Preserve successful and failed synthetic evidence, never keys or databases
@@ -109,6 +119,7 @@ jobs:
           ${{ runner.temp }}/wakeup-pairs/pairs.json
           ${{ runner.temp }}/wakeup-pairs/**/wakeup/*
           ${{ runner.temp }}/wakeup-pairs/**/environment.json
+          ${{ runner.temp }}/wakeup-pairs/**/junit.xml
           ${{ runner.temp }}/wakeup-pairs/**/postgres.log
           ${{ runner.temp }}/evidence/junit.xml
           ${{ runner.temp }}/evidence/environment.json
@@ -116,7 +127,7 @@ jobs:
         if-no-files-found: warn
         retention-days: 30
   windows:
-    name: Windows Server 2022 PG18 paired synthetic wakeup experiment
+    name: Windows Server 2022 PG18 wake/socket factorial
     runs-on: windows-2022
     timeout-minutes: 45
     strategy:
@@ -212,15 +223,24 @@ jobs:
         ref: 115dcfe67c1dc2ebd2bfc004ed9ce0700947ce40
         path: baseline-source
         persist-credentials: false
-    - name: Build immutable baseline then run AB BA AB fresh-cluster pairs
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      with:
+        ref: 332c6afee1dab46132eabf77eacd42cd82305ec3
+        path: wake-source
+        persist-credentials: false
+    - name: Build isolated factorial variants then run matched fresh-cluster arms
       run: |
         $ErrorActionPreference = 'Stop'
-        cmake -S baseline-source -B build-baseline -A x64 "-DPG_CONFIG=$env:PG_CONFIG" "-DPROTON_ROOT=$env:PROTON_ROOT"
-        if ($LASTEXITCODE -ne 0) { throw 'Baseline configure failed' }
-        cmake --build build-baseline --config RelWithDebInfo --parallel 2
-        if ($LASTEXITCODE -ne 0) { throw 'Baseline build failed' }
+        python bench/wakeup_variants.py
+        if ($LASTEXITCODE -ne 0) { throw 'Variant source isolation failed' }
+        foreach ($variant in @('baseline','wake','nodelay')) {
+          cmake -S "$variant-source" -B "build-$variant" -A x64 "-DPG_CONFIG=$env:PG_CONFIG" "-DPROTON_ROOT=$env:PROTON_ROOT"
+          if ($LASTEXITCODE -ne 0) { throw "Configure failed: $variant" }
+          cmake --build "build-$variant" --config RelWithDebInfo --parallel 2
+          if ($LASTEXITCODE -ne 0) { throw "Build failed: $variant" }
+        }
         python bench/wakeup_pairs.py --pg-config "$env:PG_CONFIG" --output "$env:RUNNER_TEMP/wakeup-pairs"
-        if ($LASTEXITCODE -ne 0) { throw 'Paired experiment failed; retain partial evidence' }
+        if ($LASTEXITCODE -ne 0) { throw 'Factorial experiment failed; retain partial evidence' }
     - name: Preserve successful and failed synthetic evidence, never keys or databases
       if: always()
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -230,6 +250,7 @@ jobs:
           ${{ runner.temp }}/wakeup-pairs/pairs.json
           ${{ runner.temp }}/wakeup-pairs/**/wakeup/*
           ${{ runner.temp }}/wakeup-pairs/**/environment.json
+          ${{ runner.temp }}/wakeup-pairs/**/junit.xml
           ${{ runner.temp }}/wakeup-pairs/**/postgres.log
           ${{ runner.temp }}/evidence/junit.xml
           ${{ runner.temp }}/evidence/environment.json

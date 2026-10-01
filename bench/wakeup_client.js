@@ -39,7 +39,8 @@ container.on('released', () => fail('publish released'));
 container.on('message', context => {
     const id = String(context.message.message_id), sample = samples.get(id);
     if (!sample || sample.receive_ms !== undefined) return fail('missing or duplicate message');
-    assert.equal(context.message.body.content.toString(), 'synthetic-' + id);
+    if (context.message.body?.content?.toString() !== 'synthetic-' + id) return fail('payload mismatch');
+    if (context.delivery.remote_settled) return fail('unexpected pre-settled delivery');
     sample.receive_ms = now();
     context.delivery.accept();
     context.delivery.context = id;
@@ -48,6 +49,8 @@ container.on('settled', context => {
     if (!context.receiver) return;
     const id = context.delivery.context, sample = samples.get(id);
     if (!sample) return fail('unknown consumer settlement');
+    if (!context.delivery.remote_settled || context.delivery.remote_state?.constructor?.composite_type !== 'accepted')
+        return fail('consumer completion did not carry remote accepted settlement');
     sample.settled_ms = now();
     completed.add(id);
     if (kind === 'backlog') receiver.add_credit(1);
@@ -73,7 +76,8 @@ async function batch(count, prefix) {
     sender=connection.open_sender(queue);
     receiver=connection.open_receiver({source:{address:queue},credit_window:0,autoaccept:false,autosettle:false,rcv_settle_mode:1});
     await until(() => sender.sendable() && receiver.is_open(), 'links');
-    record.start_ms=now();
+    if (receiver.remote.attach.rcv_settle_mode !== 1) throw new Error('receiver settlement mode SECOND required');
+    record.start_ms=now(); save();
     if (kind==='idle') { receiver.add_credit(window); await sleep(5000); }
     else if (kind==='backlog') {
         await batch(256,'backlog-');
@@ -88,9 +92,11 @@ async function batch(count, prefix) {
             await batch(window,'sparse-'+round+'-');
             const expected=(round+1)*window;
             await until(() => completed.size===expected && [...samples.values()].every(x => x.accepted_ms!==undefined),'sparse cohort');
+            save();
         }
     }
     record.end_ms=now(); record.complete_count=completed.size;
+    record.socket_bytes_read=connection.socket.bytesRead; record.socket_bytes_written=connection.socket.bytesWritten;
     record.status='passed'; save();
     closing=true; connection.close();
     await until(() => connection.is_closed(),'close');

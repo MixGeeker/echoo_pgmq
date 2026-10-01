@@ -19,6 +19,7 @@ REPO = Path(__file__).resolve().parents[1]
 # into adversarial-input, resource-exhaustion, fault-injection or crash testing.
 ORDINARY_TESTS = [
     "tests/test_consumer_wakeup_unit.py",
+    "tests/test_socket_nodelay_unit.py",
     "tests/test_consumer_wakeup.py::test_empty_consumer_separate_connection_orders",
     "tests/sql/test_bounded_storage.py::test_concurrent_same_key_creates_one_message",
     "tests/sql/test_bounded_storage.py::test_concurrent_key_quota_cannot_overbook",
