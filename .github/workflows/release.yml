@@ -1,0 +1,61 @@
+name: Publish reviewed v0.1.0 CI artifacts
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/release.yml'
+      - 'releases/v0.1.0.json'
+      - 'scripts/release_from_ci.py'
+      - 'tests/test_release_from_ci.py'
+      - 'docs/releases/v0.1.0.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-v0.1.0
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    if: github.repository == 'MixGeeker/echoo_pgmq' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Test release controls
+        run: python -m unittest discover -s tests -p test_release_from_ci.py -v
+      - name: Verify fixed trusted CI source and byte-identical assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/release_from_ci.py --output "$RUNNER_TEMP/release-validate"
+
+  publish:
+    needs: validate
+    if: github.repository == 'MixGeeker/echoo_pgmq' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      # Revalidate immutable inputs in this isolated runner. No artifact code is executed.
+      # No PAT, new secret, environment permission or repository setting is required.
+      - name: Verify, create non-overwriting tag, upload draft and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/release_from_ci.py --output "$RUNNER_TEMP/release-publish" --publish
