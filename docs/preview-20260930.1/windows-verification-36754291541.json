@@ -1,0 +1,40 @@
+{
+  "run": 36754291541,
+  "head": "c152c282e0a86c4d3261a0a2d5ae3e704a5c360c",
+  "actual_checkout": "1b0b0d8fb1a3942c25d0a05ac4cf23f54a9bec88",
+  "same_tree": "8f3cfb3500b9567c81f3c1df949d177860aa7183",
+  "artifact_sha256": "214b11307e9ecae9717c28c2150c5ba06dc171815c431adab6261a343b4f751f",
+  "status": "passed",
+  "fixed_preview": "20260930.1",
+  "extension": "0.1.0",
+  "guide_hashes_verified": 12,
+  "wrapper_sha256": "f39a3a96eca34d432c589f01e504c69286e6dc284ebc80bd794b607b605149af",
+  "original_candidate_sha256": "a8107211653c966dca2792726a84e4013bd7c1eb010e40700f755d3d425ff164",
+  "preview_exit_codes": {
+    "install": 0,
+    "init": 0,
+    "start": 0,
+    "sql-demo": 0,
+    "amqp-demo": 0,
+    "stop": 0
+  },
+  "rhea_scenarios": [
+    "roundtrip",
+    "release",
+    "reconnect"
+  ],
+  "sql_demo_marker": true,
+  "normal_shutdown": true,
+  "pg_status": 3,
+  "platform": {
+    "os": "Windows",
+    "release": "2022Server",
+    "version": "10.0.20348",
+    "architecture": "AMD64",
+    "image_os": "win22",
+    "image_version": "20260927.320.1"
+  },
+  "windows11_qualification": false,
+  "qualification_status": "blocked_security_review",
+  "scope": "ordinary exact-package and exact-guide Windows Server2022 smoke, not full core.sql or security/fault qualification"
+}

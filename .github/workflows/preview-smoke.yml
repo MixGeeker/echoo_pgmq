@@ -1,0 +1,122 @@
+name: Fixed PG18 previews ordinary Windows smoke
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/preview-smoke.yml'
+      - 'docs/preview-20260930.1/**'
+      - 'docs/preview-20260930.2/**'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/preview-smoke.yml'
+      - 'docs/preview-20260930.1/**'
+      - 'docs/preview-20260930.2/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: preview-smoke-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  windows-preview:
+    if: github.event_name == 'workflow_dispatch'
+    name: Windows Server 2022 / fixed PG18 preview.1 ordinary wrapper
+    runs-on: windows-2022
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24'
+      - name: Run exact delivered wrapper with original candidate bytes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $opensslCommand = Get-Command openssl -CommandType Application -ErrorAction Stop | Select-Object -First 1
+          $opensslPath = [string]$opensslCommand.Source
+          if (![IO.Path]::IsPathFullyQualified($opensslPath) -or !(Test-Path -LiteralPath $opensslPath -PathType Leaf)) {
+            throw 'The runner OpenSSL executable must be one existing absolute file path'
+          }
+          $env:ECHOO_TEST_OPENSSL = $opensslPath
+          Write-Host "Resolved OpenSSL executable: $opensslPath"
+          & $opensslPath version
+          if ($LASTEXITCODE -ne 0) { throw 'The resolved runner OpenSSL executable could not report its version' }
+          python docs/preview-20260930.1/run_windows_smoke.py
+          if ($LASTEXITCODE -ne 0) { throw 'Fixed preview ordinary smoke failed; inspect allowlisted evidence' }
+      - name: Preserve ordinary results and sanitized logs only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: preview-20260930.1-windows-server2022-pg18-evidence
+          path: |
+            ${{ runner.temp }}/echoo-preview-evidence/result.json
+            ${{ runner.temp }}/echoo-preview-evidence/stages.log
+            ${{ runner.temp }}/echoo-preview-evidence/postgres.log
+            ${{ runner.temp }}/echoo-preview-evidence/demo-results.json
+          if-no-files-found: warn
+          retention-days: 14
+
+  windows-preview-two:
+    name: Windows Server 2022 / fixed PG18 preview.2 ordinary wrapper
+    runs-on: windows-2022
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24'
+      - name: Validate ordinary preview runner arguments and results
+        run: python -m unittest discover -s docs/preview-20260930.2 -p "test_*.py" -v
+      - name: Run new .2 wrapper with fixed original candidate bytes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $opensslCommand = Get-Command openssl -CommandType Application -ErrorAction Stop | Select-Object -First 1
+          $opensslPath = [string]$opensslCommand.Source
+          if (![IO.Path]::IsPathFullyQualified($opensslPath) -or !(Test-Path -LiteralPath $opensslPath -PathType Leaf)) {
+            throw 'The runner OpenSSL executable must be one existing absolute file path'
+          }
+          $env:ECHOO_TEST_OPENSSL = $opensslPath
+          Write-Host "Resolved OpenSSL executable: $opensslPath"
+          & $opensslPath version
+          if ($LASTEXITCODE -ne 0) { throw 'The resolved runner OpenSSL executable could not report its version' }
+          python docs/preview-20260930.2/run_windows_smoke.py
+          if ($LASTEXITCODE -ne 0) { throw 'Fixed preview ordinary smoke failed; inspect allowlisted evidence' }
+      - name: Preserve ordinary results and sanitized logs only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: preview-20260930.2-windows-server2022-pg18-evidence
+          path: |
+            ${{ runner.temp }}/echoo-preview-evidence/result.json
+            ${{ runner.temp }}/echoo-preview-evidence/stages.log
+            ${{ runner.temp }}/echoo-preview-evidence/postgres.log
+            ${{ runner.temp }}/echoo-preview-evidence/demo-results.json
+            ${{ runner.temp }}/echoo-preview-evidence/policy-results.json
+          if-no-files-found: warn
+          retention-days: 14

@@ -1,0 +1,9 @@
+{
+  "name": "echoo-pgmq-independent-interop",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Ordinary AMQP 1.0 compatibility checks using independent JavaScript rhea",
+  "dependencies": {
+    "rhea": "3.0.5"
+  }
+}
