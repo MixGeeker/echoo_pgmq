@@ -1,2 +1,5 @@
 # Freeze the exact .2 delivery/CI input bytes on Windows too.
 docs/preview-20260930.2/** text eol=lf
+# Preserve the standard license and project notice bytes on every platform.
+/LICENSE text eol=lf
+/NOTICE text eol=lf

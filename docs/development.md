@@ -25,7 +25,7 @@ python scripts/run_integration.py --ordinary --pg-config /path/to/pg_config --wo
 
 ## CI策略
 
-GitHub Actions在PR与main推送上运行，六个功能矩阵：Ubuntu24.04 PG18（主要目标）及16/17、WindowsServer2022原生PG18（主要目标）及16/17。每个自动任务安装扩展，执行 `--ordinary` 明确允许的 SQL/storage 并发、备份/升级、候选归档单元测试，以及正常 AMQP 二进制/提交/重投/迟到 ACK/release 语义，PG18额外安装锁定的Node/rhea测试依赖并运行8项独立实现互操作，当前清单每轮44项；PG16/17每轮36项，六组合源码安装和归档重装共464次执行。这个预期数量仍须由每次实际JUnit、core.sql结束标记和归档核验确认。源码安装和归档重装均成功后保留candidate证据。自动任务不包含畸形输入、连接耗尽、进程强杀或故障注入。actions固定commit SHA，权限只读，checkout不保留凭据，没有publish-release、token写权限、continue-on-error或伪造成功。
+GitHub Actions在PR与main推送上运行，六个功能矩阵：Ubuntu24.04 PG18（主要目标）及16/17、WindowsServer2022原生PG18（主要目标）及16/17。每个自动任务安装扩展，执行 `--ordinary` 明确允许的 SQL/storage 并发、备份/升级、候选归档单元测试，以及正常 AMQP 二进制/提交/重投/迟到 ACK/release 语义，PG18额外安装锁定的Node/rhea测试依赖并运行8项独立实现互操作，新增项目与依赖通知打包回归后，当前清单每轮45项；PG16/17每轮37项，六组合源码安装和归档重装预期共476次执行。这个预期数量仍须由每次实际JUnit、core.sql结束标记和归档核验确认。源码安装和归档重装均成功后保留candidate证据。自动任务不包含畸形输入、连接耗尽、进程强杀或故障注入。actions固定commit SHA，权限只读，checkout不保留凭据，没有publish-release、token写权限、continue-on-error或伪造成功。
 
 完整功能矩阵保留在 `qualification.yml`，安全矩阵保留在 `security.yml`，均仅允许手动 `workflow_dispatch`，当前等待安全审阅，不自动触发。所有 candidate manifest 均明确写入 `qualification_status=blocked_security_review`。普通任务通过不等于完整验收，未执行的测试不会被记作通过。
 
@@ -50,7 +50,7 @@ python scripts/package_candidate.py --pg-config /path/to/pg_config --build-dir b
   --proton-root /path/to/proton --output dist
 ```
 
-ZIP含扩展、版本SQL/control、Proton运行库、中文文档、第三方许可、MANIFEST与SHA256旁文件。WindowsOpenSSL由可信发行版/系统提供，不覆盖PG已有DLL。打包拒绝CMake开启故障注入的构建，并扫描已安装库中的专用hook标识，避免测试库混入候选。该包没有自动签名、最终发布或无审核自动部署；项目许可仍待所有者决定。候选安装/ABI核查参见quickstart。
+ZIP含扩展、版本SQL/control、Proton运行库、中文文档、项目LICENSE/NOTICE、第三方许可、MANIFEST与SHA256旁文件；project_license记为Apache-2.0，通知文件纳入完整散列清单。WindowsOpenSSL由可信发行版/系统提供，不覆盖PG已有DLL。打包拒绝CMake开启故障注入的构建，并扫描已安装库中的专用hook标识，避免测试库混入候选。该包没有自动签名、最终发布或无审核自动部署；项目采用标准Apache-2.0，第三方组件保留各自通知。候选安装/ABI核查参见quickstart。
 
 ## 发布门槛（尚需逐项形成证据）
 
@@ -64,4 +64,4 @@ Linux 从候选复制扩展、SQL 与 Proton 库，随后去掉 `LD_LIBRARY_PATH
 
 SHA256 用于发现文件损坏和清单不一致，不代表签名认证；不可信来源能够同时替换 ZIP 与散列。正式发布仍需独立可信分发与签名流程。
 
-37fc015的416次执行是历史基线。固定450二进制的464次执行、后续ad589825整合树的另一次464次执行，以及.2包装器烟测分别记录在[验证记录](validation.md)。2026-10-01整合候选须核实自己的普通CI，不能用旧绿替代。main可以承载已验证的预发布代码；完整安全资格、正式生产发行与许可证决定仍独立保留，不因合并解除。
+37fc015的416次执行是历史基线。固定450二进制的464次执行、后续ad589825整合树的另一次464次执行，以及.2包装器烟测分别记录在[验证记录](validation.md)。2026-10-01整合候选须核实自己的普通CI，不能用旧绿替代。main可以承载已验证的预发布代码；完整安全资格、正式生产发行与第三方分发审查仍独立保留，不因合并解除。
