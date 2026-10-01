@@ -105,3 +105,29 @@ pg_stat_wal snapshots are marked unusable for per-cell attribution. Neither
 zero boundary lock waiters nor a40ms gap establishes a causal storage/network
 attribution. TCP_NODELAY effects will be judged from the factorial; packet-level
 Nagle/delayed-ACK behavior has not been directly captured.
+
+## Factorial installation audit and correction
+
+Run36913155367 is not valid as a Linux four-arm factorial: baseline, wake-only
+and NODELAY-only all recorded one installed module hash. Their requested source
+hashes were distinct, but CMake logged Up-to-date while switching modules. The
+combined module was distinct. All raw artifacts remain available; no Linux
+factor attribution is made from that run. Windows had four distinct stable
+installed hashes, but no pre-install build-hash assertion yet.
+
+The corrected experiment preflights four distinct build-module SHA256 values,
+checks that the preceding owned cluster is stopped, installs schema files, then
+stages an exact copy of the intended build library and atomically renames it
+into place. Staged and installed bytes must both match the expected build hash
+before a gate or timed arm starts. A failed identity check stops immediately.
+Private CI measurements use unmodified build libraries with their build RPATH
+pointing at the same verified Proton installation; ordinary package/reinstall
+regressions remain a separate check. No running cluster or loaded DLL is
+intentionally overwritten. Unit tests cover stale/mismatched identities and
+running/unknown cluster status.
+
+The original two-arm run36909344362 has two distinct stable installed hashes on
+both platforms, and its logs show installation at each variant switch. Its
+Up-to-date lines occur only on intentionally repeated same-variant arms. No
+aliasing was observed there. It nevertheless lacks pre-install build hashes,
+so exact build-to-installed byte identity cannot be retroactively proved.

@@ -3,6 +3,7 @@ name: Queue wake and TCP_NODELAY factorial (not capacity qualification)
   push:
     branches:
     - perf/queue-commit-wakeup-20261001
+    - benchmarks/wakeup-install-verify-20261001
     paths:
     - src/echoo_pgmq.c
     - bench/wakeup_*
@@ -89,7 +90,7 @@ jobs:
         set -euo pipefail
         python scripts/run_integration.py --ordinary ${INDEPENDENT_CLIENT:-} --pg-config "$PG_CONFIG" --work-dir "$RUNNER_TEMP/evidence" --keep
     - name: Validate cohort accounting without external traffic
-      run: python -m unittest discover -s bench -p test_wakeup_measure.py -v
+      run: python -m unittest discover -s bench -p "test_wakeup*.py" -v
     - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       with:
         ref: 115dcfe67c1dc2ebd2bfc004ed9ce0700947ce40
@@ -217,7 +218,7 @@ jobs:
         python @integrationArgs
         if ($LASTEXITCODE -ne 0) { throw 'Integration tests failed' }
     - name: Validate cohort accounting without external traffic
-      run: python -m unittest discover -s bench -p test_wakeup_measure.py -v
+      run: python -m unittest discover -s bench -p "test_wakeup*.py" -v
     - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       with:
         ref: 115dcfe67c1dc2ebd2bfc004ed9ce0700947ce40
