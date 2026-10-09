@@ -16,6 +16,12 @@ def zipped(files):
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, 'w') as z:
         for name, data in files:
+            if isinstance(name, str):
+                # ZipInfo turns os.sep into '/' on Windows; keep the raw member
+                # name so unsafe-name rejection is exercised on every platform.
+                info = zipfile.ZipInfo(name)
+                info.filename = name
+                name = info
             z.writestr(name, data)
     return buf.getvalue()
 
