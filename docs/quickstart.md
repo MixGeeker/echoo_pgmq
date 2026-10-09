@@ -4,7 +4,7 @@
 
 ## 1. 编译与安装
 
-目标为 x86-64 Linux、原生 Windows；PostgreSQL 18（主要目标）及16/17 分别构建。需要对应服务器头文件与 import library（Windows）、CMake ≥3.20、C11 编译器、Apache Proton 0.40.0 和 OpenSSL。Python ≥3.12 仅用于构建辅助/测试，不是服务运行依赖。
+目标为 x86-64 与 arm64（aarch64）Linux、x64 原生 Windows；PostgreSQL 18（主要目标）及16/17 分别构建。需要对应服务器头文件与 import library（Windows）、CMake ≥3.20、C11 编译器、Apache Proton 0.40.0 和 OpenSSL。Python ≥3.12 仅用于构建辅助/测试，不是服务运行依赖。
 
 Linux 的完整最短命令在 [README](../README.md)。CMake 的 `PG_CONFIG` 必须指向目标实例的开发安装，`PROTON_ROOT` 指向以 OpenSSL 后端构建的 Proton。运行 `cmake --install build` 默认安装到 pg_config 输出的 pkglibdir 与 sharedir/extension。
 
