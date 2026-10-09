@@ -33,7 +33,7 @@ find_path(PROTON_INCLUDE_DIR proton/connection_driver.h
 find_library(PROTON_LIBRARY NAMES qpid-proton libqpid-proton
   HINTS "${PROTON_ROOT}/lib" "${PROTON_ROOT}/lib64" REQUIRED)
 
-add_library(echoo_pgmq MODULE src/echoo_pgmq.c src/storage.c src/message.c)
+add_library(echoo_pgmq MODULE src/echoo_pgmq.c src/storage.c src/message.c src/message_validate.c)
 set_target_properties(echoo_pgmq PROPERTIES PREFIX "" OUTPUT_NAME "echoo_pgmq"
   BUILD_RPATH "${PROTON_ROOT}/lib;${PROTON_ROOT}/lib64"
   INSTALL_RPATH "$ORIGIN")

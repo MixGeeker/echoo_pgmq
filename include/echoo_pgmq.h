@@ -3,6 +3,7 @@
 
 #include "postgres.h"
 #include "utils/uuid.h"
+#include "echoo_message_valid.h"
 
 /* SQL bridge. Every call owns a top-level transaction and catches SQL ERROR.
  * Returned message bytes use malloc, never transaction-scoped PostgreSQL memory.
@@ -20,7 +21,6 @@ extern int echoo_max_message_bytes;
 #ifdef ECHOO_ENABLE_TEST_HOOKS
 extern bool echoo_test_fail_settle_before_commit;
 #endif
-bool echoo_message_valid(const unsigned char *bytes, size_t size);
 bool echoo_db_authorize(const char *queue, const char *identity, bool publish);
 bool echoo_db_publish(const char *queue, const char *identity,
                       const unsigned char *body, size_t size);
