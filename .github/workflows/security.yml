@@ -63,6 +63,19 @@ jobs:
             "$RUNNER_TEMP/proton-fuzz" "$RUNNER_TEMP/corpus" \
             -max_total_time=60 -timeout=3 -rss_limit_mb=1024 -max_len=65536 \
             -artifact_prefix=security-results/crashes/ 2>&1 | tee security-results/fuzz.txt
+      - name: Fuzz production message validator with ASAN and UBSAN
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Same validator the worker runs on AMQP transfers and SQL-enqueued bodies;
+          # inputs up to the 1 MiB default max_message_bytes, seeded with a 100k-deep list.
+          clang tests/fuzz/message_valid.c src/message_validate.c -o "$RUNNER_TEMP/validator-fuzz" \
+            -Iinclude -I"$RUNNER_TEMP/proton/include" -L"$RUNNER_TEMP/proton/lib" -lqpid-proton \
+            -Wl,-rpath,"$RUNNER_TEMP/proton/lib" -fsanitize=fuzzer,address,undefined -g
+          ASAN_OPTIONS=detect_leaks=1 UBSAN_OPTIONS=halt_on_error=1 \
+            "$RUNNER_TEMP/validator-fuzz" "$RUNNER_TEMP/corpus" \
+            -max_total_time=120 -timeout=3 -rss_limit_mb=2048 -max_len=1048576 \
+            -artifact_prefix=security-results/crashes/validator- 2>&1 | tee security-results/validator-fuzz.txt
       - name: Keep reports and minimized failures
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

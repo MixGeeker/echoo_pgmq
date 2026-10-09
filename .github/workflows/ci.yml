@@ -15,13 +15,17 @@ concurrency:
 
 jobs:
   linux:
-    name: Linux PG${{ matrix.pg }} / native AMQP 1.0
-    runs-on: ubuntu-24.04
+    # x64 keeps its historical job/artifact names; arm64 runs natively on GitHub's Arm runner.
+    name: Linux${{ matrix.arch == 'arm64' && ' arm64' || '' }} PG${{ matrix.pg }} / native AMQP 1.0
+    runs-on: ${{ matrix.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
     timeout-minutes: 35
     strategy:
       fail-fast: false
       matrix:
         pg: ['18', '16', '17']
+        arch: ['x64', 'arm64']
+    env:
+      ARTIFACT_PREFIX: linux${{ matrix.arch == 'arm64' && '-arm64' || '' }}-pg${{ matrix.pg }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
@@ -102,7 +106,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: linux-pg${{ matrix.pg }}-evidence
+          name: ${{ env.ARTIFACT_PREFIX }}-evidence
           path: |
             ${{ runner.temp }}/evidence/postgres.log
             ${{ runner.temp }}/evidence/junit.xml
@@ -117,7 +121,7 @@ jobs:
       - name: Upload candidate, never publish a release
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: linux-pg${{ matrix.pg }}-candidate
+          name: ${{ env.ARTIFACT_PREFIX }}-candidate
           path: dist/
           if-no-files-found: error
           retention-days: 14

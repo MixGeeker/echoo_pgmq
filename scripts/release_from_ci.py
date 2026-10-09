@@ -115,7 +115,9 @@ def validate_artifact(config, item, data):
         require(m['project_license'] == 'Apache-2.0', 'project license mismatch')
         system = 'Windows' if name.startswith('native-windows-') else 'Linux'
         require(m['system'] == system and m['postgres_build'].split()[1].split('.')[0] == pg, 'platform mismatch')
-        require(m['architecture'].lower() in ('amd64', 'x86_64'), 'unexpected architecture')
+        # Linux arm64 artifacts are named linux-arm64-pgNN-*; every other artifact stays x64.
+        arches = ('aarch64', 'arm64') if name.startswith('linux-arm64-') else ('amd64', 'x86_64')
+        require(m['architecture'].lower() in arches, 'unexpected architecture')
         require(archive == f"echoo-pgmq-{m['version']}-candidate-pg{pg}-{system.lower()}-{m['architecture'].lower()}.zip", 'candidate filename/version mismatch')
         actual = {n[len(prefix):]: sha(inner.read(n)) for n in inner.namelist() if n != manifests[0]}
         require(actual == m['files_sha256'], 'inner file set/hash mismatch')

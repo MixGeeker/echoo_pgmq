@@ -16,6 +16,12 @@ def zipped(files):
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, 'w') as z:
         for name, data in files:
+            if isinstance(name, str):
+                # ZipInfo turns os.sep into '/' on Windows; keep the raw member
+                # name so unsafe-name rejection is exercised on every platform.
+                info = zipfile.ZipInfo(name)
+                info.filename = name
+                name = info
             z.writestr(name, data)
     return buf.getvalue()
 
@@ -168,6 +174,35 @@ class ReleaseTests(unittest.TestCase):
             self.assertEqual(result, b'zip-bytes')
             self.assertEqual(captured[0].get_header('Accept'), accept)
             redirected.assert_called_once_with('https://example.invalid/signed', timeout=60)
+
+    def test_candidate_architecture_follows_artifact_name(self):
+        config = {'source_sha': 'a' * 40, 'tag': 'v0.1.0'}
+
+        def artifact(name, architecture):
+            archive = f'echoo-pgmq-0.1.0-candidate-pg18-linux-{architecture}.zip'
+            manifest = {'commit': config['source_sha'], 'version': '0.1.0', 'status': 'candidate-not-production-release',
+                        'qualification_status': 'blocked_security_review', 'project_license': 'Apache-2.0',
+                        'system': 'Linux', 'postgres_build': 'PostgreSQL 18.0', 'architecture': architecture,
+                        'files_sha256': {'missing': '0'}}
+            raw = zipped([('root/MANIFEST.json', json.dumps(manifest))])
+            outer = zipped([(archive, raw), (archive + '.sha256', f'{r.sha(raw)}  {archive}\n')])
+            item = {'name': name, 'size_in_bytes': len(outer), 'digest': 'sha256:' + r.sha(outer)}
+            return item, outer
+
+        accepted = [('linux-pg18-candidate', 'x86_64'), ('linux-arm64-pg18-candidate', 'aarch64')]
+        rejected = [('linux-pg18-candidate', 'aarch64'), ('linux-arm64-pg18-candidate', 'x86_64')]
+        for name, architecture in accepted:
+            with self.subTest(name=name, architecture=architecture), self.assertRaisesRegex(ValueError, 'inner file set'):
+                r.validate_artifact(config, *artifact(name, architecture))
+        for name, architecture in rejected:
+            with self.subTest(name=name, architecture=architecture), self.assertRaisesRegex(ValueError, 'unexpected architecture'):
+                r.validate_artifact(config, *artifact(name, architecture))
+
+    def test_ci_builds_linux_arm64_natively(self):
+        text = (r.ROOT / '.github/workflows/ci.yml').read_text()
+        self.assertIn("arch: ['x64', 'arm64']", text)
+        self.assertIn("'ubuntu-24.04-arm'", text)
+        self.assertIn("linux${{ matrix.arch == 'arm64' && '-arm64' || '' }}-pg${{ matrix.pg }}", text)
 
     def test_workflow_permissions_and_checkout(self):
         text = (r.ROOT / '.github/workflows/release.yml').read_text()

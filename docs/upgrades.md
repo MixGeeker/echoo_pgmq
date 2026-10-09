@@ -5,8 +5,10 @@
 - `0.1.0`：基础队列表、受限 SQL 接口、原生 worker 与 AMQP 1.0
 - `0.1.0--0.1.1`：真实的加法迁移，增加按 session_user ACL 过滤的 queue_stats 视图；不重写消息正文
 - `0.1.1`：提供相同最终结构的全新安装脚本，用于恢复与回归验证
+- `0.1.1--0.1.2`：加法迁移，只新增管理员函数 `drop_queue(queue, missing_ok DEFAULT false)`；不改表结构、不重写消息
+- `0.1.2`：0.1.2 最终结构的全新安装脚本；`0.1.0` 可经 0.1.1 链式升级到 0.1.2
 
-0.1.1 当前用于迁移路线演练，不代表已发布一个独立生产版本。默认安装版本仍为0.1.0；需要时显式指定版本。
+默认安装版本仍为0.1.0；需要 queue_stats 或 drop_queue 时显式指定版本（`CREATE EXTENSION echoo_pgmq VERSION '0.1.2'` 或 `ALTER EXTENSION echoo_pgmq UPDATE TO '0.1.2'`）。原生二进制与 SQL 版本分开标识，安装新二进制不会自动执行 ALTER EXTENSION。
 
 ## 升级前
 

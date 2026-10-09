@@ -294,3 +294,51 @@ def test_presettled_publisher_is_refused(admin, queue, connect_amqp):
     with pytest.raises(ProtonException):
         connection.create_sender(queue, options=AtMostOnce())
     assert count(admin, queue) == 0
+
+
+def nested_amqp_value(depth):
+    """amqp-value section holding `depth` nested list32 values around list0."""
+    wire = bytearray(b"\x00\x53\x77")
+    for level in range(depth):
+        remaining = (depth - level - 1) * 9 + 1 + 4
+        wire += b"\xd0" + struct.pack(">II", remaining, 1)
+    return bytes(wire + b"\x45")
+
+
+def test_bounded_nesting_and_arrays_are_accepted(admin, queue, connect_amqp):
+    from proton import Array, Data, UNDESCRIBED
+    body = []
+    for _ in range(40):
+        body = [body]
+    connection = connect_amqp()
+    message = Message(body=body, annotations={symbol("x-opt-tags"): Array(UNDESCRIBED, Data.SYMBOL, symbol("a"), symbol("b"))},
+                      properties={"rows": Array(UNDESCRIBED, Data.LIST, [1, "x"], [2, [3]])})
+    assert connection.create_sender(queue).send(message).remote_state == Delivery.ACCEPTED
+    receiver = connection.create_receiver(queue, credit=1)
+    received = receiver.receive(timeout=5)
+    assert received.body == body
+    assert list(received.annotations[symbol("x-opt-tags")].elements) == [symbol("a"), symbol("b")]
+    receiver.accept()
+    receiver.close()
+    eventually(lambda: count(admin, queue) == 0)
+
+
+def test_excessive_nesting_is_rejected_before_proton_decoding(admin, client, queue, connect_amqp):
+    wire = nested_amqp_value(1000)
+    connection = connect_amqp()
+    sender = connection.create_sender(queue)
+    connection.wait(lambda: sender.link.credit > 0, timeout=5)
+    delivery = sender.link.delivery("nested-" + uuid.uuid4().hex)
+    sender.link.stream(wire)
+    sender.link.advance()
+    connection.wait(lambda: delivery.remote_state != 0, timeout=5)
+    assert delivery.remote_state == Delivery.REJECTED
+    delivery.settle()
+    assert count(admin, queue) == 0
+    poison_id = client.execute("SELECT echoo_pgmq.enqueue(%s,%s)", (queue, wire)).fetchone()[0]
+    receiver = connection.create_receiver(queue, credit=1)
+    from proton import Timeout
+    with pytest.raises(Timeout):
+        receiver.receive(timeout=2)
+    receiver.close()
+    assert admin.execute("SELECT state FROM echoo_pgmq.messages WHERE id=%s", (poison_id,)).fetchone()[0] == "dead"
