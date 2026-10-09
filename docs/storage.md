@@ -40,7 +40,7 @@ TO echoo_pgmq_worker;
 
 ACL 中的角色名必须已在 PostgreSQL 中存在；角色成员关系不会隐式继承队列 ACL。撤销权限影响之后的 SQL 操作，包括投递结算。ACL 同时绑定主体名称和 PostgreSQL 角色身份（`regrole`）。删除或重命名角色后，后续授权立即失效；重新创建同名角色不会恢复旧授权，管理员必须显式重新授权。PostgreSQL 将 `regrole` 按角色名导出，以便跨集群恢复时正确解析角色；恢复扩展数据之前应先建立预期角色。
 
-`create_queue`、`grant_queue`、`revoke_queue`、`purge_dead` 和 `retry_dead` 默认仅管理员可执行。公共函数不会隐式创建队列。安装者可以按需显式委派特定管理函数的执行权。
+`create_queue`、`grant_queue`、`revoke_queue`、`purge_dead`、`retry_dead` 和 SQL 0.1.2 起的 `drop_queue` 默认仅管理员可执行。公共函数不会隐式创建队列。安装者可以按需显式委派特定管理函数的执行权。
 
 ## 公共 SQL 接口
 
@@ -98,6 +98,7 @@ inflight -> dead                  当前 rejected，或最后一次尝试的 rel
 过期且耗尽尝试 -> dead            后续领取时执行有界清理
  dead -> ready                    管理员 retry_dead；重置 attempts
  dead -> deleted                  管理员 purge_dead
+ 任意状态 -> deleted              管理员 drop_queue（整队列）
 ```
 
 死信是原队列消息表中的逻辑状态，没有单独的路由地址。管理员仍可查看其原始正文与原因，正文继续占用已预留容量。`retry_dead(queue, id)` 重置尝试次数并递增代次；`purge_dead(queue, limit DEFAULT 100)` 每次最多删除 10,000 条死信并释放容量。两者都具有事务性。没有定时器自动丢弃消息。耗尽且过期的消息会在之后的领取中转为死信，因此空闲队列的原始管理数据仍可能暂时将其显示为 inflight。

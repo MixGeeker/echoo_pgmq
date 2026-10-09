@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(echoo_pgmq VERSION 0.1.1 LANGUAGES C)
+project(echoo_pgmq VERSION 0.1.2 LANGUAGES C)
 
 option(ECHOO_ENABLE_TEST_HOOKS "Compile administrator-only deterministic fault-injection hooks; NEVER ship this build" OFF)
 

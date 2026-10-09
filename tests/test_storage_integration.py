@@ -90,3 +90,81 @@ def test_upgrade_failure_rolls_back_and_retry_preserves_data(dsn, admin):
             assert conn.execute("SELECT body FROM echoo_pgmq.messages WHERE id=%s", (ident,)).fetchone()[0] == b"\x00\xffupgrade"
     finally:
         admin.execute(sql.SQL("DROP DATABASE {} WITH (FORCE)").format(sql.Identifier(database)))
+
+
+def _scratch_database(admin, dsn, prefix):
+    database = prefix + uuid.uuid4().hex
+    admin.execute(sql.SQL("CREATE DATABASE {}").format(sql.Identifier(database)))
+    options = conninfo_to_dict(dsn)
+    options["dbname"] = database
+    return database, make_conninfo(**options)
+
+
+def test_drop_queue_upgrade_reclaims_global_capacity(dsn, admin):
+    database, scratch = _scratch_database(admin, dsn, "dropq_")
+    options = conninfo_to_dict(scratch)
+    options["user"] = "echoo_test_user"
+    try:
+        with psycopg.connect(scratch, autocommit=True) as conn:
+            conn.execute("CREATE EXTENSION echoo_pgmq VERSION '0.1.0'")
+            for name in ("drop/me", "keep/me"):
+                conn.execute("SELECT echoo_pgmq.create_queue(%s)", (name,))
+                conn.execute("SELECT echoo_pgmq.grant_queue(%s,session_user::text)", (name,))
+            conn.execute("SELECT echoo_pgmq.grant_queue('drop/me','echoo_test_user')")
+            conn.execute("SELECT echoo_pgmq.enqueue('drop/me',%s,'idem')", (b"ready-1",))
+            conn.execute("SELECT echoo_pgmq.enqueue('drop/me',%s)", (b"ready-two",))
+            leased = conn.execute("SELECT * FROM echoo_pgmq.read('drop/me',%s,3600)", (uuid.uuid4(),)).fetchone()
+            rejected_owner = uuid.uuid4()
+            conn.execute("SELECT echoo_pgmq.enqueue('drop/me',%s)", (b"dead",))
+            rejected = conn.execute("SELECT * FROM echoo_pgmq.read('drop/me',%s,3600)", (rejected_owner,)).fetchone()
+            assert conn.execute("SELECT echoo_pgmq.reject('drop/me',%s,%s,%s)", (rejected[0], rejected[1], rejected_owner)).fetchone()[0]
+            conn.execute("SELECT echoo_pgmq.enqueue('keep/me',%s)", (b"kept",))
+            assert leased is not None
+            assert conn.execute("SELECT message_count,total_bytes FROM echoo_pgmq.limits").fetchone() == (4, 7 + 9 + 4 + 4)
+            with pytest.raises(psycopg.errors.UndefinedFunction):
+                with conn.transaction():
+                    conn.execute("SELECT echoo_pgmq.drop_queue('drop/me')")
+            conn.execute("ALTER EXTENSION echoo_pgmq UPDATE TO '0.1.2'")
+            assert conn.execute("SELECT extversion FROM pg_extension WHERE extname='echoo_pgmq'").fetchone()[0] == "0.1.2"
+            with psycopg.connect(make_conninfo(**options), autocommit=True) as user:
+                with pytest.raises(psycopg.errors.InsufficientPrivilege):
+                    user.execute("SELECT echoo_pgmq.drop_queue('drop/me')")
+            assert conn.execute("SELECT echoo_pgmq.drop_queue('drop/me')").fetchone()[0] == 3
+            assert conn.execute("SELECT message_count,total_bytes FROM echoo_pgmq.limits").fetchone() == (1, 4)
+            assert conn.execute("SELECT message_count,total_bytes FROM echoo_pgmq.queues WHERE name='keep/me'").fetchone() == (1, 4)
+            assert conn.execute("SELECT count(*) FROM echoo_pgmq.queue_acl a LEFT JOIN echoo_pgmq.queues q USING(queue_id) WHERE q.queue_id IS NULL").fetchone()[0] == 0
+            assert conn.execute("SELECT count(*) FROM echoo_pgmq.idempotency").fetchone()[0] == 0
+            assert conn.execute("SELECT count(*) FROM echoo_pgmq.messages").fetchone()[0] == 1
+            with pytest.raises(psycopg.errors.UndefinedObject):
+                conn.execute("SELECT echoo_pgmq.drop_queue('drop/me')")
+            assert conn.execute("SELECT echoo_pgmq.drop_queue('drop/me',true)").fetchone()[0] is None
+            # The name is immediately reusable and the old ACL did not survive.
+            conn.execute("SELECT echoo_pgmq.create_queue('drop/me')")
+            assert not conn.execute("SELECT echoo_pgmq.authorize('drop/me','echoo_test_user','produce')").fetchone()[0]
+            assert conn.execute("SELECT echoo_pgmq.drop_queue('drop/me')").fetchone()[0] == 0
+    finally:
+        admin.execute(sql.SQL("DROP DATABASE {} WITH (FORCE)").format(sql.Identifier(database)))
+
+
+def test_drop_queue_fails_fast_while_a_message_is_locked(dsn, admin):
+    database, scratch = _scratch_database(admin, dsn, "droplock_")
+    try:
+        with psycopg.connect(scratch, autocommit=True) as conn:
+            conn.execute("CREATE EXTENSION echoo_pgmq VERSION '0.1.2'")
+            conn.execute("SELECT echoo_pgmq.create_queue('busy')")
+            conn.execute("SELECT echoo_pgmq.grant_queue('busy',session_user::text)")
+            conn.execute("SELECT echoo_pgmq.enqueue('busy',%s)", (b"payload",))
+            with psycopg.connect(scratch) as consumer:
+                owner = uuid.uuid4()
+                receipt = consumer.execute("SELECT * FROM echoo_pgmq.read('busy',%s,60)", (owner,)).fetchone()
+                with pytest.raises(psycopg.errors.LockNotAvailable):
+                    conn.execute("SELECT echoo_pgmq.drop_queue('busy')")
+                # The failed drop released its locks; the open consumer can still ACK.
+                assert consumer.execute("SELECT echoo_pgmq.ack('busy',%s,%s,%s)", (receipt[0], receipt[1], owner)).fetchone()[0]
+                consumer.commit()
+            assert conn.execute("SELECT message_count,total_bytes FROM echoo_pgmq.limits").fetchone() == (0, 0)
+            conn.execute("SELECT echoo_pgmq.enqueue('busy',%s)", (b"again",))
+            assert conn.execute("SELECT echoo_pgmq.drop_queue('busy')").fetchone()[0] == 1
+            assert conn.execute("SELECT message_count,total_bytes FROM echoo_pgmq.limits").fetchone() == (0, 0)
+    finally:
+        admin.execute(sql.SQL("DROP DATABASE {} WITH (FORCE)").format(sql.Identifier(database)))

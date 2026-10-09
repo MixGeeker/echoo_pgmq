@@ -52,7 +52,7 @@ SELECT * FROM echoo_pgmq.limits;
 
 计数包含 ready/inflight/dead 的保留消息；total_bytes指消息bytea有效载荷，不包含表/索引/WAL/空洞的磁盘开销。用 pg_total_relation_size 与磁盘监控另行计算真实占用。死信不会自动无限扩容或自动删除，管理员需要有审计的重试/清理策略。
 
-`purge_dead(queue,limit)` 有明确批量上限；`retry_dead(queue,id)` 为管理员操作。任何删除/重试都应先确认业务幂等与审计要求。不要直接更新messages/queues/limits底表，否则可能破坏计数、代次与外键契约。
+`purge_dead(queue,limit)` 有明确批量上限；SQL 0.1.2 起 `drop_queue(queue, missing_ok DEFAULT false)` 在一个事务内删除队列及其全部 ready/inflight/dead 消息、ACL 与幂等键，并同步扣减实例全局计数，返回删除的消息数（`missing_ok` 时不存在返回 NULL，否则 SQLSTATE 42704）。它先取全局与队列锁，再以 NOWAIT 锁该队列消息；有事务正持有该队列消息行锁时立即以 55P03 失败且不改变任何数据，调用方稍后重试。队列删除后，原领取者的确认与生产者写入按队列不存在处理（SQLSTATE 42501）。`retry_dead(queue,id)` 为管理员操作。任何删除/重试都应先确认业务幂等与审计要求。不要直接更新messages/queues/limits底表，否则可能破坏计数、代次与外键契约。
 
 ## PostgreSQL维护
 
