@@ -1,0 +1,139 @@
+{
+  "repository": "MixGeeker/echoo_pgmq",
+  "repository_id": 1396779236,
+  "tag": "v0.1.2",
+  "source_sha": "57b0abe08bd6525ca80903a962cfc64c85879244",
+  "source_tree": "ecb74b34715a95c7fcc03cc74117ed12e75664ae",
+  "ci_run_id": 38004054360,
+  "ci_run_attempt": 1,
+  "distribution_version": "0.1.2",
+  "native_build_version": "0.1.2",
+  "sql_default_version": "0.1.0",
+  "sql_available_versions": [
+    "0.1.0",
+    "0.1.1",
+    "0.1.2"
+  ],
+  "extensionVersion": "0.1.0",
+  "sql_upgrade_policy": "explicit-only; installing native binaries does not run ALTER EXTENSION",
+  "proton_notices_sha256": {
+    "proton-LICENSE.txt": "52310e65489d30afeefc8589479fc02862a875349c19edd165658a915009da82",
+    "proton-NOTICE.txt": "e8a5271d59b904ebaf29f61fe6fdf5c8a38046f3c57d893fd460c33e15606d8a"
+  },
+  "expected_tests_per_phase": {
+    "16": 51,
+    "17": 51,
+    "18": 59
+  },
+  "user_reported_testing": "not yet performed for v0.1.2",
+  "artifacts": [
+    {
+      "id": 11650486882,
+      "name": "linux-arm64-pg16-candidate",
+      "size_in_bytes": 5881718,
+      "digest": "sha256:18d3a984ee5515b60a697c0a1ebfbbb1766ac8d843ff56518061d2fff2b07f90"
+    },
+    {
+      "id": 11650546690,
+      "name": "linux-arm64-pg16-evidence",
+      "size_in_bytes": 10503,
+      "digest": "sha256:52679d8fc936bb8eeeb86b5d99e54290852d465dd43681a7fbac961e34a641c5"
+    },
+    {
+      "id": 11650786251,
+      "name": "linux-arm64-pg17-candidate",
+      "size_in_bytes": 5881087,
+      "digest": "sha256:ac01bf2fa8402f700fe41b8ce5f944cc9ce4cd8d5b657e9f4fdb4d1ab26e8800"
+    },
+    {
+      "id": 11650576749,
+      "name": "linux-arm64-pg17-evidence",
+      "size_in_bytes": 10504,
+      "digest": "sha256:60e83ce76d8b83bb45346fb572dc9c200f6d4efb9efbdc1825fa14fc1c97c64a"
+    },
+    {
+      "id": 11650073769,
+      "name": "linux-arm64-pg18-candidate",
+      "size_in_bytes": 5881435,
+      "digest": "sha256:1f75fd565050c4b616218cd85e4643276ec58a401b1f896f530a1225fc962a31"
+    },
+    {
+      "id": 11650038905,
+      "name": "linux-arm64-pg18-evidence",
+      "size_in_bytes": 13586,
+      "digest": "sha256:22c541d01421c9495820acb00ba00da16264a8b9fd3b7c6d81be40ede21ee64a"
+    },
+    {
+      "id": 11650708054,
+      "name": "linux-pg16-candidate",
+      "size_in_bytes": 5963919,
+      "digest": "sha256:d382509a38cc5022eb7fdcb311584171af992ae717c715644a10d7b8a7227264"
+    },
+    {
+      "id": 11650553340,
+      "name": "linux-pg16-evidence",
+      "size_in_bytes": 10502,
+      "digest": "sha256:badcf1a86c90472a8d1a1813a0d28cb23d7d99a777502a3ebce411c38dc674d7"
+    },
+    {
+      "id": 11650741368,
+      "name": "linux-pg17-candidate",
+      "size_in_bytes": 5963264,
+      "digest": "sha256:05020d9ae5d5ec1bf8ca4620246810ec6a12cadd8e65f62223003c9fe26df059"
+    },
+    {
+      "id": 11650451865,
+      "name": "linux-pg17-evidence",
+      "size_in_bytes": 10495,
+      "digest": "sha256:1c14f1288089cbc770a92d7a36a98c228527669a8955330f354beb0073949fc3"
+    },
+    {
+      "id": 11650009016,
+      "name": "linux-pg18-candidate",
+      "size_in_bytes": 5963500,
+      "digest": "sha256:9935b9ce4c0cacc530dbe99b60c2dc2d21558fd50e893f13f879c6a77e129f22"
+    },
+    {
+      "id": 11650227712,
+      "name": "linux-pg18-evidence",
+      "size_in_bytes": 13614,
+      "digest": "sha256:a9755fb490b58293a33229f34b60a55c8b60e48cce8911c703209e8b7a460a6a"
+    },
+    {
+      "id": 11650287892,
+      "name": "native-windows-server2022-pg16-candidate",
+      "size_in_bytes": 760368,
+      "digest": "sha256:702968c5bc1ef9f51e68a96da7644e5d98b4f671b4f9ccbf8f968e03a1cbbb2a"
+    },
+    {
+      "id": 11650322743,
+      "name": "native-windows-server2022-pg16-evidence",
+      "size_in_bytes": 10656,
+      "digest": "sha256:888a6a627b278529dd3ce98e6bdc77489c347c37dd96374bffd927d0f40e7d0e"
+    },
+    {
+      "id": 11650646947,
+      "name": "native-windows-server2022-pg17-candidate",
+      "size_in_bytes": 760247,
+      "digest": "sha256:e4c628957353893056cff0f899bab4f97843fc30eea4d7428274ae259d38f727"
+    },
+    {
+      "id": 11650422355,
+      "name": "native-windows-server2022-pg17-evidence",
+      "size_in_bytes": 10643,
+      "digest": "sha256:11ce43f729a4e1940bafafee0200e59bad1b14d5d2dc347589820557bcb99cc8"
+    },
+    {
+      "id": 11650642026,
+      "name": "native-windows-server2022-pg18-candidate",
+      "size_in_bytes": 760263,
+      "digest": "sha256:ca0b94d9c7e538f183e5c13b3d00c3b756ce07b728207767ec8b78a28fc58ea6"
+    },
+    {
+      "id": 11650387615,
+      "name": "native-windows-server2022-pg18-evidence",
+      "size_in_bytes": 13762,
+      "digest": "sha256:d869125d264f3b57d281fcb1a60af08b48f2c557c255c8a58a758592de97b12e"
+    }
+  ]
+}
