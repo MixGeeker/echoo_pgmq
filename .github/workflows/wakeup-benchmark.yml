@@ -30,7 +30,7 @@ jobs:
         pg:
         - '18'
     steps:
-    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       with:
         persist-credentials: false
     - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
@@ -91,12 +91,12 @@ jobs:
         python scripts/run_integration.py --ordinary ${INDEPENDENT_CLIENT:-} --pg-config "$PG_CONFIG" --work-dir "$RUNNER_TEMP/evidence" --keep
     - name: Validate cohort accounting without external traffic
       run: python -m unittest discover -s bench -p "test_wakeup*.py" -v
-    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       with:
         ref: 115dcfe67c1dc2ebd2bfc004ed9ce0700947ce40
         path: baseline-source
         persist-credentials: false
-    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       with:
         ref: 332c6afee1dab46132eabf77eacd42cd82305ec3
         path: wake-source
@@ -140,7 +140,7 @@ jobs:
       run:
         shell: pwsh
     steps:
-    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       with:
         persist-credentials: false
     - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
@@ -219,12 +219,12 @@ jobs:
         if ($LASTEXITCODE -ne 0) { throw 'Integration tests failed' }
     - name: Validate cohort accounting without external traffic
       run: python -m unittest discover -s bench -p "test_wakeup*.py" -v
-    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       with:
         ref: 115dcfe67c1dc2ebd2bfc004ed9ce0700947ce40
         path: baseline-source
         persist-credentials: false
-    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       with:
         ref: 332c6afee1dab46132eabf77eacd42cd82305ec3
         path: wake-source
