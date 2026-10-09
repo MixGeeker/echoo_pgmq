@@ -54,6 +54,8 @@ ORDINARY_TESTS = [
     "tests/test_amqp_integration.py::test_abandoned_delivery_is_redelivered",
     "tests/test_amqp_integration.py::test_late_ack_does_not_delete_new_delivery",
     "tests/test_amqp_integration.py::test_release_retries_and_reject_retains_dead_letter",
+    "tests/test_amqp_integration.py::test_bounded_nesting_and_arrays_are_accepted",
+    "tests/test_amqp_integration.py::test_excessive_nesting_is_rejected_before_proton_decoding",
     "tests/test_spi_plan_cache.py::test_repeated_worker_operations_and_empty_claims",
     "tests/test_spi_plan_cache.py::test_capacity_rejection_then_recovery_uses_same_worker",
     "tests/test_spi_plan_cache.py::test_function_cost_change_revalidates_worker_plans",

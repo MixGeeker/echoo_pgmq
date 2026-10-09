@@ -45,6 +45,122 @@ echoo_pgmq_message_binary(PG_FUNCTION_ARGS)
     PG_RETURN_BYTEA_P(result);
 }
 
+/* Proton's codec decodes compound values recursively without a depth limit,
+ * so a sub-megabyte message of nested lists exhausts the worker's C stack.
+ * Walk the encoding first with recursion bounded by ECHOO_MAX_AMQP_NESTING
+ * (described values, lists, maps and arrays each add a level) and reject
+ * deeper input before any Proton decoder sees the bytes. Every loop consumes input
+ * except zero-width array elements, which are skipped without iteration.
+ */
+#define ECHOO_MAX_AMQP_NESTING 64
+
+static bool
+amqp_read_width(const unsigned char *bytes, size_t size, size_t *offset, int width, size_t *value)
+{
+    size_t result = 0;
+    int i;
+    if (size - *offset < (size_t) width)
+        return false;
+    for (i = 0; i < width; ++i)
+        result = (result << 8) | bytes[(*offset)++];
+    *value = result;
+    return true;
+}
+
+static bool amqp_skip_value(const unsigned char *bytes, size_t size, size_t *offset, int depth);
+
+/* Skips the body of a value whose constructor code is already consumed. */
+static bool
+amqp_skip_body(const unsigned char *bytes, size_t size, size_t *offset, int depth, unsigned char code)
+{
+    static const signed char fixed[] = {0, 1, 2, 4, 8, 16}; /* 0x4_ .. 0x9_ */
+    unsigned char category = code >> 4;
+    size_t length;
+    size_t count;
+    size_t end;
+    int width;
+    if (depth > ECHOO_MAX_AMQP_NESTING)
+        return false;
+    if (category >= 0x4 && category <= 0x9)
+    {
+        if (size - *offset < (size_t) fixed[category - 0x4])
+            return false;
+        *offset += fixed[category - 0x4];
+        return true;
+    }
+    width = (category == 0xa || category == 0xc || category == 0xe) ? 1 : 4;
+    if (category < 0xa || !amqp_read_width(bytes, size, offset, width, &length) ||
+        length > size - *offset)
+        return false;
+    end = *offset + length;
+    if (category == 0xa || category == 0xb)
+    {
+        *offset = end;
+        return true;
+    }
+    if (!amqp_read_width(bytes, end, offset, width, &count))
+        return false;
+    if (category == 0xc || category == 0xd)
+    {
+        for (; count > 0; --count)
+            if (*offset >= end || !amqp_skip_value(bytes, end, offset, depth + 1))
+                return false;
+    }
+    else
+    {
+        unsigned char element;
+        if (*offset >= end)
+            return count == 0;
+        element = bytes[(*offset)++];
+        if (element == 0x00)
+        {
+            if (!amqp_skip_value(bytes, end, offset, depth + 1) || *offset >= end)
+                return false;
+            element = bytes[(*offset)++];
+        }
+        if ((element >> 4) >= 0x4 && (element >> 4) <= 0x9)
+        {
+            size_t element_size = (size_t) fixed[(element >> 4) - 0x4];
+            if (element_size && count > (end - *offset) / element_size)
+                return false;
+            *offset += count * element_size;
+        }
+        else
+        {
+            for (; count > 0; --count)
+                if (!amqp_skip_body(bytes, end, offset, depth + 1, element))
+                    return false;
+        }
+    }
+    if (*offset > end)
+        return false;
+    *offset = end;
+    return true;
+}
+
+static bool
+amqp_skip_value(const unsigned char *bytes, size_t size, size_t *offset, int depth)
+{
+    unsigned char code;
+    if (depth > ECHOO_MAX_AMQP_NESTING || *offset >= size)
+        return false;
+    code = bytes[(*offset)++];
+    if (code == 0x00)
+        return amqp_skip_value(bytes, size, offset, depth + 1) &&
+               amqp_skip_value(bytes, size, offset, depth + 1);
+    return amqp_skip_body(bytes, size, offset, depth, code);
+}
+
+static bool
+amqp_nesting_bounded(const unsigned char *bytes, size_t size)
+{
+    size_t offset = 0;
+    while (offset < size)
+        if (!amqp_skip_value(bytes, size, &offset, 0))
+            return false;
+    return true;
+}
+
 /* Proton's high-level decoder tolerates/skips some non-message values. A
  * durable broker must require a complete sequence of recognized AMQP message
  * sections instead. Preserve the original bytes; this is validation only.
@@ -68,7 +184,7 @@ echoo_message_valid(const unsigned char *bytes, size_t size)
     int previous = -1;
     int body_kind = -1;
     bool valid = false;
-    if (!bytes || !size)
+    if (!bytes || !size || !amqp_nesting_bounded(bytes, size))
         return false;
     data = pn_data(0);
     if (!data)
