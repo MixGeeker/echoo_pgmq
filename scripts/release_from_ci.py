@@ -15,6 +15,9 @@ import xml.etree.ElementTree as ET
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
+# Native platform families per PostgreSQL major. v0.1.2 adds Linux arm64.
+PLATFORMS = {'v0.1.0': 2, 'v0.1.1': 2, 'v0.1.2': 3}
+SQL_VERSIONS = {'v0.1.1': ['0.1.0', '0.1.1'], 'v0.1.2': ['0.1.0', '0.1.1', '0.1.2']}
 
 
 def require(condition, message):
@@ -108,7 +111,7 @@ def validate_artifact(config, item, data):
         require(all(n.startswith(prefix) for n in inner.namelist()), 'multiple candidate roots')
         m = json.loads(inner.read(manifests[0]))
         require(m['commit'] == config['source_sha'] and m['version'] == config.get('distribution_version', '0.1.0'), 'source/version mismatch')
-        if config['tag'] == 'v0.1.1':
+        if config['tag'] in SQL_VERSIONS:
             for field in ('distribution_version', 'native_build_version', 'sql_default_version', 'sql_available_versions', 'extensionVersion'):
                 require(m.get(field) == config[field], 'version identity mismatch: ' + field)
         require(m['status'] == 'candidate-not-production-release' and m['qualification_status'] == 'blocked_security_review', 'qualification metadata changed')
@@ -153,14 +156,16 @@ def validate_artifact(config, item, data):
 
 
 def validate_config(config):
-    require(config['repository'] == 'MixGeeker/echoo_pgmq' and config['tag'] in ('v0.1.0', 'v0.1.1'), 'release scope changed')
-    if config['tag'] == 'v0.1.1':
-        require(config['distribution_version'] == config['native_build_version'] == '0.1.1', 'distribution/native version mismatch')
-        require(config['extensionVersion'] == config['sql_default_version'] == '0.1.0' and config['sql_available_versions'] == ['0.1.0', '0.1.1'], 'SQL migration/default changed')
+    require(config['repository'] == 'MixGeeker/echoo_pgmq' and config['tag'] in PLATFORMS, 'release scope changed')
+    tag = config['tag']
+    if tag in SQL_VERSIONS:
+        require(config['distribution_version'] == config['native_build_version'] == tag[1:], 'distribution/native version mismatch')
+        require(config['extensionVersion'] == config['sql_default_version'] == '0.1.0' and config['sql_available_versions'] == SQL_VERSIONS[tag], 'SQL migration/default changed')
         counts = config['expected_tests_per_phase']
         require(set(counts) == {'16', '17', '18'} and all(isinstance(v, int) and v > 0 for v in counts.values()), 'exact test matrix required')
-        require(config['user_reported_testing'] == 'not yet performed for v0.1.1', 'unsupported user-testing claim')
-    require(len(config['artifacts']) == 12 and len({a['id'] for a in config['artifacts']}) == 12 and len({a['name'] for a in config['artifacts']}) == 12, 'artifact identities incomplete')
+        require(config['user_reported_testing'] == 'not yet performed for ' + tag, 'unsupported user-testing claim')
+    count = 6 * PLATFORMS[tag]
+    require(len(config['artifacts']) == count and len({a['id'] for a in config['artifacts']}) == count and len({a['name'] for a in config['artifacts']}) == count, 'artifact identities incomplete')
 
 
 def prepare(config, api, output):
@@ -170,7 +175,7 @@ def prepare(config, api, output):
     require(subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() == head, 'automation checkout mismatch')
     subprocess.run(['git', 'merge-base', '--is-ancestor', config['source_sha'], head], cwd=ROOT, check=True)
     require(subprocess.check_output(['git', 'rev-parse', config['source_sha'] + '^{tree}'], cwd=ROOT, text=True).strip() == config['source_tree'], 'source tree mismatch')
-    if config['tag'] == 'v0.1.1':
+    if config['tag'] in SQL_VERSIONS:
         identity = json.loads(source_bytes(config, 'package_versions.json'))
         require(all(identity[k] == config[k] for k in ('distribution_version', 'native_build_version', 'sql_default_version', 'sql_available_versions', 'extensionVersion')), 'source version identity mismatch')
     run = api.request('/actions/runs/' + str(config['ci_run_id']))
@@ -179,11 +184,14 @@ def prepare(config, api, output):
             and run['status'] == 'completed' and run['conclusion'] == 'success'
             and run['run_attempt'] == config['ci_run_attempt'] and run['path'] == '.github/workflows/ci.yml', 'untrusted CI run')
     jobs = api.request('/actions/runs/' + str(config['ci_run_id']) + '/attempts/' + str(config['ci_run_attempt']) + '/jobs?per_page=100')
+    platforms = PLATFORMS[config['tag']]
     expected_jobs = {f'Linux PG{p} / native AMQP 1.0' for p in (16, 17, 18)} | {f'Native Windows Server 2022 PG{p} (not Windows 11 certification)' for p in (16, 17, 18)}
-    require(jobs['total_count'] == 6 and {j['name'] for j in jobs['jobs']} == expected_jobs
+    if platforms == 3:
+        expected_jobs |= {f'Linux arm64 PG{p} / native AMQP 1.0' for p in (16, 17, 18)}
+    require(jobs['total_count'] == 3 * platforms and {j['name'] for j in jobs['jobs']} == expected_jobs
             and all(j['conclusion'] == 'success' and j['head_sha'] == config['source_sha'] for j in jobs['jobs']), 'CI matrix incomplete')
     artifacts = api.request('/actions/runs/' + str(config['ci_run_id']) + '/artifacts?per_page=100')
-    require(artifacts['total_count'] == 12 and len(artifacts['artifacts']) == 12, 'artifact count changed')
+    require(artifacts['total_count'] == 6 * platforms and len(artifacts['artifacts']) == 6 * platforms, 'artifact count changed')
     live = {a['id']: a for a in artifacts['artifacts']}
     assets = {}
     tests = 0
@@ -196,8 +204,8 @@ def prepare(config, api, output):
         require(not (assets.keys() & verified.keys()), 'duplicate release asset')
         assets.update(verified)
         tests += count
-    expected_total = 4 * sum(config.get('expected_tests_per_phase', {'16': 37, '17': 37, '18': 45}).values())
-    require(tests == expected_total and len(assets) == 18, 'release coverage changed')
+    expected_total = 2 * platforms * sum(config.get('expected_tests_per_phase', {'16': 37, '17': 37, '18': 45}).values())
+    require(tests == expected_total and len(assets) == 9 * platforms, 'release coverage changed')
     tag = config['tag']
     assets[f'echoo-pgmq-{tag}-source.zip'] = subprocess.check_output(['git', 'archive', '--format=zip', f'--prefix=echoo-pgmq-{tag}/', config['source_sha']], cwd=ROOT)
     binary_manifest = []
@@ -214,7 +222,7 @@ def prepare(config, api, output):
     provenance = {'release': config['tag'], 'source_commit': config['source_sha'], 'source_tree': config['source_tree'],
                   'release_automation_commit': head, 'release_workflow_run': os.environ['GITHUB_RUN_ID'],
                   'ci_run_id': config['ci_run_id'], 'ci_run_attempt': config['ci_run_attempt'],
-                  'ci_url': run['html_url'], 'ordinary_test_executions': tests, 'core_sql_passes': 12,
+                  'ci_url': run['html_url'], 'ordinary_test_executions': tests, 'core_sql_passes': 6 * platforms,
                   'qualification_status': 'blocked_security_review', 'user_reported_testing': config.get('user_reported_testing', 'passed; scope unspecified'),
                   'signature': 'unsigned; checksums and CI provenance are not a signature or security certification',
                   'original_ci_artifacts': config['artifacts'],
@@ -270,7 +278,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--publish', action='store_true')
-    parser.add_argument('--config', choices=('releases/v0.1.0.json', 'releases/v0.1.1.json'), default='releases/v0.1.1.json')
+    parser.add_argument('--config', choices=('releases/v0.1.0.json', 'releases/v0.1.1.json', 'releases/v0.1.2.json'), default='releases/v0.1.2.json')
     args = parser.parse_args()
     config = json.loads((ROOT / args.config).read_text())
     api = GitHub(config['repository'], os.environ['GH_TOKEN'])

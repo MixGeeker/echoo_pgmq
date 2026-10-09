@@ -52,6 +52,21 @@ class ReleaseTests(unittest.TestCase):
                 r.validate_config(dict(config, **{field:value}))
         self.assertEqual(4*sum(config['expected_tests_per_phase'].values()),596)
 
+    def test_v012_adds_arm64_and_sql_012(self):
+        config = {'repository':'MixGeeker/echoo_pgmq','tag':'v0.1.2',
+                  'distribution_version':'0.1.2','native_build_version':'0.1.2',
+                  'sql_default_version':'0.1.0','extensionVersion':'0.1.0',
+                  'sql_available_versions':['0.1.0','0.1.1','0.1.2'],
+                  'expected_tests_per_phase':{'16':51,'17':51,'18':59},
+                  'user_reported_testing':'not yet performed for v0.1.2',
+                  'artifacts':[{'id':i,'name':str(i)} for i in range(18)]}
+        r.validate_config(config)
+        for field,value in [('distribution_version','0.1.1'),('sql_default_version','0.1.2'),
+                            ('sql_available_versions',['0.1.0','0.1.1']),
+                            ('artifacts',[{'id':i,'name':str(i)} for i in range(12)])]:
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                r.validate_config(dict(config, **{field:value}))
+
     def test_unsafe_zip_paths_rejected(self):
         for name in ('../x', '/x', 'a/../../x', 'a\\b', 'C:/x'):
             with self.subTest(name=name), self.assertRaises(ValueError):
