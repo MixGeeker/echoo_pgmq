@@ -52,7 +52,7 @@ jobs:
             --output "$RUNNER_TEMP/benchmark-infrastructure-smoke" --smoke
       - name: Preserve infrastructure smoke evidence immediately
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: pg18-benchmark-infrastructure-smoke-${{ github.sha }}
           path: ${{ runner.temp }}/benchmark-infrastructure-smoke/
@@ -70,7 +70,7 @@ jobs:
             --repetitions 3 --warmup-seconds 30 --duration-seconds 120 --rates 200 400
       - name: Retain every result, including failures and missed provisional targets
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: pg18-equal-budget-benchmark-${{ github.sha }}
           path: ${{ runner.temp }}/equal-budget-benchmark/
