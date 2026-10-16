@@ -78,7 +78,7 @@ jobs:
             -artifact_prefix=security-results/crashes/validator- 2>&1 | tee security-results/validator-fuzz.txt
       - name: Keep reports and minimized failures
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: bounded-parser-static-evidence
           path: |
@@ -105,7 +105,7 @@ jobs:
           python -m pip_audit -r requirements-dev.txt --format json --output python-dependency-audit.json
       - name: Preserve dependency advisory results
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: python-dependency-advisories
           path: python-dependency-audit.json
