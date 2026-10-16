@@ -38,3 +38,7 @@ start与两个demo检查实际GUC/SQL一致；policy-check导出无凭据的实�
 - 完整结论、失败历史及两平台套件hash见[verification-final.json](verification-final.json)。guide/VALIDATION.json保留生成guide时的准备快照；最终平台证明以本追加记录为准
 
 完整安全/故障资格、Win11设备/真实SSD/ERP/生产SLA未通过；状态仍blocked_security_review。无新性能承诺、不合并main、不创建正式生产Release。已发.1仍可按原指南正常stop保留；.2作为新套件使用全新ROOT，原.1与原内层二进制字节均保留。
+
+## 固定输入到期（2026-10-14）
+
+固定输入 [CI36720731289](https://github.com/MixGeeker/echoo_pgmq/actions/runs/36720731289) 的 artifact 已过保留期，接口返回空列表，`download-original-artifact` 阶段因此无法取得原归档。`.2` 包装器作业与 `.1` 一致改为只在手动触发时运行，PR 与 main 推送不再自动执行；上方验证记录保持不变。
