@@ -72,6 +72,7 @@ jobs:
           retention-days: 14
 
   windows-preview-two:
+    if: github.event_name == 'workflow_dispatch'
     name: Windows Server 2022 / fixed PG18 preview.2 ordinary wrapper
     runs-on: windows-2022
     timeout-minutes: 25
