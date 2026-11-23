@@ -10,6 +10,7 @@
 | 原生 Windows Server 2022 PG18（主要目标）及16/17 x64 | 原生进程，不经过WSL/Docker；同固定450681d源码/归档两轮，PG18每轮44项、PG16/17每轮36项及core.sql通过；不等于Win11验收 |
 | Windows 11 实机 | 尚需独立验收；Server2022结果不能替代 |
 | Linux arm64（aarch64）PG18/17/16 | 普通CI在GitHub原生Arm runner（ubuntu-24.04-arm）构建、打包并跑源码/归档两轮普通回归，产出`linux-arm64-pgNN-candidate`；尚未进入正式Release，完整资格未通过 |
+| PostgreSQL 19（Linux x64/arm64、原生 Windows Server 2022 x64） | 预览：独立工作流 `pg19-preview.yml` 跑普通源码/归档两轮回归，产出 `preview-*-pg19-candidate`；不进入正式Release，完整资格未通过 |
 | PostgreSQL其它主版本/Windows ARM/macOS | 未纳入支持矩阵 |
 | 物理断电/电源拔除 | 未验证；SIGKILL/taskkill/immediate shutdown 是进程级故障 |
 | 真实 ERP 集成 | 后续共同联调；仓库示例不是业务验收 |
