@@ -33,6 +33,12 @@ DEPENDENCIES = {
         "algorithm": "sha256",
         "digest": "6eabdf00d2893713b75db4336a23c3fdf505f056e217ec6e2e95d901750cfea3",
     },
+    # PG19 preview CI only; not part of the release matrix until promoted through review.
+    "postgres-windows-19": {
+        "url": "https://get.enterprisedb.com/postgresql/postgresql-19.0-1-windows-x64-binaries.zip",
+        "algorithm": "sha256",
+        "digest": "bc397f1e58f018e364262074c2e9d960f6169e7436892dbe6e73313d1bb201ff",
+    },
 }
 
 

@@ -833,7 +833,12 @@ echoo_pgmq_main(Datum main_arg)
     pqsignal(SIGTERM, signal_stop);
     pqsignal(SIGHUP, signal_reload);
 #ifndef WIN32
+#ifdef PG_SIG_IGN
+    /* PostgreSQL 19 handlers take signal info; use its typed SIG_IGN. */
+    pqsignal(SIGPIPE, PG_SIG_IGN);
+#else
     pqsignal(SIGPIPE, SIG_IGN);
+#endif
 #endif
     BackgroundWorkerUnblockSignals();
 #if PG_VERSION_NUM >= 170000

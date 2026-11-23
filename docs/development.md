@@ -13,7 +13,7 @@
 
 ## 可复现运行
 
-构建依赖为PG18（主要目标）及16/17开发安装、Proton0.40.0(OpenSSL)、CMake/C11编译器。运行示例见快速开始。当前允许的普通回归使用固定清单：
+构建依赖为PG18（主要目标）及16/17开发安装（PG19为预览，见下方CI策略）、Proton0.40.0(OpenSSL)、CMake/C11编译器。运行示例见快速开始。当前允许的普通回归使用固定清单：
 
 ```sh
 python scripts/run_integration.py --ordinary --pg-config /path/to/pg_config --work-dir /tmp/echoo-one --keep
@@ -26,6 +26,8 @@ python scripts/run_integration.py --ordinary --pg-config /path/to/pg_config --wo
 ## CI策略
 
 GitHub Actions在PR与main推送上运行，六个功能矩阵：Ubuntu24.04 PG18（主要目标）及16/17、WindowsServer2022原生PG18（主要目标）及16/17。每个自动任务安装扩展，执行 `--ordinary` 明确允许的 SQL/storage 并发、备份/升级、候选归档单元测试，以及正常 AMQP 二进制/提交/重投/迟到 ACK/release 语义，PG18额外安装锁定的Node/rhea测试依赖并运行8项独立实现互操作，新增项目与依赖通知打包回归后，当前清单每轮45项；PG16/17每轮37项，六组合源码安装和归档重装预期共476次执行。这个预期数量仍须由每次实际JUnit、core.sql结束标记和归档核验确认。源码安装和归档重装均成功后保留candidate证据。普通自动任务不包含畸形输入、连接耗尽、进程强杀或故障注入。该普通工作流的actions固定commit SHA，权限只读，checkout不保留凭据，没有publish-release、token写权限、continue-on-error或伪造成功；正式Release的授权发布与普通测试工作流分开。
+
+PostgreSQL 19 预览由独立工作流 `pg19-preview.yml` 在PR与main推送上运行：Ubuntu24.04 x64/arm64与WindowsServer2022原生PG19各一组，步骤与普通CI相同（源码安装、打包、归档重装两轮，并运行独立实现互操作），产物名带 `preview-` 前缀。它不进入 `ci.yml` 的六组合、发行脚本 `release_from_ci.py` 的固定任务集合或任何Release；PG19 进入正式矩阵时，`ci.yml`、发行配置与测试计数一起调整。PG19 起后端信号处理函数多一个 `pg_signal_info` 参数，扩展在有 `PG_SIG_IGN` 时用它忽略 SIGPIPE。
 
 完整功能矩阵保留在 `qualification.yml`，安全矩阵保留在 `security.yml`，均仅允许手动 `workflow_dispatch`，当前等待安全审阅，不自动触发。所有 candidate manifest 均明确写入 `qualification_status=blocked_security_review`。普通任务通过不等于完整验收，未执行的测试不会被记作通过。
 
